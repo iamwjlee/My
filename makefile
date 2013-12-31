@@ -12,7 +12,7 @@ ubuntu:
 	# apt-get install samba smbfs
 	# sudo smbpasswd -a wj
 	# sudo vi /etc/samba/smb.conf
-	# 	[name]
+	# 	[wj]
 	# 	comment = samba directory
 	# 	path = /home
 	# 	valid users = wj
@@ -108,8 +108,8 @@ directfb:
 	#or 
 	#mode=1024x768
 	#
-	#vi /etc/ld.so.conf 에 경로를 지정하고,
-	#ldconfig 로 캐싱
+	# add path in the  vi /etc/ld.so.conf
+	# caching by ldconfig 
 
 
 
