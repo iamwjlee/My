@@ -163,6 +163,26 @@ sdl01:
 	gcc  -c sdl01.c 
 	gcc -o sdl01 sdl01.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
 
+cannot open shared object file:
+	# cannot open shared object file: No such file or directory
+	# /usr/local/lib is normally not searched by the dynamic linker. Add it to LD_LIBRARY_PATH.
+	# Alternatively, configure the dynamic linker to always search /usr/local/lib and perhaps /usr/local/lib64. 
+	# This is usually done by adding the paths to the /etc/ld.so.conf file, and running ldconfig.
+	# There is sometimes also a 32/64 bit issue, that is, one tries to run a 32-bit executable and only 64-bit libraries are present, 
+	# or vice versa. Run file <somtething>.so and file <your-executable> to determine their architecture. 
+	# In general, 32-bit libraries go to <whatever>/lib and 64-bit ones to <whatever>/lib64, but sometimes they end up in a wrong place.
+
+	# export LD_LIBRARY_PATH=$PATH:/usr/local/lib	
+	#  g++  main.o -o main -L/usr/local/lib -lxxx
+	# sudo sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/usrlocal'  
+        # sudo ldconfig
+	# after make install, don't forget   sudo ldconfig
+	# vi /etc/ld.so.conf
+sfml: 
+	g++ -c sfml.cpp
+	g++ -o sfml sfml.o -lsfml-graphics -lsfml-window -lsfml-system
+	#g++ -o sfml sfml.o -L/usr/local/lib -lsfml-graphics -lsfml-window -lsfml-system
+
 clean :
 	rm -f *.o
 	rm -f hello-xlib
@@ -175,4 +195,5 @@ clean :
 	rm -f sdl
 	rm -f dfb01
 	rm -f sdl01
+	rm -f sfml
 
