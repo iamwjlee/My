@@ -26,6 +26,7 @@ SDL_FillRect(screen, &rect, color);
 }
 
 
+
 int main(int argc,char *argv[])
 {
 	SDL_Rect r;
@@ -38,41 +39,46 @@ int main(int argc,char *argv[])
 	screen = SDL_SetVideoMode(800,600,16,SDL_HWSURFACE|SDL_HWPALETTE|SDL_DOUBLEBUF|SDL_RESIZABLE);
 	//screen = SDL_SetVideoMode(600,480,32,SDL_SWSURFACE);
 
-	SDL_Surface *hourglass;
-	SDL_Surface *image;
-	//hourglass=SDL_LoadBMP("./hello.bmp");
-	hourglass=IMG_Load("./hourglass01.png");
-	if(hourglass !=NULL)
+	SDL_Surface *image01;
+	//SDL_Surface *image;
+	//image01=SDL_LoadBMP("./hello.bmp");
+	image01=IMG_Load("./1.png");
+	if(image01 !=NULL)
 	{
-		//image= SDL_DisplayFormat(hourglass);
-		//SDL_FreeSurface(hourglass);
+		//image= SDL_DisplayFormat(image01);
+		//SDL_FreeSurface(image01);
 
-		printf("okay image loaded\n");
+		print("okay image loaded\n");
+		
+		SDL_PixelFormat *pixel_format=image01->format;
+		int bpp = pixel_format->BitsPerPixel;
+		int image_w = image01->w;
+		int image_h = image01->h;
+		int image_size = image_w * image_h * bpp;
+		print("bpp[%d] w[%d] h[%d] size[%d]\n",bpp,image_w,image_h,image_size);
+		
+		r.x=300;
+		r.y=100;
+		r.w=image_w;
+		r.h=image_h;
+		SDL_BlitSurface(image01,NULL,screen,&r);
 	}
 	else
-	 printf(" image not loaded \n");
+	 print(" image not loaded !!\n");
 
-	r.x=50;
-	r.y=50;
-	r.w=100;
-	r.h=100;
-	//SDL_FillRect(screen, &r, 0xff00ff);
-	SDL_FillRect(screen, &r, SDL_MapRGB(screen->format,0xff, 0, 0x00));
-
+	
 	
 	FillRect(screen,100,100,100,100,0x0000ff);
 
 	
-	SDL_BlitSurface(hourglass,NULL,screen,NULL);
 	// ttf test 
 	SDL_Color color={0xff,0xff,0};
 	TTF_Font *font=TTF_OpenFont("decker.ttf",28);
-	SDL_Surface *text = TTF_RenderText_Solid(font, "Hello lulu", color);
+	SDL_Surface *text = TTF_RenderText_Solid(font, "Hello", color);
  	SDL_Rect rect = {100,100,0,0};//text position
  	SDL_BlitSurface(text,NULL,screen,&rect);
 
 	SDL_Flip(screen);
-	//SDL_Delay(2000);
 
 //	SDL_Delay(2000);
 
@@ -141,7 +147,7 @@ while(!done)
 }
   SDL_FreeSurface(text);
 	TTF_CloseFont(font);
-	SDL_FreeSurface(hourglass);
+	SDL_FreeSurface(image01);
 	SDL_Quit();
 	return 0;
 
