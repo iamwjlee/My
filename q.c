@@ -106,7 +106,7 @@ void *q_receive(msg_queue_t *q)
 		return NULL;
 }
 
-msg_queue_t *q_open(const char *name, int q_size ,int m_size)
+msg_queue_t *q_open(const char *name, int q_size ,int datasize)
 {
 	int i;
 	msg_t *queue;
@@ -123,7 +123,7 @@ msg_queue_t *q_open(const char *name, int q_size ,int m_size)
 	queue=q->queue;
 	for(i=0;i<q->count ;queue++, i++)
 	{
- 		queue->msg=(void *)calloc(1,m_size);
+ 		queue->msg=(void *)calloc(1,datasize);
 		//dprint(" queue->msg[%d] -[%x] \n",i,queue->msg);
 	}
 	
