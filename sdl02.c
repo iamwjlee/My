@@ -1,31 +1,59 @@
 #include "my_sdl.h"
 
 int g_on =1;
-int TestThread( void *ptr )
+SDL_Surface *screen=NULL;
+SDL_Surface  *background=NULL;
+SDL_Thread *thread;
+SDL_sem *videoLock = NULL;
+
+int TestThread( void *data )
 {
         int        cnt=0;
 		while(g_on)
         {
                 print( "\nThread counter: %d", cnt++);
-                SDL_Delay(200);
+                SDL_Delay(20);
         }
 
         return 0;
 }
 
+void show_surface( int x, int y, SDL_Surface* source )
+{
+    //Lock
+    SDL_SemWait( videoLock );
+
+    //Holds offsets
+    SDL_Rect offset;
+
+    //Get offsets
+    offset.x = x;
+    offset.y = y;
+
+    //Blit
+    SDL_BlitSurface( source, NULL, screen, &offset );
+
+    //Update the screen
+    SDL_Flip( screen );
+
+    //Unlock
+    SDL_SemPost( videoLock );
+}
+
 int main(int argc,char *argv[])
 {
 	bool done = false;
+	int 				threadReturnValue;
 
-	SDL_Surface *screen=NULL;
 	SDL_Init(SDL_INIT_EVERYTHING);
 	screen = SDL_SetVideoMode(800,600,32,SDL_HWSURFACE|SDL_HWPALETTE|SDL_DOUBLEBUF|SDL_RESIZABLE);
-
-	SDL_Thread *thread;
-	 int				 threadReturnValue;
-	
 	 print("\nSimple SDL_CreateThread test:");
+
+	 
+	 videoLock = SDL_CreateSemaphore( 1 );
+	 background=IMG_Load("./background.png");
 	
+	show_surface( 0, 0, background );
 	 // Simply create a thread
 	 thread = SDL_CreateThread( TestThread,  (void *)NULL);
 	
@@ -37,16 +65,17 @@ int main(int argc,char *argv[])
 
 	while(!done)
 	{
-	SDL_Event event;
-	while(SDL_PollEvent(&event))
-	{
+		SDL_Event event;
+		while(SDL_PollEvent(&event))
+		{
 		switch(event.type)
-	    {
+		  {
 
 		    case SDL_KEYDOWN:
 				switch(event.key.keysym.sym)
 				{
 				  	case SDLK_ESCAPE:
+						print("Exit this program\n");	
 				    	done =  true;
 				     	break;
 					case SDLK_UP:
@@ -62,7 +91,8 @@ int main(int argc,char *argv[])
 							print("left\n"); break;
 					case SDLK_RIGHT:
 							print("right\n"); break;
-					case SDLK_q:
+					case SDLK_a:
+							if(!g_on) break;
 							g_on=0;
 							SDL_WaitThread( thread, &threadReturnValue);
 							print("Thread returned value:%d\n", threadReturnValue);
@@ -81,23 +111,28 @@ int main(int argc,char *argv[])
 						
 				}
 				break;
-		
+
 			case SDL_VIDEORESIZE:
 				{
 				print("w:%d. h:%d \n",event.resize.w,event.resize.h);
 				}
-	      		break;
+		    		break;
 			case SDL_QUIT:
 				print("window close\n");
 				done=true;
 				break;
 					
 
-		}
-	}			
+			}
+		}			
 
-}
+	}
+
 	
+	SDL_DestroySemaphore( videoLock );
+
+	//Free the surfaces
+	SDL_FreeSurface( background );
 	SDL_Quit();
 	return 0;
 

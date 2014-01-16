@@ -24,6 +24,14 @@ ubuntu:
 	# \\192.168.0.42\wj   at the win7
 
 
+git:
+	@echo --- git usage ---
+	@echo  git status
+	@echo  git add filename
+	@echo  git  commit -m "fix something"
+	@echo  git push
+
+
 help:
 	@echo -- usefull command --
 	
