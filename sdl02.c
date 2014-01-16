@@ -1,4 +1,9 @@
 #include "my_sdl.h"
+#include "q.h"
+//#include "/usr/src/linux-headers-3.8.0-29/include/linux/list.h"
+//#include  "list0.h"
+
+typedef SDL_Thread task_t;
 
 int g_on =1;
 SDL_Surface *screen=NULL;
@@ -6,6 +11,7 @@ SDL_Surface  *background=NULL;
 SDL_Thread *thread;
 SDL_sem *videoLock = NULL;
 
+task_t *task;
 int TestThread( void *data )
 {
         int        cnt=0;
@@ -40,11 +46,19 @@ void show_surface( int x, int y, SDL_Surface* source )
     SDL_SemPost( videoLock );
 }
 
+
 int main(int argc,char *argv[])
 {
 	bool done = false;
 	int 				threadReturnValue;
+	int tickspersec;
+	unsigned  long t,t2;
 
+	time_test();
+	th_test();	
+	q_test2();
+	return 0;
+	
 	SDL_Init(SDL_INIT_EVERYTHING);
 	screen = SDL_SetVideoMode(800,600,32,SDL_HWSURFACE|SDL_HWPALETTE|SDL_DOUBLEBUF|SDL_RESIZABLE);
 	 print("\nSimple SDL_CreateThread test:");
@@ -55,7 +69,7 @@ int main(int argc,char *argv[])
 	
 	show_surface( 0, 0, background );
 	 // Simply create a thread
-	 thread = SDL_CreateThread( TestThread,  (void *)NULL);
+	 task = SDL_CreateThread( TestThread,  (void *)NULL);
 	
 	 if( NULL == thread )
 			printf("\nSDL_CreateThread failed: %s\n", SDL_GetError());
@@ -96,7 +110,7 @@ int main(int argc,char *argv[])
 							g_on=0;
 							SDL_WaitThread( thread, &threadReturnValue);
 							print("Thread returned value:%d\n", threadReturnValue);
-							//SDL_KillThread( thread );
+							SDL_KillThread( thread );
 							print("q\n"); break;
 					case SDLK_w:
 					case SDLK_e:

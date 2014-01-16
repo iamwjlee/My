@@ -168,11 +168,17 @@ sdl:
 	gcc -o sdl sdl.o `pkg-config  --cflags  --libs sdl` -lSDL_image
 
 sdl01:
+	
 	gcc  -c sdl01.c 
 	gcc -o sdl01 sdl01.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
 sdl02:
-	gcc  -c sdl02.c 
-	gcc -o sdl02 sdl02.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
+	#gcc  -c sdl02.c  -I/usr/src/linux-headers-3.8.0-29/include/linux -I/usr/src/linux-headers-3.8.0-29/include/uapi/linux 
+	gcc -g -c sdl02.c  
+	gcc -g -c time.c
+	gcc -g -c slink.c
+	gcc -g -c th.c
+	gcc -g  -c q.c
+	gcc -g -o sdl02 sdl02.o time.o slink.o th.o q.o  `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
 
 cannot open shared object file:
 	# cannot open shared object file: No such file or directory
@@ -208,4 +214,5 @@ clean :
 	rm -f sdl01
 	rm -f sdl02
 	rm -f sfml
+	
 
