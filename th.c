@@ -75,13 +75,50 @@ int task_delete(task_t *task)
 {
 	
 	//SDL_KillThread( task );
-	print("\t\t\t task_deleted\n");
+	//print("\t\t\t task_deleted\n");
 	return 0;
 
 }
 
 
 //---------------------------------------------------------------
+
+
+typedef struct
+{
+	int g_on;
+	int cnt;
+	task_t *task;
+}my_first_t;
+
+my_first_t *my_thread;
+int TestThread( void *data )
+{
+		my_first_t *my=(my_first_t *)data;
+        my->cnt=10;
+		while(my->g_on)
+        {
+                print( "\nThread counter: %d", my->cnt++);
+                SDL_Delay(20);
+        }
+		
+        return 0;
+}
+
+void th_test0()
+{
+	my_thread=malloc(sizeof(my_first_t));
+	my_thread->g_on=1;
+	my_thread->task = SDL_CreateThread( TestThread,  (void *)my_thread);
+	SDL_Delay(2000);
+	my_thread->g_on=0;
+	SDL_WaitThread( my_thread->task, NULL);
+	print("\nMy First thread_test0 end\n");
+	
+}
+
+
+
 
 /* let's make basic mycounting thread object  */
 
@@ -146,5 +183,14 @@ void th_test()
 
 
 }
+
+
+//
+#if 0
+int  get_key(void *data)
+{
+	
+}
+#endif
 
 

@@ -7,7 +7,7 @@
 #include "q.h"
 //#include "ui.control.h"
 
-#define dprint(...)  printf(__VA_ARGS__)
+#define dprint(...)  //printf(__VA_ARGS__)
 
 //msg_queue_t *myQ;
 
@@ -20,12 +20,12 @@ void *q_claim(msg_queue_t *q)
 	
 	
 	//
-	#ifdef _my_debug
+	#ifndef _my_debug
 	queue=q->queue;
 	for(i=0;i<q->count ;queue++, i++)
 	{
 		
-		dprint(" q_claim[%d] : [%x][%d]\n",i,queue,queue->state);
+		dprint(" q_claim[%d] : [%x][%d]\n",i,(unsigned int)queue,queue->state);
 	}
 	#endif
 	//
@@ -106,11 +106,11 @@ void *q_receive(msg_queue_t *q)
 		return NULL;
 }
 
-msg_queue_t *q_open(const char *name, int q_size ,int datasize)
+msg_queue_t *q_open(const char *name, int q_size ,int m_size)
 {
 	int i;
-	msg_t *queue;
-	msg_queue_t *q;
+	msg_t *queue;  //one queue
+	msg_queue_t *q;  //total queue
 
 	q=(msg_queue_t *)calloc(1,sizeof(msg_queue_t));
 	//dprint("q : %x\n",q);
@@ -123,7 +123,7 @@ msg_queue_t *q_open(const char *name, int q_size ,int datasize)
 	queue=q->queue;
 	for(i=0;i<q->count ;queue++, i++)
 	{
- 		queue->msg=(void *)calloc(1,datasize);
+ 		queue->msg=(void *)calloc(1,m_size);
 		//dprint(" queue->msg[%d] -[%x] \n",i,queue->msg);
 	}
 	
@@ -134,6 +134,22 @@ msg_queue_t *q_open(const char *name, int q_size ,int datasize)
 	}
 	return q;
 }
+
+int q_delete(msg_queue_t *q)
+{
+	msg_t *queue;
+	int i;
+	
+	queue=q->queue;
+	for(i=0;i<q->count ;queue++, i++)
+	{
+		free(queue->msg);
+	}
+	
+	free(q);
+	return 0;
+}
+
 int q_init(const char *name, int q_size,msg_queue_t **qq)
 {
 	
@@ -168,6 +184,10 @@ msg_queue_t *q_open0(const char *name, int size )
 	
 	return q;
 }
+
+
+
+//------------------------------------------------------------------------
 
 typedef struct 
 {

@@ -178,7 +178,9 @@ sdl02:
 	gcc -g -c slink.c
 	gcc -g -c th.c
 	gcc -g  -c q.c
-	gcc -g -o sdl02 sdl02.o time.o slink.o th.o q.o  `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
+	gcc -g -c ui.control.c
+	gcc -g -c live.control.c
+	gcc -g -o sdl02 sdl02.o time.o slink.o th.o q.o  ui.control.o live.control.o  `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
 
 cannot open shared object file:
 	# cannot open shared object file: No such file or directory

@@ -42,5 +42,6 @@ int q_init(const char *name, int size,msg_queue_t **qq);
 msg_queue_t *q_open(const char *name, int q_size ,int m_size);
 
 int q_test2(void);
+int q_delete(msg_queue_t *q);
 
 #endif
