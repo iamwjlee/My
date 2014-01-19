@@ -1,3 +1,8 @@
+
+/*
+
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,6 +19,7 @@ typedef struct
 	unsigned				nospace		: 1;
 	unsigned				reserved	: 7;
 	task_t					*task;
+	char name[20];
 
 } live_instance_t;
 
@@ -25,9 +31,9 @@ static int live_control_ioctl(ui_control_t *control, int type, void *data);
 static int live_control_task(void *cookie);
 
 
-static ui_control_t	live_control =
+static ui_control_t						live_control =
 										{
-											.name		= "live.control",
+											.name		= "live2.control",
 											.priority	= 1,
 											.start		= live_control_start,
 											.stop		= live_control_stop,
@@ -38,7 +44,7 @@ static ui_control_t	live_control =
 										};
 
 
-int live_control_init(void)
+int live2_control_init(void)
 {
 	ui_control_t			*control	= &live_control;
 	print("%s\n",__FUNCTION__);
@@ -51,7 +57,8 @@ int live_control_init(void)
 static int live_control_start(ui_control_t *control)
 {
 	live_instance_t			*live		= control->instance;
-	live->task=task_create (live_control_task,(void *)control,TASK_STACK_SIZE,TASK_PRIORITY,"live_control_task",0);
+	strcpy(live->name,"live1_control_task");
+	live->task=task_create (live_control_task,(void *)control,TASK_STACK_SIZE,TASK_PRIORITY,live->name,0);
 	return(0);
 }
 static int live_control_stop(ui_control_t *control)
@@ -115,13 +122,10 @@ static int live_control_task(void *cookie)
 					break;
 				case SDLK_1:
 					print(" %s:1\n",control->name);
-					ui_control_start(UI_CONTROL("live1.control"),NULL);
 					break;
 				case SDLK_2:
 					
 					print(" %s:2\n",control->name);
-					
-					ui_control_start(UI_CONTROL("live2.control"),NULL);
 					break;
 				case SDLK_3:
 					
@@ -170,9 +174,9 @@ static int live_control_task(void *cookie)
 	ui_control_release(control);
 	print("Exit %s \n",control->name);
 
-	sdl_key_stop();
+	//sdl_key_stop();
 	
-	sdl_stop();
+	//sdl_stop();
 
  	return;
 }

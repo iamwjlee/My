@@ -3,6 +3,9 @@ CC = gcc
 ubuntu:
 	# version 12.04 
 
+	# chown -R wj My : owner of My directory is wj
+	# chown -R 755 My : change My direcory's mode
+
 	# -------gvim install ----------
 	# sudo apt-get install vim-gnome
 	# add in ~/.bashrc the line
@@ -180,7 +183,12 @@ sdl02:
 	gcc -g  -c q.c
 	gcc -g -c ui.control.c
 	gcc -g -c live.control.c
-	gcc -g -o sdl02 sdl02.o time.o slink.o th.o q.o  ui.control.o live.control.o  `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
+	gcc -g -c live1.control.c
+	gcc -g -c live2.control.c
+	gcc -g -c live11.control.c
+	gcc -g -c dlink.c
+	gcc -g -c blit.c
+	gcc -g -o sdl02 sdl02.o time.o slink.o th.o q.o  ui.control.o live.control.o live1.control.o live2.control.o live11.control.o blit.o dlink.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
 
 cannot open shared object file:
 	# cannot open shared object file: No such file or directory

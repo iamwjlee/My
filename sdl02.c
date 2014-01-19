@@ -7,32 +7,11 @@
 //typedef SDL_Thread task_t;
 
 SDL_Surface *screen=NULL;
-SDL_Surface  *background=NULL;
+//SDL_Surface  *background=NULL;
 SDL_Thread *thread;
 SDL_sem *videoLock = NULL;
 
 
-void show_surface( int x, int y, SDL_Surface* source )
-{
-    //Lock
-    SDL_SemWait( videoLock );
-
-    //Holds offsets
-    SDL_Rect offset;
-
-    //Get offsets
-    offset.x = x;
-    offset.y = y;
-
-    //Blit
-    SDL_BlitSurface( source, NULL, screen, &offset );
-
-    //Update the screen
-    SDL_Flip( screen );
-
-    //Unlock
-    SDL_SemPost( videoLock );
-}
 
 void sdl_stop()
 {
@@ -55,26 +34,30 @@ int main(int argc,char *argv[])
 	unsigned  long t,t2;
 
 	//time_test();
-	th_test0();	
-	q_test2();
+	//th_test0();	
+	//q_test2();
 	//return 0;
 	
 	SDL_Init(SDL_INIT_EVERYTHING);
-	screen = SDL_SetVideoMode(800,600,32,SDL_HWSURFACE|SDL_HWPALETTE|SDL_DOUBLEBUF|SDL_RESIZABLE);
+	screen = SDL_SetVideoMode(s_width,s_height,32,SDL_HWSURFACE|SDL_HWPALETTE|SDL_DOUBLEBUF|SDL_RESIZABLE);
 	 print("\nSimple SDL_CreateThread test:");
-
 	 
-	 videoLock = SDL_CreateSemaphore( 1 );
-	 background=IMG_Load("./background.png");
+ 	videoLock = SDL_CreateSemaphore( 1 );
+	//background=IMG_Load("./background.png");
 	
-	show_surface( 0, 0, background );
+	//background=IMG_Load("./1.png");
+	//show_surface( 0, 0, s_width,s_height, background );
 
+	blit_test();
 	
 	ui_message_init("myq",3);
 	sdl_key_start();
 	
 	ui_control_init();
 	live_control_init();
+	live1_control_init();
+	live2_control_init();
+	live11_control_init();
 	
 	ui_control_start(UI_CONTROL("live.control"),NULL);
 	while(1)
@@ -86,7 +69,7 @@ int main(int argc,char *argv[])
 	SDL_DestroySemaphore( videoLock );
 
 	//Free the surfaces
-	SDL_FreeSurface( background );
+	//SDL_FreeSurface( background );
 	SDL_Quit();
 	return 0;
 
