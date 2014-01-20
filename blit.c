@@ -28,7 +28,8 @@ gfx_color_t GFX_COLOR(U32 value)
 
 void show_surface( int x, int y, int w,int h,SDL_Surface* source )
 {
-	print("Surface : w:%d h:%d bpp:%d\n",  source->w, source->h, source->format->BitsPerPixel);
+	print("\n source info : w:%d h:%d bpp:%d\n",  source->w, source->h, source->format->BitsPerPixel);
+	print(" surface info : x:%d y:%d  w:%d h:%d  \n",  x,y,w,h);
 
     SDL_SemWait( videoLock );
 
@@ -115,8 +116,15 @@ int gfx_blit_image(gfx_rectangle_t *dest_rect, unsigned int *image, gfx_rectangl
 	SDL_Surface *source_images;
 
 	//return 0;
-	
-	source_images	= load_image( (const char *)*image);
+	//print(" image = %s\n",(const char *)image);
+	source_images	= load_image( (const char *)*image);  // 
+	if(source_images == NULL)
+	{
+		print("source_images is null :0x%x\n",(unsigned int)source_images);
+	}
+	else
+		
+		print("source_images okay :0x%x\n",(unsigned int)source_images);
 	
 	//source_images->GetSize( source_images, &w, &h );
 	/*
@@ -136,10 +144,10 @@ int gfx_blit_image(gfx_rectangle_t *dest_rect, unsigned int *image, gfx_rectangl
 	}
 */
 	
-	if(!dest_rect)
+	if(dest_rect==NULL)
 	{
 		rect.x	= 0;
-		rect.x= 0;
+		rect.y= 0;
 		rect.w		=source_images->w;
 		rect.h	= source_images->h;
 	}
@@ -157,6 +165,34 @@ int gfx_blit_image(gfx_rectangle_t *dest_rect, unsigned int *image, gfx_rectangl
 	return 0;
 
 }
+
+int gfx_blit_fill(int mode,gfx_rectangle_t *target_rect, unsigned int *source, gfx_rectangle_t *source_rect)
+{
+
+	if(*source==0) 
+	{
+		/* when widget_create(ex, button_create),  widget->background==0   */
+		print(" gfx_blit_fill :  ------      no background   ---------\n");
+		return 0;
+	}	
+
+
+	if( ((*source>>24)&0xff) == 0x80 )
+	{
+		gfx_blit_fill_color( mode,target_rect,  (gfx_color_t *)source);
+	}
+	else
+	{
+		print(" gfx_blit_fill : 0x%x  \n",*source);
+		gfx_blit_image(target_rect, source, source_rect);
+	}
+	return 0;
+
+}
+
+
+
+
 
 SDL_Surface *load_image( const char *name )
 {
@@ -197,24 +233,81 @@ SDL_Surface *load_image( const char *name )
     //Return the optimized image
     return optimizedImage;
 }
+int gfx_blit_restore(gfx_rectangle_t *rect, int *image, gfx_rectangle_t *src_rect)
+{
 
+	print("gfx_blit_restore\n");
+	return 0;
+}
+int gfx_blit_capture(gfx_rectangle_t *rect, int *image, gfx_rectangle_t *src_rect)
+{
+	print("gfx_blit_capture\n");
+
+	return 0;
+}
+
+blit_source_t 							out_border_test[8] =
+										{
+											(blit_source_t )DATADIR"border.out.NW.png",
+											(blit_source_t )DATADIR"border.out.NE.png",
+											(blit_source_t )DATADIR"border.out.N.png",
+											(blit_source_t )DATADIR"border.out.SW.png",
+											(blit_source_t )DATADIR"border.out.SE.png",
+											(blit_source_t )DATADIR"border.out.S.png",
+											(blit_source_t )DATADIR"border.out.W.png",
+											(blit_source_t )DATADIR"border.out.E.png",
+										};
+
+blit_source_t 							*out_border_test2[8] =
+										{
+											(blit_source_t  *)DATADIR"border.out.NW.png",
+											(blit_source_t *)DATADIR"border.out.NE.png",
+											(blit_source_t *)DATADIR"border.out.N.png",
+											(blit_source_t *)DATADIR"border.out.SW.png",
+											(blit_source_t *)DATADIR"border.out.SE.png",
+											(blit_source_t *)DATADIR"border.out.S.png",
+											(blit_source_t *)DATADIR"border.out.W.png",
+											(blit_source_t *)DATADIR"border.out.E.png",
+										};
+
+void pointer_array_test(unsigned int **bg)
+{
+	unsigned int *tmp;
+	gfx_rectangle_t r={20,40,20,20};
+
+	tmp=bg[0];
+	gfx_blit_image(&r,tmp++,NULL);
+
+	r.y+=20;
+	gfx_blit_image(&r,tmp++,NULL);
+
+
+}
 
 int blit_test(void)
 {
-	
+	unsigned int image;
 	gfx_color_t c=GFX_COLOR(0x800096c8);
-	gfx_rectangle_t 		rec 	= { 10, 300, 234, 72 };
+	gfx_rectangle_t 		rec 	= { 10, 10, 20, 20 };
 	gfx_rectangle_t  r;
-	FillRect(screen,0,0,s_width,s_height,0x0000ff);
+	FillRect(screen,0,0,s_width,s_height,0xf0303f);
 
 
-	gfx_blit_fill_color(0, &rec, &c ); 
+	//gfx_blit_fill_color(0, &rec, &c ); 
+
+	image=(unsigned int )DATADIR"border.out.NW.png";
+	gfx_blit_image(&rec,&image,NULL);
+	rec.y+=30;
+	gfx_blit_fill(0,&rec,&image, NULL);
+
+	//pointer_array_test(out_border_test2);
 
 	
-	//gfx_blit_image(NULL,(unsigned int *)DATADIR"border.out.NW.png",NULL);
-
 
 	
+	//gfx_blit_fill(0,NULL, (unsigned int *)DATADIR"border.out.NW.png", NULL);
+
+	#if 0
 	background=load_image(DATADIR"border.out.NW.png");
 	show_surface( 30, 30, background->w,background->h, background );
 	
@@ -241,6 +334,7 @@ int blit_test(void)
 
 	background=load_image(DATADIR"border.out.E.png");
 	show_surface( 30+200-20, 30+20, background->w,400-20-32, background );
+	#endif
 
 }
 

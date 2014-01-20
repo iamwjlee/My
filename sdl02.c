@@ -49,6 +49,7 @@ int main(int argc,char *argv[])
 	//show_surface( 0, 0, s_width,s_height, background );
 
 	blit_test();
+	my_widget_test();
 	
 	ui_message_init("myq",3);
 	sdl_key_start();

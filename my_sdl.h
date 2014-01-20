@@ -27,6 +27,10 @@ typedef enum {false=0,true=1}  bool;
 #define null NULL
 #endif
 
+typedef int BOOL;
+#define TRUE 1
+#define FALSE 0
+
 typedef  unsigned int 		gfx_bitmap_t;
 typedef   unsigned int		blit_source_t;
 typedef unsigned int  osclock_t;

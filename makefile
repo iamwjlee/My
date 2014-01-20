@@ -188,7 +188,8 @@ sdl02:
 	gcc -g -c live11.control.c
 	gcc -g -c dlink.c
 	gcc -g -c blit.c
-	gcc -g -o sdl02 sdl02.o time.o slink.o th.o q.o  ui.control.o live.control.o live1.control.o live2.control.o live11.control.o blit.o dlink.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
+	gcc -g -c widget.c
+	gcc -g -o sdl02 sdl02.o time.o slink.o th.o q.o  ui.control.o live.control.o live1.control.o live2.control.o live11.control.o blit.o dlink.o widget.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
 
 cannot open shared object file:
 	# cannot open shared object file: No such file or directory
