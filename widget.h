@@ -12,6 +12,9 @@ extern "C" {
 
 /* constants ------------------------------------------------------------------ */
 
+#define CLIENT_BODY 0x80c0f0f0
+#define BODY_COLOR 0x800070A0
+#define LABEL_COLOR 0x80ffffff
 
 /* enumerations --------------------------------------------------------------- */
 

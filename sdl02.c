@@ -10,6 +10,7 @@ SDL_Surface *screen=NULL;
 //SDL_Surface  *background=NULL;
 SDL_Thread *thread;
 SDL_sem *videoLock = NULL;
+TTF_Font *font ; //=TTF_OpenFont("decker.ttf",28);
 
 
 
@@ -26,6 +27,16 @@ void sdl_stop()
 }
 
 
+typedef struct 
+{
+	char name[20];
+	char *p;
+
+}me_t;
+me_t me;
+char *gp;
+
+
 int main(int argc,char *argv[])
 {
 	bool done = false;
@@ -33,12 +44,21 @@ int main(int argc,char *argv[])
 	int tickspersec;
 	unsigned  long t,t2;
 
+	strcpy(me.name,"wj");
+	gp=me.name;
+	print("me.name %s \n",me.name);
+	
+	print("me.p %s \n",gp);
+//	return 0;
 	//time_test();
 	//th_test0();	
 	//q_test2();
 	//return 0;
 	
 	SDL_Init(SDL_INIT_EVERYTHING);
+	TTF_Init();
+	
+	font=TTF_OpenFont("decker.ttf",28);
 	screen = SDL_SetVideoMode(s_width,s_height,32,SDL_HWSURFACE|SDL_HWPALETTE|SDL_DOUBLEBUF|SDL_RESIZABLE);
 	 print("\nSimple SDL_CreateThread test:");
 	 

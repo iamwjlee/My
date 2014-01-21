@@ -120,29 +120,12 @@ int gfx_blit_image(gfx_rectangle_t *dest_rect, unsigned int *image, gfx_rectangl
 	source_images	= load_image( (const char *)*image);  // 
 	if(source_images == NULL)
 	{
-		print("source_images is null :0x%x\n",(unsigned int)source_images);
+		err("source_images is null :0x%x\n",(unsigned int)source_images);
 	}
-	else
+	//else
 		
-		print("source_images okay :0x%x\n",(unsigned int)source_images);
+	//	print("source_images okay :0x%x\n",(unsigned int)source_images);
 	
-	//source_images->GetSize( source_images, &w, &h );
-	/*
-	if(!src_rect)
-	{
-		rect.x	= 0;
-		rect.x= 0;
-		rect.w		=w;
-		rect.h	= h;
-	}
-	else
-	{
-		rect.x	= src_rect.x;
-		rect.x= src_rect.y;
-		rect.w		=src_rect.w;
-		rect.h	= src_rect.h;
-	}
-*/
 	
 	if(dest_rect==NULL)
 	{
@@ -172,18 +155,20 @@ int gfx_blit_fill(int mode,gfx_rectangle_t *target_rect, unsigned int *source, g
 	if(*source==0) 
 	{
 		/* when widget_create(ex, button_create),  widget->background==0   */
-		print(" gfx_blit_fill :  ------      no background   ---------\n");
+		print(" gfx_blit_fill :  ------      no source(background)   ---------\n");
 		return 0;
 	}	
 
 
 	if( ((*source>>24)&0xff) == 0x80 )
 	{
+		
+		print(" gfx_blit_fill_color : 0x%x  \n",*source);
 		gfx_blit_fill_color( mode,target_rect,  (gfx_color_t *)source);
 	}
 	else
 	{
-		print(" gfx_blit_fill : 0x%x  \n",*source);
+		print(" gfx_blit_image : 0x%x  \n",*source);
 		gfx_blit_image(target_rect, source, source_rect);
 	}
 	return 0;
@@ -233,6 +218,35 @@ SDL_Surface *load_image( const char *name )
     //Return the optimized image
     return optimizedImage;
 }
+
+int gfx_blit_label( int mode, char *text,gfx_rectangle_t *rect,  gfx_color_t color)
+{
+	SDL_Color my_color;
+	SDL_Rect my_rect;
+
+	my_color.r=color.argb.r;
+	my_color.g=color.argb.g;
+	my_color.b=color.argb.b;
+
+	my_rect.x=rect->x;
+	my_rect.y=rect->y;
+
+	print( " gfx_blit_label[%s]\n",text);
+
+	//rect->y+=font_dsc.height ;
+	//rect->y+=8;
+
+	if(mode)
+	{
+	}
+	SDL_Surface *mytext = TTF_RenderText_Solid(font,text, my_color);
+ 	SDL_BlitSurface(mytext,NULL,screen,&my_rect);
+
+	return 0;
+}
+
+
+
 int gfx_blit_restore(gfx_rectangle_t *rect, int *image, gfx_rectangle_t *src_rect)
 {
 
@@ -303,6 +317,16 @@ int blit_test(void)
 	//pointer_array_test(out_border_test2);
 
 	
+	// ttf test 
+	
+	//FillRect(screen,100,100,100,100,0x0000ff);
+	SDL_Color color={0xff,0xff,0};
+	TTF_Font *font=TTF_OpenFont("decker.ttf",28);
+	SDL_Surface *text = TTF_RenderText_Solid(font, "Hello", color);
+ 	SDL_Rect rect = {400,20,0,0};//text position
+ 	SDL_BlitSurface(text,NULL,screen,&rect);
+
+	//SDL_Flip(screen);
 
 	
 	//gfx_blit_fill(0,NULL, (unsigned int *)DATADIR"border.out.NW.png", NULL);

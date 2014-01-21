@@ -40,17 +40,19 @@ extern  SDL_Surface *load_image( const char *name );
 	menu_t					*parent;									
 	const char				*name;										
 	widget_t				widget; 								
-	widget_border_t 		border; 								
-	widget_t				body; 								
-	U32 					level;									
-	U32 					dummy;
-   	widget_border_t		 client;
-	 widget_t 			 bottom;
-	 widget_t 			 *title;
-
+	widget_border_t 		border; 	
+	widget_border_t 	 client;
+	widget_t				body; 			
+	widget_t				top; 				
+	widget_t				bottom;
 	
- //  task_t 				 *task;
+	widget_t				title; //for text
  	gfx_rectangle_t			area;
+	//U32 					level;									
+	//U32 					dummy;
+	// widget_t 			 *title;
+	
+ 	//  task_t 				 *task;
  } my_instance_t;
 
 static my_instance_t				 menu_instance;
@@ -79,30 +81,58 @@ static my_instance_t				 menu_instance;
 											 (blit_source_t)DATADIR"border.in.E.png",
 										 };
 
+ static void label_custom_draw(widget_t *widget, int *target, gfx_rectangle_t *granted, int recursive)
+ {
+	// label_t				 *label  = label_from(widget);
+	 //gfx_pen_t				 *pen	 = &label->pen;
+	 gfx_rectangle_t		 client  = widget->client;
+	gfx_color_t color;
+ 
+  	d_print("label_custom_draw : client[%d-%d-%d-%d] granted[%d-%d-%d-%d]   [%s]\n ",
+ 	client.x, client.y,client.w,client.h,  granted->x,granted->y,granted->w,granted->h,widget->label_text);
+ 
+	 client.x += granted->x;
+	 client.y += granted->y;
+	 
+
+	//gfx_blit_label(&client,widget->background);
+	//strcpy(text,"Good");
+	color.value= widget->label_color;
+	gfx_blit_label(0,widget->label_text,&client,color);
+
+
+	
+	// gfx_pen_set_target(pen, target, &client);
+	 //label->remain = gfx_new_puts(pen, label->text);
+	 
+ }
+
  int my_view_layout(my_instance_t *menu)
 {
- // widget_params_t 		base	= { .rect = { 30, 30, 200, 600 }, 	 .background =	NULL, .name="base"};
 	
-	widget_params_t base	= { .rect = { 60, 60, 500, 400 },  .attribute.popup = 1, .background =	0x808f0000, .name="my.view.base"};
-  	widget_params_t help  = { .rect = { 0, 0, 0, 150},  .pad = { 0, 0, 10, 0},  .align = GfxDOCK_BOTTOM,.background = 0x800070A0,.name="my.view.help" };
-	widget_params_t body	= { .rect = { 0, 0,  0, 0 },			.align = GfxDOCK_FILL,	.background = 0x80c0f0f0,.name="my.view.body" };
-	
-	
+	widget_params_t base	= { .rect = { 60, 60, 500, 400 },  .attribute.popup = 1, .background =	0, .name="my.view.base"};
+ 
+ 	widget_params_t top  = { .label_text="love", .label_color=LABEL_COLOR,
+		.rect = { 0, 0, 0, 40 },	.align = GfxDOCK_TOP, .background =  BODY_COLOR, .name="my.view.top" };
+  	widget_params_t help  = { .rect = { 0, 0, 0, 80},  .pad = { 0, 0, 2, 0},  .align = GfxDOCK_BOTTOM,.background = BODY_COLOR,.name="my.view.help" };
+	widget_params_t body	= { .rect = { 0, 0,  0, 0 },			.align = GfxDOCK_FILL,	.background = CLIENT_BODY,.name="my.view.body" };
 
 	/* order of widget_init */ 
 
-	/* fill base region with red color */
-	widget_init(&menu->widget, &base, (void*)NULL); 					WIDGET_VISIBLE(menu) = 0;   
+	widget_init(&menu->widget, &base, (void*)NULL); 					
+	WIDGET_VISIBLE(menu) = 0;   // it does not work !!
 	//menu->widget.flags.visible = true;
-	widget_border_init(&menu->border, out_border_list, 1, WIDGET_OF(menu));
-
 	
-	widget_init(&menu->bottom, &help, WIDGET_OF(menu)); 						menu->bottom.flags.visible	= 1;
-	widget_init(&menu->body, &body, WIDGET_OF(menu)); 					menu->body.flags.visible	= 1;
+	widget_border_init(&menu->border, out_border_list, 0, WIDGET_OF(menu));
+
+	widget_init(&menu->top, &top, WIDGET_OF(menu)); 				menu->top.flags.visible	= 1;
+	menu->top.custom.draw=label_custom_draw;
+	widget_init(&menu->bottom, &help, WIDGET_OF(menu)); 			menu->bottom.flags.visible	= 1;
+	widget_init(&menu->body, &body, WIDGET_OF(menu)); 			menu->body.flags.visible	= 1;
 
 
 
-	widget_border_init(&menu->client, in_border_list, 1, &menu->body);
+	widget_border_init(&menu->client, in_border_list, 0, &menu->body);
 
 
 
@@ -157,17 +187,6 @@ void  my_widget_test()
 	 
 	 widget_params_t		 base = { .rect = { 0, 0, 24, 24 }, T_DOCK,  .attribute.phantom = TRUE	};
 
-	 for(i = 0,  blit_source = backgrounds; i < 2; i++)
-	 {
-			tmp = *blit_source++;
-				d_print("%s [0x%x]\n",(const char *)tmp,tmp);
-			tmp = *blit_source++;
-			d_print("%s \n",(const char *)tmp);
-
-			tmp = *blit_source++;
-			
-			d_print("%s \n",(const char *)tmp);
-	 }	 
  
 	 for(i = 0, plate = &border->_top, blit_source = backgrounds; i < 2; i++, plate++)
 	 {
@@ -241,29 +260,6 @@ void  my_widget_test()
  
  }
 
-#if 0
-static void label_custom_draw2(widget_t *widget, int *target, gfx_rectangle_t *granted, int recursive)
-{
-	char text[30];
-	label_t *label=(label_t *)widget;
-	
-	/* This is the same meaning !:  gfx_rectangle_t		client	= label->widget.client; */
-	gfx_rectangle_t 		client	= widget->client;
-
- d_print("label_custom_draw2 : client[%d-%d-%d-%d] granted[%d-%d-%d-%d]0x%x\n ",
- client.x, client.y,client.w,client.h,	granted->x,granted->y,granted->w,granted->h,widget->background);
-
-	client.x += granted->x;
-	client.y += granted->y;
-	
- 
- 	//gfx_pen_set_target(pen, target, &client);
-	//label->remain = gfx_new_puts(pen, label->text);
-	
- 	gfx_blit_label(0,label->label_text,&client,label->label_color);
-	
-}
-#endif
 
 
 int widget_init(widget_t *widget, widget_params_t *params, widget_t *parent)
@@ -293,8 +289,14 @@ int widget_init(widget_t *widget, widget_params_t *params, widget_t *parent)
 	widget->attribute	= params->attribute;
 	widget->rect		= params->rect;
 	widget->background	= params->background;  // error: assignment of read-only member ¡®background¡¯
-	
+
 	//widget->cover		= params->cover ? params->cover : BLIT_SOURCE_NONE;  
+	if(params->label_text)
+	{
+		print32("params->label_text:%s \n",params->label_text);
+		strcpy(widget->label_text,params->label_text);
+		widget->label_color=params->label_color;
+	}
 
 	#if 0
 	widget->label_color=params->label_color;

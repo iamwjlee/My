@@ -48,6 +48,7 @@ extern DECLSPEC int SDLCALL SDL_SoftStretch(SDL_Surface *src, SDL_Rect *srcrect,
 extern SDL_Surface *screen;
 extern SDL_sem *videoLock ;
 extern SDL_Surface  *background;
+extern TTF_Font *font ;
 
 
 #define print(...) printf(__VA_ARGS__)
