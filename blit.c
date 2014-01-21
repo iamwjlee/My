@@ -206,7 +206,7 @@ SDL_Surface *load_image( const char *name )
         if( optimizedImage != NULL )
         {
             //Map the color key with white color
-            Uint32 colorkey = SDL_MapRGB( optimizedImage->format, 0xff, 0xFF, 0xFF );
+            Uint32 colorkey = SDL_MapRGB( optimizedImage->format, 0x1f, 0xFF, 0xFF );
 
             //Set all pixels of color R 0xff, G 0xFF, B 0xFF to be transparent
             SDL_SetColorKey( optimizedImage, SDL_SRCCOLORKEY, colorkey );

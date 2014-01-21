@@ -48,6 +48,12 @@ extern  SDL_Surface *load_image( const char *name );
 	
 	widget_t				title; //for text
  	gfx_rectangle_t			area;
+
+	//test 	
+	widget_t 			 icon;
+	
+	widget_t 			 icon_info;
+	widget_t 			 icon_yellow;
 	//U32 					level;									
 	//U32 					dummy;
 	// widget_t 			 *title;
@@ -117,6 +123,39 @@ static my_instance_t				 menu_instance;
   	widget_params_t help  = { .rect = { 0, 0, 0, 80},  .pad = { 0, 0, 2, 0},  .align = GfxDOCK_BOTTOM,.background = BODY_COLOR,.name="my.view.help" };
 	widget_params_t body	= { .rect = { 0, 0,  0, 0 },			.align = GfxDOCK_FILL,	.background = CLIENT_BODY,.name="my.view.body" };
 
+	/* 
+		what's blend  mode ?
+		it need 
+
+	*/
+
+	widget_params_t			icon =
+							{
+								.rect					= { 0, 10, 48, 48 },
+								.pad = { 20, 10, 10, 10}, 
+								.background				= BODY_COLOR,
+								//.attribute.blend		= true,
+								.name="my.view.icon",
+							};
+
+	widget_params_t			icon_info =
+							{
+								.rect					= { 50, 10, 46, 46 },
+								//.pad = { 20, 10, 10, 10}, 
+								.background				= BODY_COLOR,
+								//.attribute.blend		= true,
+								.name="my.view.icon2",
+							};
+
+	widget_params_t			icon_yellow =
+							{
+								.rect					= { 50+50, 10, 46, 28 },
+								//.pad = { 20, 10, 10, 10}, 
+								.background				= BODY_COLOR,
+								//.attribute.blend		= true,
+								.name="my.view.icon3",
+							};
+
 	/* order of widget_init */ 
 
 	widget_init(&menu->widget, &base, (void*)NULL); 					
@@ -134,8 +173,14 @@ static my_instance_t				 menu_instance;
 
 	widget_border_init(&menu->client, in_border_list, 0, &menu->body);
 
+	icon.background = (blit_source_t)DATADIR"icon.critical.png";
+	widget_init(&menu->icon, &icon, &menu->bottom); 	menu->icon.flags.visible = 1;
 
+	icon_info.background = (blit_source_t)DATADIR"icon.info.png";
+	widget_init(&menu->icon_info, &icon_info, &menu->bottom); 	menu->icon_info.flags.visible = 1;
 
+	icon_yellow.background = (blit_source_t)DATADIR"icon.yellow.png";
+	widget_init(&menu->icon_yellow, &icon_yellow, &menu->bottom); 	menu->icon_yellow.flags.visible = 1;
 
 // size for help 
 	menu->area.x	= menu->bottom.client.x+menu->bottom.rect.x;
