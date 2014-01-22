@@ -5,6 +5,9 @@
 //#include "/usr/src/linux-headers-3.8.0-29/include/linux/list.h"
 //#include  "list0.h"
 
+
+#define d_print(...)  dprint(__VA_ARGS__)
+
 //typedef SDL_Thread task_t;
 
 SDL_Surface  *background=NULL;
@@ -24,12 +27,21 @@ gfx_color_t GFX_COLOR(U32 value)
 	return(color);
 }
 
+int flip_end(void)
+{
+	d_print("-flip_end-");
+	//DFBCHECK(sur->Flip(sur, NULL, DSFLIP_WAITFORSYNC));
+return 0;
+
+}
+
+
 
 
 void show_surface( int x, int y, int w,int h,SDL_Surface* source )
 {
-	print("\n source info : w:%d h:%d bpp:%d\n",  source->w, source->h, source->format->BitsPerPixel);
-	print(" surface info : x:%d y:%d  w:%d h:%d  \n",  x,y,w,h);
+	d_print("\n source info : w:%d h:%d bpp:%d",  source->w, source->h, source->format->BitsPerPixel);
+	d_print(" surface info : x:%d y:%d  w:%d h:%d",  x,y,w,h);
 
     SDL_SemWait( videoLock );
 
@@ -115,8 +127,6 @@ int gfx_blit_image(gfx_rectangle_t *dest_rect, unsigned int *image, gfx_rectangl
 	SDL_Rect			rect;
 	SDL_Surface *source_images;
 
-	//return 0;
-	//print(" image = %s\n",(const char *)image);
 	source_images	= load_image( (const char *)*image);  // 
 	if(source_images == NULL)
 	{
@@ -155,7 +165,7 @@ int gfx_blit_fill(int mode,gfx_rectangle_t *target_rect, unsigned int *source, g
 	if(*source==0) 
 	{
 		/* when widget_create(ex, button_create),  widget->background==0   */
-		print(" gfx_blit_fill :  ------      no source(background)   ---------\n");
+		d_print(" gfx_blit_fill :  ------      no source(background)   ---------");
 		return 0;
 	}	
 
@@ -163,12 +173,12 @@ int gfx_blit_fill(int mode,gfx_rectangle_t *target_rect, unsigned int *source, g
 	if( ((*source>>24)&0xff) == 0x80 )
 	{
 		
-		print(" gfx_blit_fill_color : 0x%x  \n",*source);
+		d_print(" gfx_blit_fill_color : 0x%x  ",*source);
 		gfx_blit_fill_color( mode,target_rect,  (gfx_color_t *)source);
 	}
 	else
 	{
-		print(" gfx_blit_image : 0x%x  \n",*source);
+		d_print(" gfx_blit_image : 0x%x ",*source);
 		gfx_blit_image(target_rect, source, source_rect);
 	}
 	return 0;
@@ -206,7 +216,7 @@ SDL_Surface *load_image( const char *name )
         if( optimizedImage != NULL )
         {
             //Map the color key with white color
-            Uint32 colorkey = SDL_MapRGB( optimizedImage->format, 0x1f, 0xFF, 0xFF );
+            Uint32 colorkey = SDL_MapRGB( optimizedImage->format, 0xff, 0xFF, 0xFF );
 
             //Set all pixels of color R 0xff, G 0xFF, B 0xFF to be transparent
             SDL_SetColorKey( optimizedImage, SDL_SRCCOLORKEY, colorkey );
@@ -231,7 +241,7 @@ int gfx_blit_label( int mode, char *text,gfx_rectangle_t *rect,  gfx_color_t col
 	my_rect.x=rect->x;
 	my_rect.y=rect->y;
 
-	print( " gfx_blit_label[%s]\n",text);
+	d_print( " gfx_blit_label[%s]",text);
 
 	//rect->y+=font_dsc.height ;
 	//rect->y+=8;
@@ -250,12 +260,12 @@ int gfx_blit_label( int mode, char *text,gfx_rectangle_t *rect,  gfx_color_t col
 int gfx_blit_restore(gfx_rectangle_t *rect, int *image, gfx_rectangle_t *src_rect)
 {
 
-	print("gfx_blit_restore\n");
+	d_print("gfx_blit_restore");
 	return 0;
 }
 int gfx_blit_capture(gfx_rectangle_t *rect, int *image, gfx_rectangle_t *src_rect)
 {
-	print("gfx_blit_capture\n");
+	d_print("gfx_blit_capture");
 
 	return 0;
 }

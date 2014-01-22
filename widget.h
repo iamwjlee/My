@@ -16,6 +16,27 @@ extern "C" {
 #define BODY_COLOR 0x800070A0
 #define LABEL_COLOR 0x80ffffff
 
+#define BLIT_SOURCE_NONE				0x80000000
+
+#define T_DOCK							.align = GfxDOCK_TOP
+#define B_DOCK							.align = GfxDOCK_BOTTOM
+#define L_DOCK							.align = GfxDOCK_LEFT
+#define R_DOCK							.align = GfxDOCK_RIGHT
+#define F_DOCK							.align = GfxDOCK_FILL
+ 
+#define WT_DOCK							.widget.align = GfxDOCK_TOP
+#define WB_DOCK							.widget.align = GfxDOCK_BOTTOM
+#define WL_DOCK							.widget.align = GfxDOCK_LEFT
+#define WR_DOCK							.widget.align = GfxDOCK_RIGHT
+#define WF_DOCK							.widget.align = GfxDOCK_FILL
+ 
+ 
+#define WL_ALIGN						.widget.align = GfxALIGN_LEFT
+#define WR_ALIGN						.widget.align = GfxALIGN_RIGHT
+#define W_RECT							.widget.rect
+#define W_PAD							.widget.pad
+#define W_BACK							.widget.background
+
 /* enumerations --------------------------------------------------------------- */
 
 
@@ -377,9 +398,9 @@ struct widget_s
 	{
 		widget_draw_func_t		draw;
 	} custom;
-	char name[10];
+	char name[30];
 	/* ---- */
-	char label_text[20];
+	char label_text[30];
 	U32 label_color;
 };
 

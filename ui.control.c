@@ -10,6 +10,9 @@
 #include "ui.control.h"
 #include "q.h"
 
+#define d_print(...)  dprint(__VA_ARGS__)
+
+
 typedef struct
 {
 	//slink_list_t			list;
@@ -61,7 +64,7 @@ static void trace_focused_list(slink_list_t list)
 		sprintf(string, "%s(%02X)>", focused->name, focused->priority);
 		strcat(buffer, string);
 	}
-	print("%s\n", buffer);
+	d_print("%s", buffer);
 }
 
 ui_control_t *ui_control_focused(void)
@@ -78,7 +81,7 @@ int ui_control_delete(void)
 	root->running=0;
 	task_wait(root->task, 1, TIMEOUT_INFINITY);
 	task_delete(root->task);
-	print("[%s] task deleted \n",root->name);
+	d_print("[%s] task deleted ",root->name);
 
 }
 
@@ -86,7 +89,7 @@ int ui_control_init(void)
 {
 	ui_control_t			*control	= &ui_control;
 	root_instance_t			*root		= control->instance;
-	print("%s\n",__FUNCTION__);
+	d_print("%s",__FUNCTION__);
 
 	//api_lock			= mutex_create_fifo_p(ui_partition);
 	//ui_queue			= ui_queue_create_p(ui_partition, MAX_MESSAGE_COUNT, sizeof(ui_message_t));
@@ -123,7 +126,7 @@ int ui_control_start(ui_control_t *request, int *msg)
 			{
 				ui_control_t			*focused = slink_first(root->focused);
 
-				print("ui_control_start(%s)\n", control->name);
+				d_print("ui_control_start(%s)", control->name);
 				if(!control->start(control))
 				{
 					//ui_event_params_t		params = { .now = focused, .next = control };
@@ -136,7 +139,7 @@ int ui_control_start(ui_control_t *request, int *msg)
 
 					//if(msg)	ui_massage_undo_receive(msg);
 					//event_notify(ui_event, UI_EVENT_FOCUS_CHANGED, &params);
-					print("UI_EVENT_FOCUS_CHANGED[%s]\n",control->name );  // can not see menu osd!
+					d_print("UI_EVENT_FOCUS_CHANGED[%s]",control->name );  // can not see menu osd!
 					//ui_control_awake(control);
 					//API_UNLOCK();
 					return(0);
@@ -223,13 +226,13 @@ void  show_ui_message_queue(void)
 	msg_t *queue;
 	slink_foreach(queue, ui_q->slist)
 	{
-		print("\t queue[0x%x] queue->msg=%d queue->state=%d \n",(unsigned int)queue,*(int *)queue->msg,queue->state);
+		d_print("\t queue[0x%x] queue->msg=%d queue->state=%d ",(unsigned int)queue,*(int *)queue->msg,queue->state);
 	} 
 	print("\n");
 	queue=ui_q->queue;
 	for(i=0;i<ui_q->count;queue++,i++)
 	{
-		print("\t\t queue[0x%x] queue->msg=%d	queue->state=%d \n",(unsigned int)queue,*(int *)queue->msg,queue->state);
+		d_print("\t\t queue[0x%x] queue->msg=%d	queue->state=%d ",(unsigned int)queue,*(int *)queue->msg,queue->state);
 	}
 
 }
@@ -248,7 +251,7 @@ ui_message_t *ui_message_claim(osclock_t *timeout)
 int ui_message_init(const char *name, int q_size )
 {
 	
-	print("%s\n",__FUNCTION__);
+	d_print("%s",__FUNCTION__);
 	 ui_q=q_open(name, q_size ,sizeof(ui_message_t));
 	 return 0;
  }
@@ -336,11 +339,11 @@ static int  get_sdl_key(void *data)
 
 				case SDL_VIDEORESIZE:
 					{
-					print("w:%d. h:%d \n",event.resize.w,event.resize.h);
+					d_print("w:%d. h:%d",event.resize.w,event.resize.h);
 					}
 							break;
 				case SDL_QUIT:
-					print("window close\n");
+					d_print("window close");
 					break;
 					
 
@@ -357,7 +360,7 @@ int sdl_key_start(void)
 	sdl_key.running=1;
 	strcpy(sdl_key.name,"keyboard");
 	
-	print("%s\n",__FUNCTION__);
+	d_print("%s",__FUNCTION__);
 	
 	sdl_key.task = task_create (get_sdl_key,(void *)&sdl_key,TASK_STACK_SIZE,TASK_PRIORITY,sdl_key.name,0);
 

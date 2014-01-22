@@ -4,6 +4,9 @@
 //#include "/usr/src/linux-headers-3.8.0-29/include/linux/list.h"
 //#include  "list0.h"
 
+#define d_print(...)  dprint(__VA_ARGS__)
+
+
 //typedef SDL_Thread task_t;
 
 SDL_Surface *screen=NULL;
@@ -36,6 +39,7 @@ typedef struct
 me_t me;
 char *gp;
 
+extern int  datalist_test(void);
 
 int main(int argc,char *argv[])
 {
@@ -46,10 +50,13 @@ int main(int argc,char *argv[])
 
 	strcpy(me.name,"wj");
 	gp=me.name;
-	print("me.name %s \n",me.name);
+	d_print("me.name %s ",me.name);
+	d_print("me.p %s ",gp);
+
+	datalist_test();
+	while(1)  	{	SDL_Delay(20);	}
+	return 0;
 	
-	print("me.p %s \n",gp);
-//	return 0;
 	//time_test();
 	//th_test0();	
 	//q_test2();
@@ -60,7 +67,7 @@ int main(int argc,char *argv[])
 	
 	font=TTF_OpenFont("decker.ttf",28);
 	screen = SDL_SetVideoMode(s_width,s_height,32,SDL_HWSURFACE|SDL_HWPALETTE|SDL_DOUBLEBUF|SDL_RESIZABLE);
-	 print("\nSimple SDL_CreateThread test:");
+	 dprint("\nSimple SDL_CreateThread test:");
 	 
  	videoLock = SDL_CreateSemaphore( 1 );
 	//background=IMG_Load("./background.png");

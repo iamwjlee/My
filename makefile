@@ -189,8 +189,16 @@ sdl02:
 	gcc -g -c dlink.c
 	gcc -g -c blit.c
 	gcc -g -c widget.c
-	gcc -g -o sdl02 sdl02.o time.o slink.o th.o q.o  ui.control.o live.control.o live1.control.o live2.control.o live11.control.o blit.o dlink.o widget.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
+##	not yet tested
+	gcc -g -c ui_data.c
+	gcc -g -c listbox.c
+	gcc -g -c scroll.c
+##
+	gcc -g -c button.c
+	gcc -g -o sdl02 sdl02.o time.o slink.o th.o q.o  ui.control.o live.control.o live1.control.o live2.control.o live11.control.o blit.o dlink.o widget.o ui_data.o listbox.o scroll.o button.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
 
+debug :
+	gdb -tui ./sdl02
 cannot open shared object file:
 	# cannot open shared object file: No such file or directory
 	# /usr/local/lib is normally not searched by the dynamic linker. Add it to LD_LIBRARY_PATH.

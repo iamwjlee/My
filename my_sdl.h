@@ -44,6 +44,10 @@ typedef unsigned char  U8;
 #define s_width  800
 #define s_height  600
 #define DATADIR			"/home/My/data/"
+#define DEBUG_ASSERT(exp)
+
+
+
 extern DECLSPEC int SDLCALL SDL_SoftStretch(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect);
 extern SDL_Surface *screen;
 extern SDL_sem *videoLock ;
@@ -52,6 +56,8 @@ extern TTF_Font *font ;
 
 
 #define print(...) printf(__VA_ARGS__)
+#define dprint(f,...) printf(f"%s",##__VA_ARGS__,"\r\n")
+
 #define err(f,...) printf("%s"f"%s", "\e[31m", ##__VA_ARGS__, "\e[0m \n")  //red
 #define print32(f,...) printf("%s"f"%s", "\e[32m", ##__VA_ARGS__, "\e[0m \n")  //green
 #define print33(f,...) printf("%s"f"%s", "\e[33m", ##__VA_ARGS__, "\e[0m")  //brown

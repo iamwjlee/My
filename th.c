@@ -7,6 +7,7 @@
 #include "slink.h"
 #include "th.h"
 
+#define d_print(...)  dprint(__VA_ARGS__)
 
 struct task_list_s
 {
@@ -49,24 +50,24 @@ int task_wait(task_t *task, int ntasks, unsigned long *timeout)
 	memset(name,0,sizeof(char)*8);
 	slink_foreach(list, TaskList)
 	{
-		//print("\t\t\t m[%x] [%x] [%x]\n",list->name,list->task,*task,task);
+		//d_print("\t\t\t m[%x] [%x] [%x]",list->name,list->task,*task,task);
 		if(list->task==task)
 		{
 			strcpy(name,list->name);
-			//print("\t\t\t name=%s\n",list->name);
+			//d_print("\t\t\t name=%s",list->name);
 			break;
 		}
 	}	
 	
-	print("\t\t\t remove list=%s\n",list->name);
+	d_print("\t\t\t remove list=%s",list->name);
 	slink_remove(TaskList, list);
-	print("\t\t\t free list=%s\n",list->name);
+	d_print("\t\t\t free list=%s",list->name);
 	free(list);
 
 	SDL_WaitThread( task, &threadReturnValue);
 	
 	if(name)
-		print("\t\t\t task_wait  [%s][%x] \n",name,threadReturnValue);
+		d_print("\t\t\t task_wait  [%s][%x] ",name,threadReturnValue);
 	return 0;
 
 }
@@ -98,7 +99,7 @@ int TestThread( void *data )
         my->cnt=10;
 		while(my->g_on)
         {
-                print( "\nThread counter: %d", my->cnt++);
+                d_print( "\nThread counter: %d", my->cnt++);
                 SDL_Delay(20);
         }
 		
@@ -113,7 +114,7 @@ void th_test0()
 	SDL_Delay(2000);
 	my_thread->g_on=0;
 	SDL_WaitThread( my_thread->task, NULL);
-	print("\nMy First thread_test0 end\n");
+	d_print("\nMy First thread_test0 end");
 	
 }
 
@@ -139,7 +140,7 @@ int  counting(void *data)
 	mycounting_t *p=(mycounting_t *)data;
 	while(p->running)
 	{
-		 print("%s[0x%x] : %d [%d]\n",p->name,(unsigned int )p,p->counting,p->running);
+		 d_print("%s[0x%x] : %d [%d]",p->name,(unsigned int )p,p->counting,p->running);
 		p->counting++;
 		SDL_Delay(500);
 	}
@@ -152,7 +153,7 @@ void th_test()
 	mycounting_t *my2;
 	
 	mycounting_t *p;
-	print("test\n");
+	d_print("test");
 
 /* make instance my1 */
 	my1= (mycounting_t *)malloc(sizeof(mycounting_t));

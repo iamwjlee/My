@@ -8,11 +8,13 @@
 #include "slink.h"
 
 #include "menuitem.h"
-//#include <directfb.h>
-//#include "label.h"
+
+#include "listbox.h"
+#include "scroll.h"
+#include "button.h"
 
  
-#define d_print(...)  printf(__VA_ARGS__)
+#define d_print(...)  dprint(__VA_ARGS__)
  
 #define T_DOCK							.align = GfxDOCK_TOP
 #define B_DOCK							.align = GfxDOCK_BOTTOM
@@ -54,6 +56,23 @@ extern  SDL_Surface *load_image( const char *name );
 	
 	widget_t 			 icon_info;
 	widget_t 			 icon_yellow;
+
+	struct
+	{
+		listbox_t				*list;
+		scroll_t				*scroll;
+		widget_t				left;
+		widget_t				right;
+		widget_t				top;
+		widget_t				bottom;
+	} listbox;
+	//
+
+	// button
+	button_t 			 *button[3];
+	int						current;
+	//
+	
 	//U32 					level;									
 	//U32 					dummy;
 	// widget_t 			 *title;
@@ -87,6 +106,26 @@ static my_instance_t				 menu_instance;
 											 (blit_source_t)DATADIR"border.in.E.png",
 										 };
 
+ static listbox_style_t 				 service_list_style =
+										 {
+											 .pad = { 10, 40, 4, 0 },
+ 
+											 .pen[0].forecolor.value	 = 0x800070A0,
+											 .pen[0].align			 = GfxALIGN_LEFT,
+											 .pen[1].forecolor.value	 = 0x806A4700,
+											 .pen[1].align			 = GfxALIGN_LEFT,
+											 .pen[2].forecolor.value	 = 0x80B2B2B2,
+											 .pen[2].align			 = GfxALIGN_LEFT,
+ 
+											 .base[0] 				 = 0x80C0F0F0, //0x80c0ede8, background of list text!
+											 .base[1] 				 = 0x80c9e55e,
+											 .base[2] 				 = 0x80d4f5e8,
+ 
+											 .cover[0]				 = BLIT_SOURCE_NONE,
+											 .cover[1]				 = BLIT_SOURCE_NONE,
+											 .cover[2]				 = BLIT_SOURCE_NONE,
+										 };
+
  static void label_custom_draw(widget_t *widget, int *target, gfx_rectangle_t *granted, int recursive)
  {
 	// label_t				 *label  = label_from(widget);
@@ -94,7 +133,7 @@ static my_instance_t				 menu_instance;
 	 gfx_rectangle_t		 client  = widget->client;
 	gfx_color_t color;
  
-  	d_print("label_custom_draw : client[%d-%d-%d-%d] granted[%d-%d-%d-%d]   [%s]\n ",
+  	d_print("label_custom_draw : client[%d-%d-%d-%d] granted[%d-%d-%d-%d]   [%s] ",
  	client.x, client.y,client.w,client.h,  granted->x,granted->y,granted->w,granted->h,widget->label_text);
  
 	 client.x += granted->x;
@@ -112,11 +151,15 @@ static my_instance_t				 menu_instance;
 	 //label->remain = gfx_new_puts(pen, label->text);
 	 
  }
+ static void draw_service_item(ui_data_t *datum, int *target, gfx_pen_t *pen, gfx_rectangle_t *client)
+ {
+	d_print("draw_service_item");
+ }
 
  int my_view_layout(my_instance_t *menu)
 {
 	
-	widget_params_t base	= { .rect = { 60, 60, 500, 400 },  .attribute.popup = 1, .background =	0, .name="my.view.base"};
+	widget_params_t base	= { .rect = { 160, 10, 500, 580 },  .attribute.popup = 1, .background =	0, .name="my.view.base"};
  
  	widget_params_t top  = { .label_text="love", .label_color=LABEL_COLOR,
 		.rect = { 0, 0, 0, 40 },	.align = GfxDOCK_TOP, .background =  BODY_COLOR, .name="my.view.top" };
@@ -156,6 +199,54 @@ static my_instance_t				 menu_instance;
 								.name="my.view.icon3",
 							};
 
+	//
+	listbox_params_t		list =
+							{
+								WF_DOCK,
+								W_PAD			= { 0, 4, 0, 0 },
+								W_BACK			= (blit_source_t)0x80C0F0F0,
+								.widget.name="my.view.list",
+								.lines			= 5,
+								.style			= &service_list_style,
+							};
+	scroll_params_t			scroll =
+							{
+								WR_DOCK,
+								W_RECT			= { 0, 0, 20, 0 },
+								W_PAD			= { 2, 2,  2, 2 },
+								W_BACK			= 0x80588692,
+								
+								.widget.name="my.view.scroll",
+								.thumb			= 0x80e8f7f7,
+							};
+
+
+	//
+
+	//button
+	button_style_t			button_style =
+							{ /* selected button */
+								.pen[0].forecolor.value = 0x809e9e9e,/* 0x80848c8e, */
+								//.pen[0].align 		= GfxALIGN_CENTER,
+								.base[0]				= (blit_source_t)DATADIR"button.deselected.png",
+								/* non-selected button */
+								.pen[1].forecolor.value = 0x806A4700, /* 0x80ffffff : (blue)	0x806A4700: (yellow) */
+								//.pen[1].align 		= GfxALIGN_CENTER,
+								.base[1]				= (blit_source_t)DATADIR"button.selected.yellow.png"
+							};
+	button_params_t 		button =
+							{
+								.widget.rect	= { 280, 10, 168-20, 54 },
+								.widget.pad 	= { 0, 0, 6, 0},
+								.widget.name="my.view.button",
+								//.widget.attribute.blend =1,
+								.style			= &button_style,
+							};
+
+
+
+	//
+
 	/* order of widget_init */ 
 
 	widget_init(&menu->widget, &base, (void*)NULL); 					
@@ -171,7 +262,7 @@ static my_instance_t				 menu_instance;
 
 
 
-	widget_border_init(&menu->client, in_border_list, 0, &menu->body);
+	//widget_border_init(&menu->client, in_border_list, 0, &menu->body);
 
 	icon.background = (blit_source_t)DATADIR"icon.critical.png";
 	widget_init(&menu->icon, &icon, &menu->bottom); 	menu->icon.flags.visible = 1;
@@ -182,6 +273,23 @@ static my_instance_t				 menu_instance;
 	icon_yellow.background = (blit_source_t)DATADIR"icon.yellow.png";
 	widget_init(&menu->icon_yellow, &icon_yellow, &menu->bottom); 	menu->icon_yellow.flags.visible = 1;
 
+	//
+
+	menu->listbox.scroll			= scroll_create(&menu->body, &scroll);
+	menu->listbox.list			= listbox_create(&menu->body, &list);
+	menu->listbox.list->scroll	= menu->listbox.scroll;
+	menu->listbox.list->item.draw	= draw_service_item;
+	//..
+	// button
+	button.text 			= "ML(ML_OK)";
+	menu->current=0;
+	menu->button[0] 	= button_create(&menu->bottom, &button);
+	
+	button_set_state(menu->button[menu->current], BUTTON_SELECTED);
+	//button_set_state(menu->button[menu->current], BUTTON_DISABLED); //something wrong
+
+	//
+
 // size for help 
 	menu->area.x	= menu->bottom.client.x+menu->bottom.rect.x;
 	menu->area.y	= menu->bottom.client.y+ menu->bottom.rect.y;
@@ -189,7 +297,7 @@ static my_instance_t				 menu_instance;
 	menu->area.h	= menu->bottom.client.h;
 
 	
-	 d_print(" ------------->bottom size %d %d %d %d\n",menu->bottom.rect.x,menu->bottom.rect.y,menu->bottom.rect.w,menu->bottom.rect.h);
+	 d_print(" ------------->bottom size %d %d %d %d",menu->bottom.rect.x,menu->bottom.rect.y,menu->bottom.rect.w,menu->bottom.rect.h);
 
 	return(0);
 }
@@ -264,7 +372,7 @@ void  my_widget_test()
 		 widget_init(WIDGET_OF(plate),		 &base, 	 widget);		 WIDGET_VISIBLE(plate)		 = TRUE;
 		 widget_init(WIDGET_OF(&plate->l),	 &base_l,	 WIDGET_OF(plate)); 	 WIDGET_VISIBLE(&plate->l)	 = TRUE;
 		 
-		 d_print("         %s \n",(const char *)base_l.background);
+		 d_print("         %s ",(const char *)base_l.background);
 		 widget_init(WIDGET_OF(&plate->r),	 &base_r,	 WIDGET_OF(plate)); 	 WIDGET_VISIBLE(&plate->r)	 = TRUE;
 		 widget_init(WIDGET_OF(&plate->m), &base_m, WIDGET_OF(plate));  WIDGET_VISIBLE(&plate->m)	 = TRUE;
 		 base.align = GfxDOCK_BOTTOM;
@@ -338,7 +446,7 @@ int widget_init(widget_t *widget, widget_params_t *params, widget_t *parent)
 	//widget->cover		= params->cover ? params->cover : BLIT_SOURCE_NONE;  
 	if(params->label_text)
 	{
-		print32("params->label_text:%s \n",params->label_text);
+		d_print("params->label_text:%s ",params->label_text);
 		strcpy(widget->label_text,params->label_text);
 		widget->label_color=params->label_color;
 	}
@@ -585,6 +693,7 @@ int widget_is_visible(widget_t *widget)
 	}
 	return(0);
 }
+int g_my_debug_point=0;
 
 void widget_show_recursive(widget_t *widget, int force_update)
 {
@@ -600,9 +709,9 @@ void widget_show_recursive(widget_t *widget, int force_update)
 			if(widget->attribute.blend)
 			{
 				//gfx_blit_fill(BLIT_MODE_BLEND, widget->target, &granted, &widget->background, null);
-				//d_print(" gfx_blit_fill blend\n");
-				d_print("\n");
-				d_print(" gfx_blit_fill blend [%d-%d-%d-%d][%d-%d-%d-%d][0x%x]-%s\n",client.x,client.y,client.w,client.h,granted.x, granted.y,granted.w,granted.h,widget->background,widget->name);
+				//d_print(" gfx_blit_fill blend");
+				d_print(" ");
+				d_print(" gfx_blit_fill blend [%d-%d-%d-%d][%d-%d-%d-%d][0x%x]-%s",client.x,client.y,client.w,client.h,granted.x, granted.y,granted.w,granted.h,widget->background,widget->name);
 				//gfx_blit_image(&granted ,&widget->background, NULL);
 				
 				gfx_blit_fill(1,&granted,&widget->background, NULL);
@@ -611,7 +720,7 @@ void widget_show_recursive(widget_t *widget, int force_update)
 			{
 				//gfx_blit_fill(BLIT_MODE_COPY, widget->target, &granted, &widget->background, null); //here
 				
-				d_print(" gfx_blit_fill not blend [%d-%d-%d-%d][%d-%d-%d-%d][0x%x] -%s\n",client.x,client.y,client.w,client.h,granted.x, granted.y,granted.w,granted.h,widget->background,widget->name);
+				d_print(" gfx_blit_fill not blend [%d-%d-%d-%d][%d-%d-%d-%d][0x%x] -%s",client.x,client.y,client.w,client.h,granted.x, granted.y,granted.w,granted.h,widget->background,widget->name);
 				//gfx_blit_fill_color(&granted,&widget->background);
 				if(granted.w && granted.h)
 				gfx_blit_fill(0,&granted, &widget->background, NULL);
@@ -627,8 +736,15 @@ void widget_show_recursive(widget_t *widget, int force_update)
 
 		dlink_foreach(child, widget->children.list)
 		{
-			print(" recursive [%s] \n",child->name);
+			d_print(" recursive [%s] ",child->name);
+			//
+			if(!strcmp(child->name,"my.view.scroll"))
+			{
+				g_my_debug_point =1;
+			}
+			//
 			widget_show_recursive(child, force_update);
+			g_my_debug_point=0;
 		}	
 		widget->flags.dirty = 0;
 	}
@@ -639,7 +755,7 @@ void widget_show(widget_t *widget, int force_update)
 {
 	if(widget)
 	{
-		print47("\twidget_show start ---->%s",widget->name);
+		d_print("\twidget_show start ---->%s",widget->name);
 		if(!widget->flags.visible)
 		{
 			force_update = 1;
@@ -655,7 +771,7 @@ void widget_show(widget_t *widget, int force_update)
 				{
 					if(	!widget->capture && widget->attribute.popup)
 					{
-						print("widget capture first -\n");
+						d_print("widget capture first -");
 						widget->capture= gfx_surface_claim(&widget->rect);
 						if(widget->capture)
 						{
@@ -687,8 +803,8 @@ void widget_show(widget_t *widget, int force_update)
 			widget->flags.dirty = 1;
 
 		
-		print47("\twidget_show stop <----%s",widget->name);
-		print("\n");
+		d_print("\twidget_show stop <----%s",widget->name);
+		d_print(" ");
 	}
 }
 
@@ -703,7 +819,7 @@ void widget_hide(widget_t *widget)
 		widget->flags.visible = false;
 		if(widget->capture)
 		{
-			d_print(" widget_hide : capture restore\n");
+			d_print(" widget_hide : capture restore");
 			gfx_blit_restore(rect,widget->capture);
 			//gfx_blit_image(BLIT_MODE_COPY| BLIT_DELETE_SOURCE, HD_VIEWPORT_BACK_BITMAP, rect, widget->capture, null);
 			widget->capture = null;
@@ -714,17 +830,17 @@ void widget_hide(widget_t *widget)
 			if(1)
 			{
 				gfx_color_t c;
-				d_print(" widget_hide : ------%d %d %d %d\n",rect->x,rect->y,rect->w,rect->h);
+				d_print(" widget_hide : ------%d %d %d %d",rect->x,rect->y,rect->w,rect->h);
 				c.value=0x80ffffff;
 				gfx_blit_fill_color(0, rect,  &c);
 	//			clear_surface();
 			}	
 			else
-				d_print(" widget_hide fail\n");
+				d_print(" widget_hide fail");
 		}
 		else
 			
-		d_print(" widget_hide fail2\n");
+		d_print(" widget_hide fail2");
 	}
 }
 

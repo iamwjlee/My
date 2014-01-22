@@ -14,6 +14,9 @@
 #include "ui.control.h"
 #include "q.h"
 
+#define d_print(...)  dprint(__VA_ARGS__)
+
+
 typedef struct
 {
 	unsigned				nospace		: 1;
@@ -47,7 +50,7 @@ static ui_control_t						live_control =
 int live1_control_init(void)
 {
 	ui_control_t			*control	= &live_control;
-	print("%s\n",__FUNCTION__);
+	d_print("%s",__FUNCTION__);
 
 	ui_control_register(control);
 
@@ -108,73 +111,73 @@ static int live_control_task(void *cookie)
 	{
 		
 		SDL_Delay(20);
-		//print("Live key?\n");	
+		//d_print("Live key?");	
 
 		m=(ui_message_t *)ui_message_receive_timeout(control,&timeout);
 		if(m)
 		{
-			//print("Live key=0x%x\n",m->key);	
+			//d_print("Live key=0x%x",m->key);	
 			switch(m->key)
 			{
 				case SDLK_ESCAPE:
-					print(" %s:ESCAPE\n",control->name);
+					d_print(" %s:ESCAPE",control->name);
 					isLoop=0;
 					break;
 				case SDLK_1:
-					print(" %s:1\n",control->name);
+					d_print(" %s:1",control->name);
 					
 					ui_control_start(UI_CONTROL("live11.control"),NULL);
 					break;
 				case SDLK_2:
 					
-					print(" %s:2\n",control->name);
+					d_print(" %s:2",control->name);
 					break;
 				case SDLK_3:
 					
-					print(" %s:3\n",control->name);
+					d_print(" %s:3",control->name);
 					break;
 				case SDLK_4:
-					print(" %s:4\n",control->name);
+					d_print(" %s:4",control->name);
 					break;
 					
 				case SDLK_UP:
-					print(" %s:UP\n",control->name);
+					d_print(" %s:UP",control->name);
 					break;
 				case SDLK_DOWN:
-					print(" %s:DOWN\n",control->name);
+					d_print(" %s:DOWN",control->name);
  					break;
 				case SDLK_LEFT:
-					print(" %s:LEFT\n",control->name);
+					d_print(" %s:LEFT",control->name);
 					break;
 				case SDLK_RIGHT:
-					print(" %s:RIGHT\n",control->name);
+					d_print(" %s:RIGHT",control->name);
 					break;
 				case SDLK_a:
 				case SDLK_w:
 				case SDLK_e:
 				case SDLK_r:
 				
-					print(" %s:AWER\n",control->name);
+					d_print(" %s:AWER",control->name);
 					break;
 				default :
-					print(" %s:ETC[0x%x]\n",control->name,m->key);
+					d_print(" %s:ETC[0x%x]",control->name,m->key);
 
 					break;
 					
 					
 			}
 			
-			if(ui_message_release(m)!=0) print("q_release fail\n");
+			if(ui_message_release(m)!=0) d_print("q_release fail");
 		}
 		else
 		{
 			
-	 	//	print("N");
+	 	//	d_print("N");
 		}	
 	}
 	
 	ui_control_release(control);
-	print("Exit %s \n",control->name);
+	d_print("Exit %s ",control->name);
 
 	//sdl_key_stop();
 	
