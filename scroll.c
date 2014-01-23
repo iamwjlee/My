@@ -90,7 +90,7 @@ static void scroll_widget_draw(widget_t *widget, int *target, gfx_rectangle_t *g
 	gfx_rectangle_t			thumb	= widget->client;
 	U32						full_size, offset, size;
 
-	print33("scroll_widget_draw\n");
+	print33("scroll_widget_draw start");
 
 	if(scroll->full > scroll->active)
 	{
@@ -122,6 +122,9 @@ static void scroll_widget_draw(widget_t *widget, int *target, gfx_rectangle_t *g
 	}
 	if(scroll->cover)
 		gfx_blit_fill(BLIT_MODE_BLEND,  granted, &scroll->cover, null);
+
+	
+	print33("scroll_widget_draw end");
 }
 
 

@@ -58,6 +58,7 @@ extern  SDL_Surface *load_image( const char *name );
 
 	//for list
 	ui_datalist_t			datalist;
+	scroll_t  *scroll;  // scroll first before list
 	listbox_t *list;
 	//
 	struct
@@ -310,9 +311,10 @@ button_style_t			button_style =
 	//menu->listbox.list->scroll	= menu->listbox.scroll;
 	//menu->listbox.list->item.draw	= draw_service_item;
 
-	
+
+	menu->scroll =scroll_create(&menu->body, &scroll);
 	menu->list			= listbox_create(&menu->body, &list);
-	menu->list->scroll	= scroll_create(&menu->body, &scroll);
+	menu->list->scroll	= menu->scroll;
 	menu->list->item.draw	= draw_service_item;
 	//..
 	// button
@@ -340,41 +342,31 @@ button_style_t			button_style =
 
 void make_sample_data(void)
 {
-	
+	int i;
 	ui_data_t 			*data;
 	my_instance_t 		*menu = &menu_instance;
 	ui_datalist_t *datalist= &menu->datalist;
 
+	char *name[20]={"a1","a2","a3","a4","a5","a6","a7","a8","a9","a10","b1","b2","b3","b4","b5","b6","b7","b8","b9","b10"};
 	
 
 	ui_datalist_init(datalist);
-	data = ui_data_new("a1", (void *)1);
+	for(i=0;i<15;i++)
+	{
+	data = ui_data_new(name[i], (void *)(i+1));
 	ui_datalist_add(datalist, data);
-
-
-	data= ui_data_new("a2", (void *)2);
-	ui_datalist_add(datalist, data);
-
-	data= ui_data_new("a3", (void *)3);
-	ui_datalist_add(datalist, data);
+	}
 
 	ui_datalist_add(datalist, ui_data_new("", null));
 
 	#if 0
-
 	ui_datalist_select(datalist, UI_DATA_FIRST);
 	{
-		
 		ui_data_t 			*datum;
 		dlink_foreach(datum, datalist->list)
 		{
-		
-	print32(" %s - %d",datum->caption,(int)datum->object);
-
+			print32(" %s - %d",datum->caption,(int)datum->object);
 		}
-	
-	
-
 	}
 	#endif
 	/* connect datalist to list object */
@@ -417,9 +409,7 @@ void my_widget_test()
 	 
 	unsigned int tmp;
 	
-	 
-	
- SDL_Surface *background_image;
+ 	SDL_Surface *background_image;
 	 
 	 widget_params_t		 base = { .rect = { 0, 0, 24, 24 }, T_DOCK,  .attribute.phantom = TRUE	};
 
@@ -427,14 +417,13 @@ void my_widget_test()
 	 for(i = 0, plate = &border->_top, blit_source = backgrounds; i < 2; i++, plate++)
 	 {
 		
- widget_params_t		 base_l  = { .rect = { 0, 0, 24, 0 }, L_DOCK, .background = *blit_source++, .attribute.blend = blend, .name="base_l" };
-		 widget_params_t		 base_r  = { .rect = { 0, 0, 24, 0 }, R_DOCK, .background = *blit_source++, .attribute.blend = blend, .name="base_r" };
-		 widget_params_t		 base_m  = { .rect = { 0, 0,  0, 0 }, F_DOCK, .background = *blit_source++, .attribute.blend = blend , .name="base_m"};
+		widget_params_t		 base_l  = { .rect = { 0, 0, 24, 0 }, L_DOCK, .background = *blit_source++, .attribute.blend = blend, .name="base_l" };
+		widget_params_t		 base_r  = { .rect = { 0, 0, 24, 0 }, R_DOCK, .background = *blit_source++, .attribute.blend = blend, .name="base_r" };
+		widget_params_t		 base_m  = { .rect = { 0, 0,  0, 0 }, F_DOCK, .background = *blit_source++, .attribute.blend = blend , .name="base_m"};
  
 		// if(((base_l.background >> 24) > 0x80) && 1 /* (base_l.background != BLIT_SOURCE_NONE) */)
 		 {
-	
-		 background_image = load_image(PNG(base_l.background));
+		 	background_image = load_image(PNG(base_l.background));
 			 if(background_image)
 			 {
 			 	
@@ -447,15 +436,11 @@ void my_widget_test()
 	 //if(((base_r.background >> 24) > 0x80) &&1 /* (base_r.background != BLIT_SOURCE_NONE) */)
 		 {
 	
-		 background_image = load_image(PNG(base_r.background));
+			 background_image = load_image(PNG(base_r.background));
 			 if(background_image)
 			 	{
-
-					
 					base_r.rect.w =background_image->w;
-				 
 			 	}
-
 		 }
  
 
@@ -463,7 +448,7 @@ void my_widget_test()
 		 widget_init(WIDGET_OF(&plate->l),	 &base_l,	 WIDGET_OF(plate)); 	 WIDGET_VISIBLE(&plate->l)	 = TRUE;
 		 
 		
- d_print("         %s ",(const char *)base_l.background);
+ 		d_print("         %s ",(const char *)base_l.background);
 		 widget_init(WIDGET_OF(&plate->r),	 &base_r,	 WIDGET_OF(plate)); 	 WIDGET_VISIBLE(&plate->r)	 = TRUE;
 		 widget_init(WIDGET_OF(&plate->m), &base_m, WIDGET_OF(plate));  WIDGET_VISIBLE(&plate->m)	 = TRUE;
 		 base.align = GfxDOCK_BOTTOM;
@@ -471,37 +456,26 @@ void my_widget_test()
  
 	 {
 		
- widget_params_t		 base_l  = { .rect = { 0, 0, 24, 0 }, L_DOCK, .background = *blit_source++,.name="base_w", .attribute.blend = blend};
+ 		widget_params_t		 base_l  = { .rect = { 0, 0, 24, 0 }, L_DOCK, .background = *blit_source++,.name="base_w", .attribute.blend = blend};
 		 widget_params_t		 base_r  = { .rect = { 0, 0, 24, 0 }, R_DOCK, .background = *blit_source++, .name="base_e", .attribute.blend = blend};
  
 		 //if(((base_l.background >> 24) > 0x80) && 1 /*(base_l.background != BLIT_SOURCE_NONE)*/)
 		 {
-	
-		 background_image =load_image(PNG(base_l.background));
-			 if(background_image) 	{ 
-			 	
-			 	base_l.rect.w = background_image->w;
-				
-	
-		 	
+			background_image =load_image(PNG(base_l.background));
+			if(background_image) 	{ 
+				base_l.rect.w = background_image->w;
 			}
-	
-	 }
+	 	}
 	
 	 //if(((base_r.background >> 24) > 0x80) &&1 /* (base_r.background != BLIT_SOURCE_NONE)*/)
 		 {
-	
-		 background_image = load_image(PNG(base_r.background));
+			 background_image = load_image(PNG(base_r.background));
 			 if(background_image) {
-			 	
 			 	base_r.rect.w =background_image-> w;
-			 	
 			 }	
-
 		 }
-	
-	 widget_init(WIDGET_OF(&border->l),  &base_l,	 widget);		 WIDGET_VISIBLE(&border->l)  = TRUE;
-		 widget_init(WIDGET_OF(&border->r),  &base_r,	 widget);		 WIDGET_VISIBLE(&border->r)  = TRUE;
+		widget_init(WIDGET_OF(&border->l),  &base_l,	 widget);		 WIDGET_VISIBLE(&border->l)  = TRUE;
+		widget_init(WIDGET_OF(&border->r),  &base_r,	 widget);		 WIDGET_VISIBLE(&border->r)  = TRUE;
 	 }
  
 	 if(WIDGET_OF(&border->_top.l)->rect.w < WIDGET_OF(&border->_bot)->rect.h)

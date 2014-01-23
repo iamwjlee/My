@@ -85,7 +85,10 @@ listbox_t *listbox_create(widget_t *parent, listbox_params_t *params)
 
 				//listbox->lock = semaphore_create_fifo(1);
 				if(style->scroll.widget.rect.w || style->scroll.widget.rect.h)
+				{
+					err("here is scroll_create ");
 					listbox->scroll	= scroll_create(WIDGET_OF(listbox), &style->scroll);
+				}	
 				if(style->spacer.rect.w)
 					widget_dock_space(WIDGET_OF(listbox), &style->spacer);
 

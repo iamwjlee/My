@@ -58,9 +58,9 @@ extern TTF_Font *font ;
 #define print(...) printf(__VA_ARGS__)
 #define dprint(f,...) printf(f"%s",##__VA_ARGS__,"\r\n")
 
-#define err(f,...) printf("%s"f"%s", "\e[31m", ##__VA_ARGS__, "\e[0m \n")  //red
+#define err(f,...) printf("%s"f"%s", "\e[31m", ##__VA_ARGS__, "\e[0m \r\n")  //red
 #define print32(f,...) printf("%s"f"%s", "\e[32m", ##__VA_ARGS__, "\e[0m \r\n")  //green
-#define print33(f,...) printf("%s"f"%s", "\e[33m", ##__VA_ARGS__, "\e[0m")  //brown
+#define print33(f,...) printf("%s"f"%s", "\e[33m", ##__VA_ARGS__, "\e[0m \r\n")  //brown
 #define print34(f,...) printf("%s"f"%s", "\e[34m", ##__VA_ARGS__, "\e[0m \n")  //blue
 #define print35(f,...) printf("%s"f"%s", "\e[35m", ##__VA_ARGS__, "\e[0m")  //purple 
 #define print36(f,...) printf("%s"f"%s", "\e[36m", ##__VA_ARGS__, "\e[0m")  //cyan

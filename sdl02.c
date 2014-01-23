@@ -42,6 +42,7 @@ int main(int argc,char *argv[])
 	//unsigned  long t,t2;
 
 	//*test_p=1234;
+	err(" Good Luck!");
 	datalist_test();
 	
 	//time_test();

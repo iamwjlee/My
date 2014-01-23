@@ -254,5 +254,5 @@ clean :
 	rm -f sdl01
 	rm -f sdl02
 	rm -f sfml
-	
+	rm -f core
 
