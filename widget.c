@@ -53,10 +53,13 @@ extern  SDL_Surface *load_image( const char *name );
 
 	//test 	
 	widget_t 			 icon;
-	
 	widget_t 			 icon_info;
 	widget_t 			 icon_yellow;
 
+	//for list
+	ui_datalist_t			datalist;
+	listbox_t *list;
+	//
 	struct
 	{
 		listbox_t				*list;
@@ -153,7 +156,30 @@ static my_instance_t				 menu_instance;
  }
  static void draw_service_item(ui_data_t *datum, int *target, gfx_pen_t *pen, gfx_rectangle_t *client)
  {
-	d_print("draw_service_item");
+ 	
+	if(*datum->caption)
+	{
+		gfx_rectangle_t r;
+	 	print32("x[%03d] y[%03d] w[%03d] h[%03d] color[0x%x]",client->x,client->y,client->w,client->h,(unsigned int)pen->forecolor.value);
+		print32("draw_service_item [%s]",datum->caption);
+			
+		pen->area.granted =*client;
+		r=pen->area.granted;
+		
+		print32("pen [%03d-%03d-%03d-%03d]",r.x,r.y,r.w,r.h);
+		gfx_new_puts(pen,datum->caption);
+		if(0){
+			gfx_rectangle_t  rec;
+			rec.x=client->x;
+			rec.y=client->y;
+			rec.w=client->w;
+			rec.h=client->h;
+			
+		gfx_blit_label(0, "safffa",&rec,0x80ff0000);
+		
+		SDL_Flip( screen );
+		}
+	}
  }
 
  int my_view_layout(my_instance_t *menu)
@@ -167,87 +193,90 @@ static my_instance_t				 menu_instance;
 	widget_params_t body	= { .rect = { 0, 0,  0, 0 },			.align = GfxDOCK_FILL,	.background = CLIENT_BODY,.name="my.view.body" };
 
 	/* 
-		what's blend  mode ?
-		it need 
+	
+	what's blend  mode ?		it need 
 
 	*/
 
-	widget_params_t			icon =
-							{
-								.rect					= { 0, 10, 48, 48 },
-								.pad = { 20, 10, 10, 10}, 
-								.background				= BODY_COLOR,
-								//.attribute.blend		= true,
-								.name="my.view.icon",
-							};
+	
+widget_params_t			icon =	{				
+		.rect					= { 0, 10, 48, 48 },
+		.pad = { 20, 10, 10, 10}, 
+		.background				= BODY_COLOR,
+		//.attribute.blend		= true,
+		.name="my.view.icon",
+	};
 
-	widget_params_t			icon_info =
-							{
-								.rect					= { 50, 10, 46, 46 },
-								//.pad = { 20, 10, 10, 10}, 
-								.background				= BODY_COLOR,
-								//.attribute.blend		= true,
-								.name="my.view.icon2",
-							};
+	widget_params_t			icon_info = 		{		
+		.rect	= { 50, 10, 46, 46 },		
+		//.pad = { 20, 10, 10, 10}, 
+		.background				= BODY_COLOR,
+		//.attribute.blend		= true,
+		.name="my.view.icon2",
+	};
 
 	widget_params_t			icon_yellow =
-							{
-								.rect					= { 50+50, 10, 46, 28 },
-								//.pad = { 20, 10, 10, 10}, 
-								.background				= BODY_COLOR,
-								//.attribute.blend		= true,
-								.name="my.view.icon3",
-							};
+	{
+		.rect					= { 50+50, 10, 46, 28 },
+		//.pad = { 20, 10, 10, 10}, 
+		.background				= BODY_COLOR,
+		//.attribute.blend		= true,
+		.name="my.view.icon3",
+	};
 
 	//
-	listbox_params_t		list =
-							{
-								WF_DOCK,
-								W_PAD			= { 0, 4, 0, 0 },
-								W_BACK			= (blit_source_t)0x80C0F0F0,
-								.widget.name="my.view.list",
-								.lines			= 5,
-								.style			= &service_list_style,
-							};
+	
+listbox_params_t		list =
+	{
+		WF_DOCK,
+		W_PAD			= { 0, 4, 0, 0 },
+		W_BACK			= (blit_source_t)0x80C0F0F0,
+		.widget.name="my.view.list",
+		.lines			= 12,
+		.style			= &service_list_style,
+	};
 	scroll_params_t			scroll =
-							{
-								WR_DOCK,
-								W_RECT			= { 0, 0, 20, 0 },
-								W_PAD			= { 2, 2,  2, 2 },
-								W_BACK			= 0x80588692,
-								
-								.widget.name="my.view.scroll",
-								.thumb			= 0x80e8f7f7,
-							};
+	{
+		WR_DOCK,
+		W_RECT			= { 0, 0, 20, 0 },
+		W_PAD			= { 2, 2,  2, 2 },
+		W_BACK			= 0x80588692,
+		.widget.name="my.view.scroll",
+		.thumb			= 0x80e8f7f7,
+	};
 
 
 	//
 
-	//button
-	button_style_t			button_style =
-							{ /* selected button */
-								.pen[0].forecolor.value = 0x809e9e9e,/* 0x80848c8e, */
-								//.pen[0].align 		= GfxALIGN_CENTER,
-								.base[0]				= (blit_source_t)DATADIR"button.deselected.png",
-								/* non-selected button */
-								.pen[1].forecolor.value = 0x806A4700, /* 0x80ffffff : (blue)	0x806A4700: (yellow) */
-								//.pen[1].align 		= GfxALIGN_CENTER,
-								.base[1]				= (blit_source_t)DATADIR"button.selected.yellow.png"
-							};
+	
+//button	
+button_style_t			button_style =
+	{ /* selected button */
+		.pen[0].forecolor.value = 0x809e9e9e,/* 0x80848c8e, */
+		//.pen[0].align 		= GfxALIGN_CENTER,
+		.base[0]				= (blit_source_t)DATADIR"button.deselected.png",
+		/* non-selected button */
+						
+		.pen[1].forecolor.value = 0x806A4700, /* 0x80ffffff : (blue)	0x806A4700: (yellow) */
+		//.pen[1].align 		= GfxALIGN_CENTER,
+		.base[1]				= (blit_source_t)DATADIR"button.selected.yellow.png"
+	};
 	button_params_t 		button =
-							{
-								.widget.rect	= { 280, 10, 168-20, 54 },
-								.widget.pad 	= { 0, 0, 6, 0},
-								.widget.name="my.view.button",
-								//.widget.attribute.blend =1,
-								.style			= &button_style,
-							};
+	{
+		.widget.rect	= { 280, 10, 168-20, 54 },
+		.widget.pad 	= { 0, 0, 6, 0},
+		.widget.name="my.view.button",
+		//.widget.attribute.blend =1,
+		.style			= &button_style,
+	};
 
 
 
 	//
 
-	/* order of widget_init */ 
+
+	
+/* order of widget_init */ 
 
 	widget_init(&menu->widget, &base, (void*)NULL); 					
 	WIDGET_VISIBLE(menu) = 0;   // it does not work !!
@@ -262,7 +291,7 @@ static my_instance_t				 menu_instance;
 
 
 
-	//widget_border_init(&menu->client, in_border_list, 0, &menu->body);
+	widget_border_init(&menu->client, in_border_list, 0, &menu->body);
 
 	icon.background = (blit_source_t)DATADIR"icon.critical.png";
 	widget_init(&menu->icon, &icon, &menu->bottom); 	menu->icon.flags.visible = 1;
@@ -275,10 +304,16 @@ static my_instance_t				 menu_instance;
 
 	//
 
-	menu->listbox.scroll			= scroll_create(&menu->body, &scroll);
-	menu->listbox.list			= listbox_create(&menu->body, &list);
-	menu->listbox.list->scroll	= menu->listbox.scroll;
-	menu->listbox.list->item.draw	= draw_service_item;
+	
+//menu->listbox.scroll			= scroll_create(&menu->body, &scroll);
+	//menu->listbox.list			= listbox_create(&menu->body, &list);
+	//menu->listbox.list->scroll	= menu->listbox.scroll;
+	//menu->listbox.list->item.draw	= draw_service_item;
+
+	
+	menu->list			= listbox_create(&menu->body, &list);
+	menu->list->scroll	= scroll_create(&menu->body, &scroll);
+	menu->list->item.draw	= draw_service_item;
 	//..
 	// button
 	button.text 			= "ML(ML_OK)";
@@ -290,7 +325,7 @@ static my_instance_t				 menu_instance;
 
 	//
 
-// size for help 
+// size for help 	
 	menu->area.x	= menu->bottom.client.x+menu->bottom.rect.x;
 	menu->area.y	= menu->bottom.client.y+ menu->bottom.rect.y;
 	menu->area.w	= menu->bottom.client.w;
@@ -303,11 +338,58 @@ static my_instance_t				 menu_instance;
 }
 
 
-void  my_widget_test()
+void make_sample_data(void)
+{
+	
+	ui_data_t 			*data;
+	my_instance_t 		*menu = &menu_instance;
+	ui_datalist_t *datalist= &menu->datalist;
+
+	
+
+	ui_datalist_init(datalist);
+	data = ui_data_new("a1", (void *)1);
+	ui_datalist_add(datalist, data);
+
+
+	data= ui_data_new("a2", (void *)2);
+	ui_datalist_add(datalist, data);
+
+	data= ui_data_new("a3", (void *)3);
+	ui_datalist_add(datalist, data);
+
+	ui_datalist_add(datalist, ui_data_new("", null));
+
+	#if 0
+
+	ui_datalist_select(datalist, UI_DATA_FIRST);
+	{
+		
+		ui_data_t 			*datum;
+		dlink_foreach(datum, datalist->list)
+		{
+		
+	print32(" %s - %d",datum->caption,(int)datum->object);
+
+		}
+	
+	
+
+	}
+	#endif
+	/* connect datalist to list object */
+	listbox_set_datalist(menu->list, datalist);
+
+	listbox_select(menu->list, UI_DATA_FIRST, false);
+
+
+}
+void my_widget_test()
 {
 	my_instance_t 		*menu = &menu_instance;
 	my_view_layout(menu);
-
+	// Need list for list box
+	make_sample_data();
 	widget_show(WIDGET_OF(menu), 1);
 
 }
@@ -330,26 +412,29 @@ void  my_widget_test()
 	unsigned int			 *background;
 	 blit_source_t			 *blit_source;
 	 widget_plate_t 		 *plate;
-	 int					 i;
+	 int			 i;
 	 int w,h;
-
+	 
 	unsigned int tmp;
 	
 	 
-	 SDL_Surface *background_image;
+	
+ SDL_Surface *background_image;
 	 
 	 widget_params_t		 base = { .rect = { 0, 0, 24, 24 }, T_DOCK,  .attribute.phantom = TRUE	};
 
  
 	 for(i = 0, plate = &border->_top, blit_source = backgrounds; i < 2; i++, plate++)
 	 {
-		 widget_params_t		 base_l  = { .rect = { 0, 0, 24, 0 }, L_DOCK, .background = *blit_source++, .attribute.blend = blend, .name="base_l" };
+		
+ widget_params_t		 base_l  = { .rect = { 0, 0, 24, 0 }, L_DOCK, .background = *blit_source++, .attribute.blend = blend, .name="base_l" };
 		 widget_params_t		 base_r  = { .rect = { 0, 0, 24, 0 }, R_DOCK, .background = *blit_source++, .attribute.blend = blend, .name="base_r" };
 		 widget_params_t		 base_m  = { .rect = { 0, 0,  0, 0 }, F_DOCK, .background = *blit_source++, .attribute.blend = blend , .name="base_m"};
  
 		// if(((base_l.background >> 24) > 0x80) && 1 /* (base_l.background != BLIT_SOURCE_NONE) */)
 		 {
-			 background_image = load_image(PNG(base_l.background));
+	
+		 background_image = load_image(PNG(base_l.background));
 			 if(background_image)
 			 {
 			 	
@@ -358,50 +443,64 @@ void  my_widget_test()
 				base.rect.h = background_image->h;
 			 }
 		 }
-		 //if(((base_r.background >> 24) > 0x80) &&1 /* (base_r.background != BLIT_SOURCE_NONE) */)
+	
+	 //if(((base_r.background >> 24) > 0x80) &&1 /* (base_r.background != BLIT_SOURCE_NONE) */)
 		 {
-			 background_image = load_image(PNG(base_r.background));
+	
+		 background_image = load_image(PNG(base_r.background));
 			 if(background_image)
 			 	{
+
 					
 					base_r.rect.w =background_image->w;
 				 
 			 	}
+
 		 }
  
+
 		 widget_init(WIDGET_OF(plate),		 &base, 	 widget);		 WIDGET_VISIBLE(plate)		 = TRUE;
 		 widget_init(WIDGET_OF(&plate->l),	 &base_l,	 WIDGET_OF(plate)); 	 WIDGET_VISIBLE(&plate->l)	 = TRUE;
 		 
-		 d_print("         %s ",(const char *)base_l.background);
+		
+ d_print("         %s ",(const char *)base_l.background);
 		 widget_init(WIDGET_OF(&plate->r),	 &base_r,	 WIDGET_OF(plate)); 	 WIDGET_VISIBLE(&plate->r)	 = TRUE;
 		 widget_init(WIDGET_OF(&plate->m), &base_m, WIDGET_OF(plate));  WIDGET_VISIBLE(&plate->m)	 = TRUE;
 		 base.align = GfxDOCK_BOTTOM;
 	 }
  
 	 {
-		 widget_params_t		 base_l  = { .rect = { 0, 0, 24, 0 }, L_DOCK, .background = *blit_source++,.name="base_w", .attribute.blend = blend};
+		
+ widget_params_t		 base_l  = { .rect = { 0, 0, 24, 0 }, L_DOCK, .background = *blit_source++,.name="base_w", .attribute.blend = blend};
 		 widget_params_t		 base_r  = { .rect = { 0, 0, 24, 0 }, R_DOCK, .background = *blit_source++, .name="base_e", .attribute.blend = blend};
  
 		 //if(((base_l.background >> 24) > 0x80) && 1 /*(base_l.background != BLIT_SOURCE_NONE)*/)
 		 {
-			 background_image =load_image(PNG(base_l.background));
+	
+		 background_image =load_image(PNG(base_l.background));
 			 if(background_image) 	{ 
 			 	
 			 	base_l.rect.w = background_image->w;
 				
-			 	
+	
+		 	
 			}
-		 }
-		 //if(((base_r.background >> 24) > 0x80) &&1 /* (base_r.background != BLIT_SOURCE_NONE)*/)
+	
+	 }
+	
+	 //if(((base_r.background >> 24) > 0x80) &&1 /* (base_r.background != BLIT_SOURCE_NONE)*/)
 		 {
-			 background_image = load_image(PNG(base_r.background));
+	
+		 background_image = load_image(PNG(base_r.background));
 			 if(background_image) {
 			 	
 			 	base_r.rect.w =background_image-> w;
 			 	
 			 }	
+
 		 }
-		 widget_init(WIDGET_OF(&border->l),  &base_l,	 widget);		 WIDGET_VISIBLE(&border->l)  = TRUE;
+	
+	 widget_init(WIDGET_OF(&border->l),  &base_l,	 widget);		 WIDGET_VISIBLE(&border->l)  = TRUE;
 		 widget_init(WIDGET_OF(&border->r),  &base_r,	 widget);		 WIDGET_VISIBLE(&border->r)  = TRUE;
 	 }
  
@@ -446,6 +545,7 @@ int widget_init(widget_t *widget, widget_params_t *params, widget_t *parent)
 	//widget->cover		= params->cover ? params->cover : BLIT_SOURCE_NONE;  
 	if(params->label_text)
 	{
+		//d	{
 		d_print("params->label_text:%s ",params->label_text);
 		strcpy(widget->label_text,params->label_text);
 		widget->label_color=params->label_color;
@@ -738,7 +838,7 @@ void widget_show_recursive(widget_t *widget, int force_update)
 		{
 			d_print(" recursive [%s] ",child->name);
 			//
-			if(!strcmp(child->name,"my.view.scroll"))
+			if(!strcmp(child->name,"my.view.list"))
 			{
 				g_my_debug_point =1;
 			}

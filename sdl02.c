@@ -30,14 +30,6 @@ void sdl_stop()
 }
 
 
-typedef struct 
-{
-	char name[20];
-	char *p;
-
-}me_t;
-me_t me;
-char *gp;
 
 extern int  datalist_test(void);
 
@@ -45,24 +37,20 @@ int main(int argc,char *argv[])
 {
 	int *test_p = NULL;
 	bool done = false;
-	int 				threadReturnValue;
-	int tickspersec;
-	unsigned  long t,t2;
+	//int 				threadReturnValue;
+	//int tickspersec;
+	//unsigned  long t,t2;
 
-	strcpy(me.name,"wj");
-	gp=me.name;
-	d_print("me.name %s ",me.name);
-	d_print("me.p %s ",gp);
 	//*test_p=1234;
 	datalist_test();
-	while(1)  	{	SDL_Delay(20);	}
-	return 0;
 	
 	//time_test();
 	//th_test0();	
 	//q_test2();
 	//return 0;
 	
+	//while(1)  	{	SDL_Delay(20);	}
+	//return 0;
 	SDL_Init(SDL_INIT_EVERYTHING);
 	TTF_Init();
 	

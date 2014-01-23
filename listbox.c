@@ -306,6 +306,8 @@ static void listbox_widget_draw(widget_t *widget, int *target, gfx_rectangle_t *
 	listbox_t				*listbox = listbox_from(widget);
 	ui_datalist_t			*data = listbox->data;
 
+	//print32("listbox_widget_draw: [%d] ",data->count);
+
 	if(data && data->count)
 	{
 		gfx_rectangle_t			client = widget->client;
@@ -320,7 +322,7 @@ static void listbox_widget_draw(widget_t *widget, int *target, gfx_rectangle_t *
 		{
 			int						state = datum->disabled ? 2 : datum->selected;
 
-			gfx_blit_fill(BLIT_MODE_COPY, target, &client, &listbox->item.base[state], null);
+			gfx_blit_fill(BLIT_MODE_COPY, /*target,*/ &client, &listbox->item.base[state], null);
 			{
 				gfx_pen_t				*pen = &listbox->item.pen[state];
 				gfx_rectangle_t			padded = gfx_rectangle_padded(&client, &listbox->item.pad);
@@ -334,7 +336,7 @@ static void listbox_widget_draw(widget_t *widget, int *target, gfx_rectangle_t *
 			}
 
 
-			gfx_blit_fill(BLIT_MODE_BLEND,  &client, &listbox->item.cover[state], null);
+//			gfx_blit_fill(BLIT_MODE_BLEND,  &client, &listbox->item.cover[state], null);
 
 			client.y += listbox->item.height;
 			if(++count == listbox->item.lines)

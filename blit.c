@@ -117,6 +117,8 @@ int gfx_blit_fill_color( blit_mode_t mode,gfx_rectangle_t *rect,  gfx_color_t *c
 
 	
 	SDL_FillRect(screen,&s, c);
+	
+	SDL_Flip( screen );
 	return 0;
 
 }
@@ -173,7 +175,7 @@ int gfx_blit_fill(int mode,gfx_rectangle_t *target_rect, unsigned int *source, g
 	if( ((*source>>24)&0xff) == 0x80 )
 	{
 		
-		d_print(" gfx_blit_fill_color : 0x%x  ",*source);
+		d_print(" gfx_blit_fill_color : 0x%x  [%03d-%03d-%03d-%03d]",*source,target_rect->x,target_rect->y,target_rect->w,target_rect->h);
 		gfx_blit_fill_color( mode,target_rect,  (gfx_color_t *)source);
 	}
 	else
@@ -229,7 +231,7 @@ SDL_Surface *load_image( const char *name )
     return optimizedImage;
 }
 
-int gfx_blit_label( int mode, char *text,gfx_rectangle_t *rect,  gfx_color_t color)
+int gfx_blit_label( int mode, const char *text,gfx_rectangle_t *rect,  gfx_color_t color)
 {
 	SDL_Color my_color;
 	SDL_Rect my_rect;
@@ -241,7 +243,7 @@ int gfx_blit_label( int mode, char *text,gfx_rectangle_t *rect,  gfx_color_t col
 	my_rect.x=rect->x;
 	my_rect.y=rect->y;
 
-	d_print( " gfx_blit_label[%s]",text);
+	print32( "gfx_blit_label[%s]",text);
 
 	//rect->y+=font_dsc.height ;
 	//rect->y+=8;
@@ -255,6 +257,33 @@ int gfx_blit_label( int mode, char *text,gfx_rectangle_t *rect,  gfx_color_t col
 	return 0;
 }
 
+int gfx_new_puts(gfx_pen_t *pen,const char *string)
+{
+	gfx_rectangle_t rect;
+	gfx_color_t color;
+
+	color=pen->forecolor;
+	rect.x=pen->area.granted.x;
+	rect.y=pen->area.granted.y;
+	rect.w=pen->area.granted.w;
+	rect.h=pen->area.granted.h;
+	gfx_blit_label(0,string,&rect,color);
+	return 0;
+
+}
+
+void gfx_printf(gfx_pen_t *pen, const char *format, ...)
+{
+	va_list					list;
+	static char				text_buffer[30];
+
+	//mutex_lock(gfx_text_lock);
+	va_start(list, format);
+	vsprintf(text_buffer, format, list);
+	va_end(list);
+	gfx_new_puts(pen, text_buffer);
+	//mutex_release(gfx_text_lock);
+}
 
 
 int gfx_blit_restore(gfx_rectangle_t *rect, int *image, gfx_rectangle_t *src_rect)

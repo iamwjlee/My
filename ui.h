@@ -87,4 +87,21 @@ struct ui_datalist_s
 typedef struct ui_datalist_s			ui_datalist_t;
 
 
+/* ui_data.c */
+extern BOOL ui_datalist_init(ui_datalist_t *datalist);
+extern ui_datalist_t *ui_datalist_new(void);
+extern void ui_datalist_set_list(ui_datalist_t *datalist, dlink_list_t list);
+extern void ui_datalist_sort(ui_datalist_t *datalist, dlink_comparator compare);
+extern void ui_datalist_clear(ui_datalist_t *datalist);		/* free data */
+extern void ui_datalist_purge(ui_datalist_t *datalist);
+extern void ui_datalist_add(ui_datalist_t *datalist, ui_data_t *data);
+extern void ui_datalist_remove(ui_datalist_t *datalist, ui_data_t *data);
+extern void ui_datalist_remove_object(ui_datalist_t *datalist, void *object);
+extern ui_data_t *ui_datalist_select(ui_datalist_t *datalist, void *object);
+extern ui_data_t *ui_data_new(const char *caption, void *object);
+extern ui_data_t *ui_data_new_embedded_caption(const char *caption, void *object);
+extern ui_data_t *ui_data_search_by_object(ui_datalist_t *datalist, void *object);
+extern void ui_datum_draw(ui_data_t *datum, gfx_pen_t *pen);
+
+
 #endif

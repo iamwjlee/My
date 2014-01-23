@@ -207,11 +207,17 @@ debug :
 	# (gdb) set (i = 20)
 	## window function
 	#(gdb) fs next
-	#(gdb) info win
 	#(gdb) fs src  //focus set to source window  //fs is Alias for focus
 	#(gdb) fs cmd 
 	#(gdb) layout [type] //src,asm,split.reg
-	#(gdb) wh  [val] //Alias winheight 
+	#(gdb) info win
+	#(gdb) wh  CMD [val] //Alias winheight 
+	#(gdb) wh  SRC [val] //Alias winheight 
+
+	## core dump
+	# ulimit -a
+	# ulimit -c unlimited
+	# gdb -tui -c core sdl02
 
 	gdb -tui ./sdl02
 cannot open shared object file:

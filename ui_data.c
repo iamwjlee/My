@@ -333,7 +333,7 @@ void ui_datum_draw(ui_data_t *datum, gfx_pen_t *pen)
 	if(datum && pen)
 	{
 		//gfx_new_puts(pen, datum->caption);
-		print(" Not yet------------\n");
+		err(" Not yet------------\n");
 	}	
 }
 
