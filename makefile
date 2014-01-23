@@ -198,6 +198,21 @@ sdl02:
 	gcc -g -o sdl02 sdl02.o time.o slink.o th.o q.o  ui.control.o live.control.o live1.control.o live2.control.o live11.control.o blit.o dlink.o widget.o ui_data.o listbox.o scroll.o button.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
 
 debug :
+	# http://beej.us/guide/bggdb/
+	# (gdb) run arg1 arg2
+	# (gdb) display i
+	# (gdb) info display
+	# (gdb) undisplay 1
+	# (gdb) watch i  [Hardware watchpoints are special breakpoints that will trigger whenever an expression changes]
+	# (gdb) set (i = 20)
+	## window function
+	#(gdb) fs next
+	#(gdb) info win
+	#(gdb) fs src  //focus set to source window  //fs is Alias for focus
+	#(gdb) fs cmd 
+	#(gdb) layout [type] //src,asm,split.reg
+	#(gdb) wh  [val] //Alias winheight 
+
 	gdb -tui ./sdl02
 cannot open shared object file:
 	# cannot open shared object file: No such file or directory
