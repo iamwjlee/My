@@ -13,6 +13,8 @@
 #include "scroll.h"
 #include "button.h"
 
+#include "math.h"
+
  
 #define d_print(...)  dprint(__VA_ARGS__)
  
@@ -40,7 +42,8 @@ extern  SDL_Surface *load_image( const char *name );
  {
 	slink_t 				slink;										
 	menu_t					*parent;									
-	const char				*name;										
+	const char				*name;		
+	int x;
 	widget_t				widget; 								
 	widget_border_t 		border; 	
 	widget_border_t 	 client;
@@ -383,6 +386,53 @@ void my_widget_test()
 	// Need list for list box
 	make_sample_data();
 	widget_show(WIDGET_OF(menu), 1);
+	{
+		
+		unsigned int b_c;
+		gfx_rectangle_t granted = { 0,0,800,600};
+		SDL_Surface *clip;
+		SDL_Rect rect = {160,10,500,580};
+		SDL_Rect bg = {0,0,800,600};
+		Uint32 rmask, gmask, bmask, amask;
+		int i,j=1;
+		rmask = 0x000000ff;
+		gmask = 0x0000ff00;
+		bmask = 0x00ff0000;
+		amask = 0xff000000;
+
+	
+		clip=SDL_CreateRGBSurface(0,500,580,32,rmask,gmask,bmask,amask);
+		if(clip == NULL) print("error \n");
+		SDL_BlitSurface( screen, &rect, clip, NULL);
+
+		
+		b_c=0x80000000;
+		for(i=-500;i<300;i +=j)
+		{
+			j=j*2;
+			print("----------------%d -- %d\n",j,i);
+			//gfx_blit_fill(0,&granted,&b_c, NULL);
+			SDL_FillRect(screen, &bg, 0x80000000);
+
+
+			rect.x=i;
+			rect.y=10;
+			SDL_BlitSurface( clip, NULL, screen,&rect );
+			SDL_Flip( screen );
+
+		}
+		
+		SDL_FillRect(screen, &bg, 0x80000000);
+		
+		
+		rect.x=300;
+		rect.y=10;
+		SDL_BlitSurface( clip, NULL, screen,&rect );
+		SDL_Flip( screen );
+		SDL_FreeSurface( clip );
+
+	}
+
 
 }
 

@@ -125,7 +125,7 @@ int gfx_blit_fill_color( blit_mode_t mode,gfx_rectangle_t *rect,  gfx_color_t *c
 	
 	SDL_FillRect(screen,&s, c);
 	
-	SDL_Flip( screen );
+	//SDL_Flip( screen );
 	return 0;
 
 }
@@ -423,11 +423,12 @@ int gt_test(void)
 {
 	int i;
 	SDL_Surface  *background=NULL;
-	
+	unsigned int b_c;
 	unsigned int image;
 	gfx_color_t c=GFX_COLOR(0x800096c8);
 	gfx_rectangle_t 		rec 	= { 5, 10, 20, 20 };
 	gfx_rectangle_t  r;
+	gfx_rectangle_t granted ={0,0,800,600};
 
 	gt_init();
 
@@ -442,7 +443,10 @@ int gt_test(void)
 
 	}
 */	
-	FillRect(screen,0,0,s_width,s_height,0xf0303f);
+	//FillRect(screen,0,0,s_width,s_height,0xf0303f);
+
+	b_c=0x80000000;
+	gfx_blit_fill(0,&granted,&b_c, NULL);
 
 
 	//gfx_blit_fill_color(0, &rec, &c ); 
