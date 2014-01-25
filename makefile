@@ -187,7 +187,7 @@ sdl02:
 	gcc -g -c live2.control.c
 	gcc -g -c live11.control.c
 	gcc -g -c dlink.c
-	gcc -g -c blit.c
+	gcc -g -c gt.c
 	gcc -g -c widget.c
 ##	not yet tested
 	gcc -g -c ui_data.c
@@ -195,7 +195,7 @@ sdl02:
 	gcc -g -c scroll.c
 ##
 	gcc -g -c button.c
-	gcc -g -o sdl02 sdl02.o time.o slink.o th.o q.o  ui.control.o live.control.o live1.control.o live2.control.o live11.control.o blit.o dlink.o widget.o ui_data.o listbox.o scroll.o button.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
+	gcc -g -o sdl02 sdl02.o time.o slink.o th.o q.o  ui.control.o live.control.o live1.control.o live2.control.o live11.control.o gt.o dlink.o widget.o ui_data.o listbox.o scroll.o button.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
 
 debug :
 	# http://beej.us/guide/bggdb/

@@ -1,30 +1,28 @@
 /*
-
-	gt driver for SDL lib
+	graphic dirver for specific vender environment
+	gt first driver for SDL lib
 
 */
 
 
 #include "my_sdl.h"
-#include "q.h"
-#include "ui.control.h"
-#include "widget.h"
+//#include "q.h"
+//#include "ui.control.h"
+//#include "widget.h"
+
+#include "gt.h"
 //#include "/usr/src/linux-headers-3.8.0-29/include/linux/list.h"
 //#include  "list0.h"
 
 
 #define d_print(...)  dprint(__VA_ARGS__)
 
-//typedef SDL_Thread task_t;
 
-SDL_Surface  *background=NULL;
-//SDL_Thread *thread;
-//SDL_sem *videoLock = NULL;
-//SDL_Surface *load_image( const char *name );
+SDL_Surface *screen=NULL;
+//SDL_Surface  *background=NULL;
+SDL_sem *screenLock = NULL;
+TTF_Font *font ; //=TTF_OpenFont("decker.ttf",28);
 
-
-
-SDL_Surface *load_image( const char *name );
 
 
 gfx_color_t GFX_COLOR(U32 value)
@@ -47,10 +45,10 @@ return 0;
 
 void show_surface( int x, int y, int w,int h,SDL_Surface* source )
 {
-	d_print("\n source info : w:%d h:%d bpp:%d",  source->w, source->h, source->format->BitsPerPixel);
+	d_print("\n source info[0x%x] : w:%d h:%d bpp:%d", (unsigned int)source,  source->w, source->h, source->format->BitsPerPixel);
 	d_print(" surface info : x:%d y:%d  w:%d h:%d",  x,y,w,h);
 
-    SDL_SemWait( videoLock );
+    SDL_SemWait( screenLock );
 
     //Holds offsets
     SDL_Rect offset;
@@ -78,6 +76,7 @@ void show_surface( int x, int y, int w,int h,SDL_Surface* source )
 	}		
 	else
 	{
+		//int SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect);
     	SDL_BlitSurface( source, NULL, screen, &offset );
 
 	}
@@ -85,9 +84,10 @@ void show_surface( int x, int y, int w,int h,SDL_Surface* source )
 
     //Update the screen
     SDL_Flip( screen );
+	SDL_FreeSurface( source );
 
     //Unlock
-    SDL_SemPost( videoLock );
+    SDL_SemPost( screenLock );
 }
 
 void FillRect(SDL_Surface *screen,int x, int y, int w, int h, unsigned int  color) {
@@ -344,19 +344,114 @@ void pointer_array_test(unsigned int **bg)
 
 }
 
-int blit_test(void)
+int gt_init(void)
 {
+
+	SDL_Init(SDL_INIT_EVERYTHING);
+	TTF_Init();
+
+	font=TTF_OpenFont("decker.ttf",28);
+	screen = SDL_SetVideoMode(s_width,s_height,32,SDL_HWSURFACE|SDL_HWPALETTE|SDL_DOUBLEBUF|SDL_RESIZABLE);
+	 
+	screenLock = SDL_CreateSemaphore( 1 );
+	return 0;
+	
+}
+
+int gt_exit(void)
+{
+	SDL_DestroySemaphore( screenLock );
+	TTF_CloseFont(font);
+	//Free the surfaces
+	//SDL_FreeSurface( background );
+	SDL_Quit();
+}
+
+
+/*
+static int  get_key(void *data)
+{
+	SDL_Event event;
+	while(SDL_PollEvent(&event))
+		{
+			if(event.key.keysym.sym==SDLK_x)
+			break;			
+		}
+
+	
+}
+*/
+
+static int  sdl_key_process()
+{
+	SDL_Event event;
+	int loop=1;
+	while(loop )
+	{
+		while(SDL_PollEvent(&event))
+		{
+			switch(event.type)
+			{
+
+				case SDL_KEYDOWN:
+					//switch(event.key.keysym.sym)
+					//if(	event.key.keysym.sym == SDLK_q) loop=0;
+					loop=0;
+					break;
+
+				case SDL_VIDEORESIZE:
+					{
+					d_print("w:%d. h:%d",event.resize.w,event.resize.h);
+					}
+							break;
+				case SDL_QUIT:
+					d_print("window close");
+					break;
+					
+
+			}
+		} 		
+
+	}
+	return 0;
+
+}
+
+
+
+int gt_test(void)
+{
+	int i;
+	SDL_Surface  *background=NULL;
+	
 	unsigned int image;
 	gfx_color_t c=GFX_COLOR(0x800096c8);
-	gfx_rectangle_t 		rec 	= { 10, 10, 20, 20 };
+	gfx_rectangle_t 		rec 	= { 5, 10, 20, 20 };
 	gfx_rectangle_t  r;
+
+	gt_init();
+
+/*
+	image=(unsigned int )DATADIR"border.out.NW.png";
+
+	for(i=0;i<800;i+=2)
+	{
+		FillRect(screen,0,0,s_width,s_height,0xf0303f);
+		rec.x=i;
+		gfx_blit_image(&rec,&image,NULL);
+
+	}
+*/	
 	FillRect(screen,0,0,s_width,s_height,0xf0303f);
 
 
 	//gfx_blit_fill_color(0, &rec, &c ); 
+	rec.x=5;
+	rec.y=10;
 
 	image=(unsigned int )DATADIR"border.out.NW.png";
 	gfx_blit_image(&rec,&image,NULL);
+
 	rec.y+=30;
 	gfx_blit_fill(0,&rec,&image, NULL);
 
@@ -371,13 +466,12 @@ int blit_test(void)
 	SDL_Surface *text = TTF_RenderText_Solid(font, "Hello", color);
  	SDL_Rect rect = {400,20,0,0};//text position
  	SDL_BlitSurface(text,NULL,screen,&rect);
-
-	//SDL_Flip(screen);
+	SDL_Flip(screen);
 
 	
 	//gfx_blit_fill(0,NULL, (unsigned int *)DATADIR"border.out.NW.png", NULL);
 
-	#if 0
+	#if 1
 	background=load_image(DATADIR"border.out.NW.png");
 	show_surface( 30, 30, background->w,background->h, background );
 	
@@ -404,7 +498,43 @@ int blit_test(void)
 
 	background=load_image(DATADIR"border.out.E.png");
 	show_surface( 30+200-20, 30+20, background->w,400-20-32, background );
+	
 	#endif
 
+	{
+
+		SDL_Surface *clip;
+		SDL_Rect rect = {5,10,50,100};
+		Uint32 rmask, gmask, bmask, amask;
+
+		//SDL_Surface *SDL_CreateRGBSurface(Uint32 flags, int width, int height, int depth, Uint32 Rmask, Uint32 Gmask, Uint32 Bmask, Uint32 Amask);
+		// pixel order RGBA as expected by OpenGL
+
+		/* Little endian */	
+		rmask = 0x000000ff;
+		gmask = 0x0000ff00;
+		bmask = 0x00ff0000;
+		amask = 0xff000000;
+
+
+		clip=SDL_CreateRGBSurface(SDL_SWSURFACE,50,100,32,rmask,gmask,bmask,amask);
+		if(clip == NULL) print("error \n");
+		SDL_BlitSurface( screen, &rect, clip, NULL);
+		d_print("\n clip info[0x%x] : w:%d h:%d bpp:%d", (unsigned int)clip,  clip->w, clip->h, clip->format->BitsPerPixel);
+
+
+		rect.x=400;
+		rect.y=100;
+		SDL_BlitSurface( clip, NULL, screen,&rect );
+
+		SDL_Flip( screen );
+	}
+
+
+	sdl_key_process();	
+	gt_exit();
+
 }
+
+
 
