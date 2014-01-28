@@ -1,7 +1,7 @@
 
 sdl03 :
 	#gcc  -c sdl02.c  -I/usr/src/linux-headers-3.8.0-29/include/linux -I/usr/src/linux-headers-3.8.0-29/include/uapi/linux 
-	gcc -g -c sdl02.c  
+	gcc -Wall -g -c sdl02.c  
 	gcc -g -c time.c
 	gcc -g -c slink.c
 	gcc -g -c th.c
@@ -20,7 +20,8 @@ sdl03 :
 	gcc -g -c scroll.c
 ##
 	gcc -g -c button.c
-	gcc -g -o sdl3 sdl02.o time.o slink.o th.o q.o  ui.control.o live.control.o live1.control.o live2.control.o live11.control.o gt.o dlink.o widget.o ui_data.o listbox.o scroll.o button.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
+	gcc -Wall -g -c my_view.c
+	gcc -g -o sdl3 sdl02.o time.o slink.o th.o q.o  ui.control.o live.control.o live1.control.o live2.control.o live11.control.o gt.o dlink.o widget.o ui_data.o listbox.o scroll.o button.o my_view.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
 
 
 debug :

@@ -240,7 +240,7 @@ typedef struct
 	U16						b;
 } gfx_padding_t;
 
-
+#if 1
 typedef enum
 {
 	GfxALIGNMENT_NONE,
@@ -277,7 +277,7 @@ typedef enum
 	GfxALIGN_VERTICAL_TRAIL_BEFORE	= 0x20000000,
 
 } gfx_align_t;
-
+#endif
 
 typedef struct widget_params_s
 {
@@ -445,6 +445,9 @@ extern blit_source_t 						in_border_list[8] ;
 
 
 /* functions ------------------------------------------------------------------ */
+int widget_init(widget_t *widget, widget_params_t *params, widget_t *parent);
+int widget_border_init(widget_border_t *border, blit_source_t *backgrounds, BOOL blend, widget_t *widget);
+void widget_show(widget_t *widget, int force_update);
 
 
 #ifdef __cplusplus

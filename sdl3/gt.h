@@ -3,10 +3,14 @@
 	gt driver for SDL lib
 
 */
+
+
 #ifndef _GT_H_
 #define _GT_H_
 
+#include "widget.h"
 
+#if 0
 typedef enum
 {
 	GfxALIGNMENT_NONE,
@@ -121,6 +125,7 @@ struct gfx_pen_s
 	} area;										/* should be defined before use */
 };
 typedef struct gfx_pen_s				gfx_pen_t;
+#endif
 
 
 extern  SDL_Surface *screen;
@@ -152,6 +157,7 @@ void gfx_printf(gfx_pen_t *pen, const char *format, ...);
 
 int gfx_blit_restore(gfx_rectangle_t *rect, int *image, gfx_rectangle_t *src_rect);
 int gfx_blit_capture(gfx_rectangle_t *rect, int *image, gfx_rectangle_t *src_rect);
+int gfx_new_puts(gfx_pen_t *pen,const char *string);
 
 
 

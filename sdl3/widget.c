@@ -36,7 +36,7 @@ extern  SDL_Surface *load_image( const char *name );
 // -----------------------------------------------------
 
 
-
+#if 0
 
  typedef struct
  {
@@ -437,7 +437,7 @@ void my_widget_test()
 }
 
 
-
+#endif
 
 
 

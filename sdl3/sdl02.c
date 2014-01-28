@@ -5,6 +5,7 @@
 //#include  "list0.h"
 
 #include "gt.h"
+#include "my_view.h"
 #define d_print(...)  dprint(__VA_ARGS__)
 
 
@@ -12,7 +13,7 @@
 
 //SDL_Surface *screen=NULL;
 //SDL_Surface  *background=NULL;
-SDL_Thread *thread;
+//SDL_Thread *thread;
 //SDL_sem *videoLock = NULL;
 //TTF_Font *font ; //=TTF_OpenFont("decker.ttf",28);
 
