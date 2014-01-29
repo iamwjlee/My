@@ -1,5 +1,5 @@
-#ifndef __GxLIB_GFX__WIDGET_TYPES_H_
-#define __GxLIB_GFX__WIDGET_TYPES_H_
+#ifndef _WIDGET_H
+#define _WIDGET_H
 
 /* includes ------------------------------------------------------------------- */
 #include "dlink.h"
@@ -434,8 +434,8 @@ struct label_s
 typedef struct label_s				label_t;
 #endif
 
-extern blit_source_t 							out_border_list[8] ;
-extern blit_source_t 						in_border_list[8] ;
+//extern blit_source_t 							out_border_list[8] ;
+//extern blit_source_t 						in_border_list[8] ;
 
 /* macros --------------------------------------------------------------------- */
 
@@ -448,10 +448,11 @@ extern blit_source_t 						in_border_list[8] ;
 int widget_init(widget_t *widget, widget_params_t *params, widget_t *parent);
 int widget_border_init(widget_border_t *border, blit_source_t *backgrounds, BOOL blend, widget_t *widget);
 void widget_show(widget_t *widget, int force_update);
+void widget_hide(widget_t *widget);
 
 
 #ifdef __cplusplus
 }
 #endif
-#endif /* __GxLIB_GFX__WIDGET_TYPES_H_ */
+#endif 
 /* end of file ---------------------------------------------------------------- */

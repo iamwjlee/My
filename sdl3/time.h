@@ -9,6 +9,7 @@
 extern "C" {
 #endif
 
+unsigned long time_ticks_per_sec(void);
 
 inline unsigned long time_now();
 int time_after(unsigned long t1,unsigned t2);

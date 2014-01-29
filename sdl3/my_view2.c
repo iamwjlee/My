@@ -15,7 +15,8 @@
 
 #include "math.h"
 #include "gt.h"
- 
+
+#include "ui.view.h"
 #define d_print(...)  dprint(__VA_ARGS__)
  
 
@@ -27,7 +28,7 @@
 
 */
 
- typedef struct
+ struct my_instance_s
  {
 	slink_t 				slink;										
 	menu_t					*parent;									
@@ -74,11 +75,27 @@
 	// widget_t 			 *title;
 	
  	//  task_t 				 *task;
- } my_instance_t;
+ };
+typedef struct my_instance_s	my_instance_t;
+static  my_instance_t my_instance;
 
-static my_instance_t				 my_instance;
+static ui_view_t						my_view =
+										{
+											.name		= "live.view",
+											//.priority	= 0x10,
+											//.area		= { LIVE_VIEW_X, LIVE_VIEW_Y, LIVE_VIEW_W, LIVE_VIEW_H },
+											//.show		= live_view_show,
+											//.hide		= live_view_hide,
+											//.update		= live_view_update,
+											//.resume		= live_view_resume,
+											//.ioctl		= live_view_ioctl,
+											.instance	= &my_instance,
+											.lifetime	= 30,
+										};
 
- blit_source_t							 out_border_list[8] =
+
+
+ static blit_source_t							 out_border_list[8] =
 										 {
 											 (blit_source_t )DATADIR"border.out.NW.png",
 											 (blit_source_t )DATADIR"border.out.NE.png",
@@ -90,7 +107,7 @@ static my_instance_t				 my_instance;
 											 (blit_source_t )DATADIR"border.out.E.png",
 										 };
  
- blit_source_t						 in_border_list[8] =
+ static blit_source_t						 in_border_list[8] =
 										 {
 											 (blit_source_t)DATADIR"border.in.NW.png",
 											 (blit_source_t)DATADIR"border.in.NE.png",
@@ -175,9 +192,9 @@ static my_instance_t				 my_instance;
 	}
  }
 
-static  int my_view_layout(my_instance_t *menu)
+static int my_view_layout(ui_view_t *view)
 {
-	
+	my_instance_t *menu=view->instance;
 	widget_params_t base	= { .rect = { 160, 10, 500, 580 },  .attribute.popup = 1, .background =	0, .name="my.view.base"};
  
  	widget_params_t top  = { .label_text="love", .label_color=LABEL_COLOR,
@@ -369,7 +386,28 @@ static void make_sample_data(void)
 
 }
 
+int my_view2_init(void)
+{
+	my_view_layout(&my_view);
+	ui_view_register(&my_view);
+	return 0;
+}
 
+// refer to live.view.c ...
+int my_view2_show(void)
+{
+
+	return 0;
+}
+int my_view2_hide(void)
+{
+
+	return 0;
+}
+
+
+
+#if 0
 void my_widget_test_close(void)
 {
 	my_instance_t 		*menu = &my_instance;
@@ -435,7 +473,7 @@ void my_widget_test(int option)
 	SDL_Flip( screen );
 	return;
 }
-
+#endif
 
 
 

@@ -299,6 +299,7 @@ int ui_message_release(ui_message_t *msg)
 
 //--------------------------------------------------------------------
 
+#if 1
 struct my_key_s
 {
 	
@@ -376,6 +377,6 @@ int sdl_key_stop(void)
 
 
 }
-
+#endif
 
 

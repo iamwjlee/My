@@ -1,11 +1,12 @@
 
 sdl03 :
 	#gcc  -c sdl02.c  -I/usr/src/linux-headers-3.8.0-29/include/linux -I/usr/src/linux-headers-3.8.0-29/include/uapi/linux 
-	gcc -Wall -g -c sdl02.c  
+	gcc -Wall -g -c sdl03.c  
 	gcc -g -c time.c
 	gcc -g -c slink.c
 	gcc -g -c th.c
 	gcc -g  -c q.c
+	gcc -Wall -g -c get_key.c
 	gcc -g -c ui.control.c
 	gcc -g -c live.control.c
 	gcc -g -c live1.control.c
@@ -21,8 +22,10 @@ sdl03 :
 ##
 	gcc -g -c button.c
 	gcc -Wall -g -c my_view.c
-	gcc -g -o sdl3 sdl02.o time.o slink.o th.o q.o  ui.control.o live.control.o live1.control.o live2.control.o live11.control.o gt.o dlink.o widget.o ui_data.o listbox.o scroll.o button.o my_view.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
-
+##	
+	gcc -Wall -g -c ui.view.c
+	gcc -Wall -g -c my_view2.c
+	gcc -g -o sdl03 sdl03.o time.o slink.o th.o q.o  get_key.o ui.control.o live.control.o live1.control.o live2.control.o live11.control.o gt.o dlink.o widget.o ui_data.o listbox.o scroll.o button.o my_view.o ui.view.o my_view2.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
 
 debug :
 	# http://beej.us/guide/bggdb/
@@ -50,5 +53,5 @@ debug :
 
 clean :
 	rm -f *.o
-	rm -f sdl3
+	rm -f sdl03
 

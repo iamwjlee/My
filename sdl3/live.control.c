@@ -100,6 +100,8 @@ static int live_control_task(void *cookie)
 	char isLoop = 1;
 	ui_message_t *m;
 
+	//my_widget_test(0);
+
 	while(isLoop)
 	{
 		
@@ -127,10 +129,12 @@ static int live_control_task(void *cookie)
 					ui_control_start(UI_CONTROL("live2.control"),NULL);
 					break;
 				case SDLK_3:
-					
+					//my_widget_test_close();
 					d_print(" %s:3",control->name);
 					break;
 				case SDLK_4:
+					
+					//my_widget_test(0);
 					d_print(" %s:4",control->name);
 					break;
 					

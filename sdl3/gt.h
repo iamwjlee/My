@@ -132,6 +132,7 @@ extern  SDL_Surface *screen;
 extern SDL_sem *screenLock;
 extern TTF_Font *font ; //=TTF_OpenFont("decker.ttf",28);
 
+//extern blit_source_t							 out_border_list[8] ;
 
 
 

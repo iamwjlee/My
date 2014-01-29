@@ -3,10 +3,9 @@
 #ifndef _UI_CONTROL_H_
 #define _UI_CONTROL_H_
 
-typedef struct ui_control_s				ui_control_t;
-
 #define UI_CONTROL(n)					((ui_control_t*)(n))
 
+typedef struct ui_control_s				ui_control_t;
 struct ui_control_s
 {
 	slink_t					slink;
@@ -56,6 +55,9 @@ int ui_message_release(ui_message_t *msg);
 int ui_message_init(const char *name, int q_size );
 int ui_message_delete();
 int ui_control_delete(void);
+
+int ui_control_init(void);
+int ui_control_start(ui_control_t *request, int *msg);
 
 
 #endif

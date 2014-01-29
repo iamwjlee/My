@@ -346,6 +346,7 @@ void pointer_array_test(unsigned int **bg)
 
 int gt_init(void)
 {
+	SDL_Rect rect = {0,0,s_width,s_height};
 
 	SDL_Init(SDL_INIT_EVERYTHING);
 	TTF_Init();
@@ -354,6 +355,8 @@ int gt_init(void)
 	screen = SDL_SetVideoMode(s_width,s_height,32,SDL_HWSURFACE|SDL_HWPALETTE|SDL_DOUBLEBUF|SDL_RESIZABLE);
 	 
 	screenLock = SDL_CreateSemaphore( 1 );
+
+	SDL_FillRect(screen,&rect, 0x80ffffff); //white bg
 	return 0;
 	
 }

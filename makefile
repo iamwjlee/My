@@ -200,6 +200,9 @@ sdl02:
 sdl03 :
 	make  $@ -C  ./sdl3
 
+run :
+	./sdl3/sdl03
+
 gt:
 	make -C  ./sdl3
 

@@ -1,11 +1,12 @@
 
+
+#ifndef _UI__H_
+#define _UI__H_
+
 #include "my_sdl.h"
 #include "widget.h"
 #include "slink.h"
 //#include "q.h"
-
-#ifndef _UI__H_
-#define _UI__H_
 
 
 #define UI_DATA_NONE					((void*)&ui_data_const_none)

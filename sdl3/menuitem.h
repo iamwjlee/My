@@ -1,17 +1,3 @@
-/********************************************************************************/
-/*																				*/
-/* File name:	menuitem.h														*/
-/*																				*/
-/* Description:	Menu Item Interface												*/
-/*																				*/
-/*																				*/
-/* COPYRIGHT (C) Genix InfoComm 2007											*/
-/*																				*/
-/* Date			Modification									Name			*/
-/* ----			------------									----			*/
-/* 2007-08-16	Created											MY				*/
-/*																				*/
-/********************************************************************************/
 #ifndef __MENUITEM_H_
 #define __MENUITEM_H_
 
@@ -46,43 +32,12 @@ typedef struct menu_s					menu_t;
 
 
 
-
-
-
-
-
-
-
-
-#define _MENU_STRUCT_													\
-	slink_t					slink;										\
-	menu_t					*parent;									\
-	const char				*name;										\
-	//event_driver_t			*event;										\
-	widget_t				widget;										\
-	widget_border_t			border;										\
-	widget_t				body;										\
-	U32						level;										\
-	//menu_help_t				*help;										\
-	//menu_view_type_t		view_type;									\
-	//label_t					*path;										\
-	char					path_string[128];							\
-	int						(*run)(menu_t *, menuitem_t *);				\
-	struct																\
-	{																	\
-		size_t				count;										\
-		dlink_list_t		list;										\
-		menuitem_t			*current;									\
-	} item;																\
-	widget_t				body2;			/*wj test */						\
-	U32						dummy;
-
 struct menu_s
 {
 	slink_t					slink;										
 	menu_t					*parent;								
 	const char				*name;										
-	//event_driver_t			*event;										
+	// event_driver_t			*event;										
 	widget_t				widget;										
 	widget_border_t			border;										
 	widget_t				body;										
@@ -112,37 +67,35 @@ struct menuitem_help_s
 	//help_icon_t				*icons;
 };
 
-#define _MENUITEM_STRUCT_								\
-	dlink_t					dlink;						\
-	menu_t					*menu;						\
-	struct												\
-	{													\
-		unsigned			index			: 8;		\
-		unsigned			selected		: 1;		\
-		unsigned			disabled		: 1;		\
-		unsigned			unselectable	: 1;		\
-		unsigned			checkable		: 1;		\
-		unsigned			checked			: 1;		\
-		unsigned			suppress_dialog	: 1;		\
-		unsigned			data_locked		: 1;		\
-		unsigned			multi			: 1;		\
-		unsigned			reserved		: 16;		\
-	};													\
-														\
-	const char				*name;						\
-	const char				*caption;					\
-	const char				*shortcut;					\
-	widget_t				widget;						\
-	//ui_datalist_t			data;						\
-	gfx_rectangle_t			data_rect;					\
-	gfx_rectangle_t			data_client;				\
-	//menuitem_xdraw_t		draw_help;					\
-	//menuitem_help_t			help;
 
 
 struct menuitem_s
 {
-	_MENUITEM_STRUCT_
+	dlink_t					dlink;					
+	menu_t					*menu;					
+	struct												
+	{													
+		unsigned			index			: 8;		
+		unsigned			selected		: 1;		
+		unsigned			disabled		: 1;		
+		unsigned			unselectable	: 1;		
+		unsigned			checkable		: 1;		
+		unsigned			checked			: 1;		
+		unsigned			suppress_dialog	: 1;		
+		unsigned			data_locked		: 1;		
+		unsigned			multi			: 1;		
+		unsigned			reserved		: 16;		
+	};													
+														
+	const char				*name;					
+	const char				*caption;					
+	const char				*shortcut;				
+	widget_t				widget;						
+	/* ui_datalist_t			data;						\ */
+	gfx_rectangle_t			data_rect;					
+	gfx_rectangle_t			data_client;				
+	/* menuitem_xdraw_t		draw_help;					\  */
+	/* menuitem_help_t			help;    */
 };
 
 typedef enum

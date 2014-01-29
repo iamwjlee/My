@@ -7,6 +7,10 @@
 
 
 
+unsigned long time_ticks_per_sec(void)
+{
+	return 1000;
+}
 
 inline unsigned long time_now()
 {

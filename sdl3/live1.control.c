@@ -106,6 +106,7 @@ static int live_control_task(void *cookie)
 	
 	char isLoop = 1;
 	ui_message_t *m;
+	my_widget_test(0);
 
 	while(isLoop)
 	{
@@ -178,6 +179,7 @@ static int live_control_task(void *cookie)
 	
 	ui_control_release(control);
 	d_print("Exit %s ",control->name);
+	my_widget_test_close();
 
 	//sdl_key_stop();
 	

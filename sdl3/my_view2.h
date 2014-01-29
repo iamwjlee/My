@@ -1,5 +1,5 @@
-#ifndef _MY_VIEW_H
-#define _MY_VIEW_H
+#ifndef _MY_VIEW2_H
+#define _MY_VIEW2_H
 
 /* includes ------------------------------------------------------------------- */
 #include "dlink.h"
@@ -25,8 +25,7 @@ extern "C" {
 
 
 /* functions ------------------------------------------------------------------ */
-void my_widget_test(int option);
-void my_widget_test_close(void);
+int my_view2_init(void);
 
 
 #ifdef __cplusplus
