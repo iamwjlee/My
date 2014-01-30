@@ -197,7 +197,7 @@ static int my_view_layout(ui_view_t *view)
 	my_instance_t *menu=view->instance;
 	widget_params_t base	= { .rect = { 160, 10, 500, 580 },  .attribute.popup = 1, .background =	0, .name="my.view.base"};
  
- 	widget_params_t top  = { .label_text="love", .label_color=LABEL_COLOR,
+ 	widget_params_t top  = { .label_text="My view", .label_color=LABEL_COLOR,
 		.rect = { 0, 0, 0, 40 },	.align = GfxDOCK_TOP, .background =  BODY_COLOR, .name="my.view.top" };
   	widget_params_t help  = { .rect = { 0, 0, 0, 80},  .pad = { 0, 0, 2, 0},  .align = GfxDOCK_BOTTOM,.background = BODY_COLOR,.name="my.view.help" };
 	widget_params_t body	= { .rect = { 0, 0,  0, 0 },			.align = GfxDOCK_FILL,	.background = CLIENT_BODY,.name="my.view.body" };
@@ -393,7 +393,20 @@ int my_view2_init(void)
 	return 0;
 }
 
-// refer to live.view.c ...
+/*  refer to live.view.c ... dialog.program.c
+
+	ui_view isn't used in the program_layout 
+	ui_view and ui_control are used in the dialog.program.c 
+
+	instance w/o ui_view_t
+		->widget_show
+	instance w ui_view_t
+		-> ui_view_show(ui_view_t *)
+
+	review at the widget_show(WIDGET_OF(dialog), true) in the program_view_show !
+	
+
+*/
 int my_view2_show(void)
 {
 
