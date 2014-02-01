@@ -12,7 +12,7 @@ ubuntu:
 	# function gvim () { /usr/bin/gvim -f $* & }
 
 	# ------- Samba install ----------
-	# apt-get install samba smbfs
+	# apt-get install samba smbfs(cifs-utils)
 	# sudo smbpasswd -a wj
 	# sudo vi /etc/samba/smb.conf
 	# 	[wj]
@@ -29,6 +29,13 @@ ubuntu:
 
 git:
 	@echo --- git usage ---
+
+	# git config --global user.name "wj"
+	# git config --global user.email "iamwjlee@gmail.com"
+	# sudo git clone https://github.com/iamwjlee/My.git
+	# chown -R wj My 
+	# 	 
+	
 	@echo  git status
 	@echo  git add filename
 	@echo  git  commit -m "fix something"

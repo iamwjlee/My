@@ -19,7 +19,7 @@
 #include "ui.view.h"
 #define d_print(...)  dprint(__VA_ARGS__)
  
-
+#include "my_view2.h"
 // -----------------------------------------------------
 
 
@@ -28,55 +28,9 @@
 
 */
 
- struct my_instance_s
- {
-	slink_t 				slink;										
-	menu_t					*parent;									
-	const char				*name;		
-	int x;
-	widget_t				widget; 								
-	widget_border_t 		border; 	
-	widget_border_t 	 client;
-	widget_t				body; 			
-	widget_t				top; 				
-	widget_t				bottom;
-	
-	widget_t				title; //for text
- 	gfx_rectangle_t			area;
 
-	//test 	
-	widget_t 			 icon;
-	widget_t 			 icon_info;
-	widget_t 			 icon_yellow;
 
-	//for list
-	ui_datalist_t			datalist;
-	scroll_t  *scroll;  // scroll first before list
-	listbox_t *list;
-	//
-	struct
-	{
-		listbox_t				*list;
-		scroll_t				*scroll;
-		widget_t				left;
-		widget_t				right;
-		widget_t				top;
-		widget_t				bottom;
-	} listbox;
-	//
-
-	// button
-	button_t 			 *button[3];
-	int						current;
-	//
-	
-	//U32 					level;									
-	//U32 					dummy;
-	// widget_t 			 *title;
-	
- 	//  task_t 				 *task;
- };
-typedef struct my_instance_s	my_instance_t;
+//my_instance_t *my2;
 static  my_instance_t my_instance;
 
 static ui_view_t						my_view =
@@ -236,7 +190,7 @@ widget_params_t			icon =	{
 
 	//
 	
-listbox_params_t		list =
+	listbox_params_t		list =
 	{
 		WF_DOCK,
 		W_PAD			= { 0, 4, 0, 0 },
@@ -349,7 +303,7 @@ button_style_t			button_style =
 }
 
 
-static void make_sample_data(void)
+static void make_sample_data2(void)
 {
 	int i;
 	ui_data_t 			*data;
@@ -382,6 +336,44 @@ static void make_sample_data(void)
 	listbox_set_datalist(menu->list, datalist);
 
 	listbox_select(menu->list, UI_DATA_FIRST, false);
+	listbox_select(menu->list, UI_DATA_NEXT, false);
+
+
+}
+void make_sample_data3(my_instance_t *menu)
+{
+	int i;
+	ui_data_t 			*data;
+	//my_instance_t 		*menu = &my_instance;
+	ui_datalist_t *datalist= &menu->datalist;
+
+	char *name[20]={"a11","a22","a33","a44","a5","a6","a7","a8","a9","a10","b1","b2","b3","b4","b5","b6","b7","b8","b9","b10"};
+	
+
+	ui_datalist_init(datalist);
+	for(i=0;i<15;i++)
+	{
+	data = ui_data_new(name[i], (void *)(i+1));
+	ui_datalist_add(datalist, data);
+	}
+
+	ui_datalist_add(datalist, ui_data_new("", null));
+
+	#if 0
+	ui_datalist_select(datalist, UI_DATA_FIRST);
+	{
+		ui_data_t 			*datum;
+		dlink_foreach(datum, datalist->list)
+		{
+			print32(" %s - %d",datum->caption,(int)datum->object);
+		}
+	}
+	#endif
+	/* connect datalist to list object */
+	listbox_set_datalist(menu->list, datalist);
+
+	listbox_select(menu->list, UI_DATA_FIRST, false);
+	//listbox_select(menu->list, UI_DATA_NEXT, false);
 
 
 }
@@ -407,18 +399,43 @@ int my_view2_init(void)
 	
 
 */
-int my_view2_show(void)
+int my_view2_show(ui_view_t *view)
 {
+	my_instance_t *my;
+	my=(my_instance_t *)view->instance;
+	//make_sample_data2();
+
+	widget_show(&my->widget, 1);
+	
+	SDL_Flip( screen );
+	//widget_show(WIDGET_OF(view->instance), 1);
 
 	return 0;
 }
-int my_view2_hide(void)
+int my_view2_hide(ui_view_t *view)
 {
+	my_instance_t *my;
+	my=(my_instance_t *)view->instance;
+
+	widget_hide(&my->widget);
 
 	return 0;
 }
 
+int my_view2_test(int option)
+{
+	if(option)
+		my_view2_show(&my_view);
+	else
+		{
+		my_view2_hide(&my_view);
+	
+		SDL_Flip( screen );	
+		}
+		
+	return 0;
 
+}
 
 #if 0
 void my_widget_test_close(void)
@@ -434,7 +451,7 @@ void my_widget_test(int option)
 	//my_instance_t 		*menu = &my_instance;
 	my_view_layout(&my_instance);
 	// Need list for list box
-	make_sample_data();
+	make_sample_data2();
 	widget_show(WIDGET_OF(&my_instance), 1);
 	if(option){
 		
