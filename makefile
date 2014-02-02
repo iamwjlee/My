@@ -209,11 +209,15 @@ sdl03 :
 
 run :
 	./sdl3/sdl03
+	
+debug : 
+	gdb  ./sdl3/sdl03
+	#gdb -tui ./sdl3/sdl03
 
 gt:
 	make -C  ./sdl3
 
-debug :
+debug0 :
 	# http://beej.us/guide/bggdb/
 	# (gdb) run arg1 arg2
 	# (gdb) display i

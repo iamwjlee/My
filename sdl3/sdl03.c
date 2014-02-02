@@ -37,7 +37,8 @@ int main(int argc,char *argv[])
 	{
 		while(--argc)
 			printf("argument[%s]\r\n",argv[argc]);
-		
+
+		assert(0);
 		//time_test();
 		//th_test0(); 
 		//q_test2();

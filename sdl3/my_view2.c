@@ -163,7 +163,7 @@ static int my_view_layout(ui_view_t *view)
 	*/
 
 	
-widget_params_t			icon =	{				
+	widget_params_t			icon =	{				
 		.rect					= { 0, 10, 48, 48 },
 		.pad = { 20, 10, 10, 10}, 
 		.background				= BODY_COLOR,
@@ -213,8 +213,8 @@ widget_params_t			icon =	{
 	//
 
 	
-//button	
-button_style_t			button_style =
+	//button	
+	button_style_t			button_style =
 	{ /* selected button */
 		.pen[0].forecolor.value = 0x809e9e9e,/* 0x80848c8e, */
 		//.pen[0].align 		= GfxALIGN_CENTER,
@@ -302,7 +302,7 @@ button_style_t			button_style =
 	return(0);
 }
 
-
+#if 0
 static void make_sample_data2(void)
 {
 	int i;
@@ -340,6 +340,7 @@ static void make_sample_data2(void)
 
 
 }
+#endif
 void make_sample_data3(my_instance_t *menu)
 {
 	int i;
@@ -347,11 +348,11 @@ void make_sample_data3(my_instance_t *menu)
 	//my_instance_t 		*menu = &my_instance;
 	ui_datalist_t *datalist= &menu->datalist;
 
-	char *name[20]={"a11","a22","a33","a44","a5","a6","a7","a8","a9","a10","b1","b2","b3","b4","b5","b6","b7","b8","b9","b10"};
+	char *name[20]={"a11","a22","a33","a44","a55","a66","a77","a88","a99","a10","b11","b12","b13","b14","b15","b6","b7","b8","b9","b10"};
 	
 
 	ui_datalist_init(datalist);
-	for(i=0;i<15;i++)
+	for(i=0;i<12;i++)
 	{
 	data = ui_data_new(name[i], (void *)(i+1));
 	ui_datalist_add(datalist, data);
@@ -371,9 +372,8 @@ void make_sample_data3(my_instance_t *menu)
 	#endif
 	/* connect datalist to list object */
 	listbox_set_datalist(menu->list, datalist);
-
 	listbox_select(menu->list, UI_DATA_FIRST, false);
-	//listbox_select(menu->list, UI_DATA_NEXT, false);
+	
 
 
 }

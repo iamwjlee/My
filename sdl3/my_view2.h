@@ -59,7 +59,7 @@ extern "C" {
 	ui_datalist_t			datalist;
 	scroll_t  *scroll;  // scroll first before list
 	listbox_t *list;
-	//
+	/*
 	struct
 	{
 		listbox_t				*list;
@@ -69,7 +69,7 @@ extern "C" {
 		widget_t				top;
 		widget_t				bottom;
 	} listbox;
-	//
+	*/
 
 	// button
 	button_t 			 *button[3];

@@ -112,28 +112,29 @@ static int live_control_task(void *cookie)
 	char isLoop = 1;
 	ui_message_t *m;
 	my_instance_t *my_ins;
-	listbox_t				*listbox;	
+
+	ui_datalist_t *datalist;
 	live = (live_instance_t *)control->instance;
 
 	
+	
 	view=live->my_view2;
 	my_ins =(my_instance_t *) view->instance;
-	listbox= my_ins->listbox.list;
+	
 	
 	make_sample_data3(my_ins);
 
 	
 	my_view2_show(live->my_view2);
-
 	//my_view2_test(1);
 
 
-	//d_print("%d %d %d %d",view->
 	while(isLoop)
 	{
 		
 		SDL_Delay(20);
 		//d_print("Live key?");	
+		BOOL					page		= false;
 
 		m=(ui_message_t *)ui_message_receive_timeout(control,&timeout);
 		if(m)
@@ -159,26 +160,24 @@ static int live_control_task(void *cookie)
 				case SDLK_4:
 					d_print(" %s:4",control->name);
 					break;
+				case SDLK_LEFT: 		page = true;
 					
 				case SDLK_UP:
 					d_print(" %s:UP",control->name);
 					
-					my_view2_show(live->my_view2);
+					listbox_select(my_ins->list, UI_DATA_PREV, page);
+					widget_show(WIDGET_OF(my_ins->list), true);
+					
+					SDL_Flip( screen ); 
 					break;
+				case SDLK_RIGHT: page = true;
 				case SDLK_DOWN:
 					d_print(" %s:DOWN",control->name);
-						listbox_select(listbox, UI_DATA_NEXT, 0);
-						
-						//widget_show(WIDGET_OF(listbox), true);
-						widget_show(WIDGET_OF(my_ins->list), true);
-						SDL_Flip( screen ); 
+
+					listbox_select(my_ins->list, UI_DATA_NEXT, page);
+					widget_show(WIDGET_OF(my_ins->list), true);
+					SDL_Flip( screen ); 
  					break;
-				case SDLK_LEFT:
-					d_print(" %s:LEFT",control->name);
-					break;
-				case SDLK_RIGHT:
-					d_print(" %s:RIGHT",control->name);
-					break;
 				case SDLK_a:
 				case SDLK_w:
 				case SDLK_e:

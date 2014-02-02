@@ -368,7 +368,9 @@ struct gfx_surface_s
 };
 
 #define WIDGET_VISIBLE(o)				((o)->widget).flags.visible
-#define WIDGET_OF(o)					((o)?&(o)->widget:NULL)
+//#define WIDGET_OF(o)					((o)?&(o)->widget:NULL)
+#define WIDGET_OF(o)					(&(o)->widget)
+
 #define WIDGET_DIRTY(o)					((o)->widget).flags.dirty
 
 

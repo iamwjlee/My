@@ -25,7 +25,11 @@ sdl03 :
 ##	
 	gcc -Wall -g -c ui.view.c
 	gcc -Wall -g -c my_view2.c
-	gcc -g -o sdl03 sdl03.o time.o slink.o th.o q.o  get_key.o ui.control.o live.control.o live1.control.o live2.control.o live11.control.o gt.o dlink.o widget.o ui_data.o listbox.o scroll.o button.o my_view.o ui.view.o my_view2.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
+
+##
+	gcc -Wall -g -c zlist.c
+	gcc -Wall -g -c xlist.c
+	gcc -g -o sdl03 sdl03.o time.o xlist.o zlist.o slink.o th.o q.o  get_key.o ui.control.o live.control.o live1.control.o live2.control.o live11.control.o gt.o dlink.o widget.o ui_data.o listbox.o scroll.o button.o my_view.o ui.view.o my_view2.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
 
 debug :
 	# http://beej.us/guide/bggdb/
