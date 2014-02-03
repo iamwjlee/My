@@ -15,6 +15,7 @@
 
 #include "xlist.h"
 
+#define d_print(...) printf(__VA_ARGS__)
 /* constants -------------------------------------------------------------------------------------- */
 
 
@@ -244,6 +245,123 @@ void xlist_merge(xlist_t *list1, xlist_t *list2)
 		else	memcpy(list1, list2, sizeof(xlist_t));
 	}
 }
+
+/* ------------------------------------ */
+
+static xlist_t my_xlist;
+
+typedef struct my_xtest_s //
+{
+	xnode_t					xlink;
+	xnode_t					sorted;
+	xnode_t					link[2];
+	int a;
+	
+}my_xtest_t;
+
+int  tt_xlist(void)
+{
+
+	int i=0;
+	int cnt=0;
+	my_xtest_t  *xbuffer;
+	my_xtest_t *xtmp;
+
+
+	d_print("xlist test\n");
+	for(i=0;i<8;i++)
+	{
+		if((xbuffer =malloc(sizeof(my_xtest_t))) != NULL)
+		{
+			xlist_append(&my_xlist,(xnode_t *)xbuffer); 
+			xbuffer->a=cnt++;
+		}
+	}
+	xlink_foreach(xtmp, &my_xlist)
+	{
+		d_print(" xtmp->a=%d\n",xtmp->a);
+	}
+	d_print(" -------------\n");
+	
+	xlist_foreach(xtmp, &my_xlist,xlink)
+	{
+		d_print(" xtmp->a=%d\n",xtmp->a);
+		if(xtmp->a == 3) break;
+
+	}
+	
+	/* next */
+	xtmp = xlist_entry(xtmp->xlink.next, my_xtest_t, xlink);
+	d_print("next:xtmp=%d\n", xtmp->a);
+
+
+	if(!xlist_empty(&my_xlist))
+		d_print("my_xlist Not empty \n");
+
+	else
+		d_print("my_xlist  Empty \n");
+
+	
+
+	/* prev */
+	xtmp = xlist_entry(xtmp->xlink.prev, my_xtest_t, xlink);
+	d_print("prev:xtmp=%d\n", xtmp->a);
+
+	/* To Tail of the List */
+	xtmp = xlist_entry(my_xlist.tail, my_xtest_t, xlink);  //becarefull if pointer or not
+	d_print("Tail:xtmp=%d\n", xtmp->a);
+
+	/* To head of the List */ 	
+	xtmp = xlist_entry(my_xlist.head, my_xtest_t, xlink);
+	d_print("Head:xtmp=%d\n", xtmp->a);
+
+	/* next */
+	xtmp = xlist_entry(xtmp->xlink.next, my_xtest_t, xlink);
+	d_print("next:xtmp=%d\n", xtmp->a);
+	/* next */
+	xtmp = xlist_entry(xtmp->xlink.next, my_xtest_t, xlink);
+	d_print("next:xtmp=%d\n", xtmp->a);
+
+	/* next */
+	xtmp = xlist_entry(xtmp->xlink.next, my_xtest_t, xlink);
+	d_print("next:xtmp=%d\n", xtmp->a);
+
+	/* prev */
+	xtmp = xlist_entry(xtmp->xlink.prev, my_xtest_t, xlink);
+	d_print("prev:xtmp=%d\n", xtmp->a);
+	/* prev */
+	xtmp = xlist_entry(xtmp->xlink.prev, my_xtest_t, xlink);
+	d_print("prev:xtmp=%d\n", xtmp->a);
+
+	d_print("Okay !\n");
+	
+	/* remove */
+	
+	d_print("remove current node [a=%d]\n",xtmp->a);
+	xlist_remove(&my_xlist, (xnode_t *)xtmp);
+
+
+
+	
+	xlink_foreach(xtmp, &my_xlist)
+	{
+		d_print(" xtmp->a=%d\n",xtmp->a);
+	}
+	d_print("Okay2 !\n");
+
+
+	/* remove all */
+	while((xtmp = xlist_entry(xlist_remove_head(&my_xlist), my_xtest_t, xlink)) != NULL)
+	{
+		d_print(" free memory[0x%x] [%d]\n",(unsigned int)xtmp,xtmp->a);
+		free(xtmp);
+	}	
+	d_print("Okay3 !\n");
+
+	return 0;
+}
+
+
 
 
 /* end of file ---------------------------------------------------------------- */

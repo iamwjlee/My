@@ -1,5 +1,17 @@
 CC = gcc
 
+help:
+	@echo -- I am used to Linux  --
+
+	@echo  tar -xvjf filename.tar.bz2
+	@echo  :set nocompatible before vi editer
+	@echo sudo apt-cache search libpng
+	@echo sudo apt-cache search libjpeg
+	@echo sudo apt-cache search libfreetype
+	@echo sudo apt-get install libjpeg62-dev
+
+
+
 ubuntu:
 	# version 12.04 
 
@@ -41,14 +53,6 @@ git:
 	@echo  git  commit -m "fix something"
 	@echo  git push
 
-
-help:
-	@echo -- usefull command --
-	
-	#sudo apt-cache search libpng
-	#sudo apt-cache search libjpeg
-	#sudo apt-cache search libfreetype
-	#sudo apt-get install libjpeg62-dev
 
 
 

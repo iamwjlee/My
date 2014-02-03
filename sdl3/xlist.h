@@ -48,6 +48,7 @@ typedef int (*xlist_compare)(void *x, void *y);
 
 /* macros ----------------------------------------------------------------------------------------- */
 #define XLIST_INIT			{ NULL, NULL }
+#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
 
 #define xlist_empty(list)	((list)->head == NULL)
 

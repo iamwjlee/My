@@ -44,6 +44,18 @@ typedef int (*zlist_compare)(void *x, void *y);
 
 #define zlist_empty(list)	((list)->next == NULL)
 
+#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+
+#if 0
+#define container_of(ptr, type, member) ({                        \
+const typeof( ((type *)0)->member ) *__mptr = (ptr);       \
+(type *)( (char *)__mptr - offsetof(type,member)  );})
+
+#define zlist_entry(node,type,member)	\
+    container_of(node, type, member)
+#endif
+
+
 #define zlist_entry(node,type,member)	\
 	({ char*n=(char*)(node); type*e=(n)?(type*)((n)-offsetof(type,member)):NULL; e; })
 
@@ -51,6 +63,13 @@ typedef int (*zlist_compare)(void *x, void *y);
 	for(e=zlist_entry((list)->next,typeof(*e),zlink);	\
 		e!=NULL;										\
 		e=zlist_entry(e->zlink.next,typeof(*e),zlink)	)
+
+#define zlink_foreach2(n, list)												\
+		for(n = (typeof(n))(list) ; 											\
+			n != NULL ; 														\
+			n = (typeof(n))((n)->zlink.next))
+	
+
 
 #define zlink_foreach_safe(e,n,list)					\
 	for(e=zlist_entry((list)->next,typeof(*e),zlink),	\
@@ -81,6 +100,8 @@ typedef int (*zlist_compare)(void *x, void *y);
 
 /* functions ------------------------------------------------------------------ */
 static inline void	zlist_init(zlist_t *list) { list->next = NULL; }
+zlist_t* zlist_first(zlist_t *list);
+
 extern int			zlist_count(zlist_t *list);
 extern void			zlist_inverse(zlist_t *list);
 //extern int			zlist_contains(zlist_t *list, zlist_t *node);

@@ -10,7 +10,16 @@
 #include "my_view2.h"
 #define d_print(...)  dprint(__VA_ARGS__)
 
+/*
 
+	Need of Event Call or Callback
+	Necessity of Event Driven,Callback,Asynchronous, Non Blocking
+		event -> int (*callback)(void);
+	
+	Repeat Codes for key pressing
+
+
+*/
 
 
 void sdl_stop()
@@ -43,6 +52,9 @@ int main(int argc,char *argv[])
 		//th_test0(); 
 		//q_test2();
 		//datalist_test();
+		t_zlist();
+		t_container();
+		tt_xlist();
 		return 0;
 
 	}

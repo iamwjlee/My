@@ -22,6 +22,7 @@
 
 /* macros ----------------------------------------------------------------------------------------- */
 #define headof(l)						((l)->next)
+#define print(...)  printf(__VA_ARGS__)
 
 
 /* prototypes ------------------------------------------------------------------------------------- */
@@ -34,6 +35,17 @@
 
 
 /* exported functions ----------------------------------------------------------------------------- */
+zlist_t* zlist_first(zlist_t *list)
+{
+	zlist_t					*node;
+
+	if(list && ((node = headof(list)) != NULL))
+	{
+		return(node);
+	}
+	return(NULL);
+}
+
 int zlist_count(zlist_t *list)
 {
 	int						count = 0;
@@ -269,6 +281,125 @@ void zlist_selection_sort(zlist_t *list, zlist_compare compare)
 		}
 	}
 }
+
+/* ---------------------------------------------------------------- */
+/*
+http://www.mcs.anl.gov/~kazutomo/list/
+
+
+*/
+
+#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+
+#define container_of(ptr, type, member) ({                      \
+        const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
+        (type *)( (char *)__mptr - offsetof(type,member) );})
+
+
+int  t_container(void) {
+      struct s {
+          int a;
+          int b;
+          int c;
+    } v;
+
+     print("container (&v): 0x%p\n", &v);
+     print("container of a: 0x%p\n", container_of(&v.a, struct s, a));
+     print("container of b: 0x%p\n", container_of(&v.b, struct s, b));
+     print("container of c: 0x%p\n", container_of(&v.c, struct s, c));
+ 
+     return 0;
+ }
+ 
+#if 1
+typedef struct 
+{
+	zlist_t					zlink;
+	int a;
+}test_list_t;
+static zlist_t  Zlist;
+
+int t_zlist(void)
+{
+	int cnt;
+	test_list_t *test01;
+	test_list_t *tmp;
+
+	zlink_init(&Zlist);
+
+	test01=malloc(sizeof(test_list_t));
+	memset(test01,0,sizeof(test_list_t));
+	test01->a=11;
+	zlink_append(&Zlist,  test01);
+
+	
+	test01=malloc(sizeof(test_list_t));
+	memset(test01,0,sizeof(test_list_t));
+	test01->a=12;
+	zlink_append(&Zlist,  test01);
+
+	
+	test01=malloc(sizeof(test_list_t));
+	memset(test01,0,sizeof(test_list_t));
+	test01->a=13;
+	zlink_append(&Zlist,  test01);
+
+	 print("show list\n"); 	 
+	zlink_foreach(tmp,&Zlist)
+		{
+	 	print("test01[0x%x] test01->a=%d   Zlist[%x] Zlist->next[%x] \n",(unsigned int)tmp,tmp->a,Zlist,(unsigned int)Zlist.next  );
+	 	print("    0x%x\n",(unsigned int)tmp->zlink.next);
+	 	}	
+
+
+	tmp=(test_list_t *)zlist_first(&Zlist);
+	print(" tmp [%d]\n",tmp->a); 
+	cnt=8;
+
+	// channel change test
+	while(--cnt)
+	{
+	
+		tmp=zlist_entry(tmp->zlink.next, test_list_t,zlink );
+		if(tmp==NULL) 
+		{
+			tmp=(test_list_t *)zlist_first(&Zlist);
+			
+		}	
+		print(" tmp [%d]\n",tmp->a); 
+
+	}
+
+	print("delete one list\n");		
+	 zlink_foreach(tmp,&Zlist)
+	 {
+		 if(tmp->a==12)
+			 zlink_remove(&Zlist, tmp);
+ 
+	}  
+	 print("show list\n"); 	 
+	zlink_foreach(tmp,&Zlist)
+		{
+	 	print("tmp[0x%x] tmp->a=%d   Zlist[%x] Zlist->next[%x] \n",(unsigned int)tmp,tmp->a,Zlist,(unsigned int)Zlist.next  );
+	 	print("    0x%x\n",(unsigned int)tmp->zlink.next);
+	 	}	
+
+	
+	print("free list\n");
+	while((tmp = (test_list_t *)zlist_remove_head(&Zlist)) != NULL){
+		print("tmp[0x%x] freed\n",(unsigned int)tmp);
+		free(tmp);
+	} 
+	print("Zlist[%x],Zlist.next[%x]\n",Zlist,(unsigned int)Zlist.next);
+	
+	print(" count=%d\n", zlist_count(&Zlist));
+
+	
+	return 0;
+
+}
+
+#endif
 
 
 /* end of file ---------------------------------------------------------------- */
