@@ -47,7 +47,7 @@ int main(int argc,char *argv[])
 		while(--argc)
 			printf("argument[%s]\r\n",argv[argc]);
 
-		assert(0);
+		//assert(0);
 		//time_test();
 		//th_test0(); 
 		//q_test2();
@@ -55,6 +55,7 @@ int main(int argc,char *argv[])
 		t_zlist();
 		t_container();
 		tt_xlist();
+		event_test();
 		return 0;
 
 	}
