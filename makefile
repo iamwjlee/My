@@ -265,6 +265,7 @@ sfml:
 	#g++ -o sfml sfml.o -L/usr/local/lib -lsfml-graphics -lsfml-window -lsfml-system
 
 clean :
+	make $@ -C ./m
 	make $@ -C ./sdl3
 	rm -f *.o
 	rm -f hello-xlib

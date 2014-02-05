@@ -34,6 +34,7 @@ typedef enum
 	CONTROL_EXIT,
 	CONTROL_KEY_PRESSED,
 	CONTROL_KEY_RELEASED,
+	CONTROL_SDL_QUIT
 } ui_control_type_t;
 
 typedef struct

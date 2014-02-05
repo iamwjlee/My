@@ -26,6 +26,7 @@ struct my_key_s
 	//char key;
 };
 typedef struct my_key_s sdl_key_t;
+
 sdl_key_t sdl_key;
 
 static int  get_sdl_key(void *data)
@@ -61,6 +62,15 @@ static int  get_sdl_key(void *data)
 					}
 							break;
 				case SDL_QUIT:
+					
+					msg=ui_message_claim(TIMEOUT_IMMEDIATE);
+					if(msg)
+					{
+						//msg->key=event.key.keysym.sym;
+						msg->type=CONTROL_SDL_QUIT;
+						ui_message_send((void *)msg);
+					}
+					
 					d_print("window close");
 					break;
 					
