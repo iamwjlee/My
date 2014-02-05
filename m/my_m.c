@@ -22,6 +22,8 @@
 	{ctrl-c}
 
 http://forum.falinux.com/zbxe/index.php?document_srl=406200&mid=device_driver
+http://www.freesoftwaremagazine.com/articles/drivers_linux
+http://lwn.net/Kernel/LDD3/
 
 
 */
