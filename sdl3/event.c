@@ -142,7 +142,7 @@ static void test_callback(event_driver_t *event, int id, void *data, void *cooki
 	{
 		//set_tp_text(instance, tp, 0);
 		strcpy(instance,data);
-		d_print("id[%d] tp_changed_callback [data=%s] [instance=%s] \n",id,tp,instance);
+		d_print("id[%d] test_callback [data=%s] [instance=%s] \n",id,tp,instance);
 	}
 }
 
@@ -156,7 +156,7 @@ void event_test(void)
 	event_driver_t		*tuner_event;
 	//tuner_event 	= event_driver_create(1);
 	d_print("event_test\n");
-	event_init("mytuner",&tuner_event);
+	event_init("myEvent",&tuner_event);
 	//d_print("tuner_event:0x%x\n",tuner_event);
 
 	event_subscribe(tuner_event, EVENT_0, test_callback, test_instance);
