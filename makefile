@@ -282,3 +282,20 @@ clean :
 	rm -f sfml
 	rm -f core
 
+
+django :
+	# apt-get install python-pip
+	# pip install django
+	# python
+	# >>> import django
+	# >>> print(django.get_version())
+	#
+	# mkdir /opt/webapp
+	# cd /opt/webapp
+	# django-admin.py startproject testapp
+	# tree testapp
+	# python manage.py runserver
+	#
+	# cd testapp
+	# manage.py startapp blog
+	# localhost:8000
