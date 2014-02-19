@@ -299,3 +299,6 @@ django :
 	# cd testapp
 	# manage.py startapp blog
 	# localhost:8000
+	#
+	# https://docs.djangoproject.com/en/1.6/intro/tutorial01/
+	
