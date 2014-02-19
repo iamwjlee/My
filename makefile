@@ -284,7 +284,9 @@ clean :
 
 
 django :
-	# apt-get install python-pip
+  # python --version
+	# apt-get install python
+	# apt-get install python-pip for Software deployment
 	# pip install django
 	# python
 	# >>> import django
@@ -301,4 +303,4 @@ django :
 	# localhost:8000
 	#
 	# https://docs.djangoproject.com/en/1.6/intro/tutorial01/
-	
+	# http://django-document-korean.readthedocs.org/en/old_master/index.html
