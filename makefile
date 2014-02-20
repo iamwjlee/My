@@ -335,7 +335,9 @@ gae :
 	# Developing and deploying an application on Google App Engine
 	# shout example
 	# http://www.youtube.com/watch?v=bfgO-LXGpTM
-
+	#
+	# google python class
+	#
 gae_hello:
 	 /home/google_appengine/dev_appserver.py hello/
 gae_guestbook:
