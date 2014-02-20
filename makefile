@@ -285,7 +285,7 @@ clean :
 	rm -f core
 
 
-django :
+django_setup :
   # python --version
 	# apt-get install python
 	# apt-get install python-pip for Software deployment
@@ -331,8 +331,8 @@ gae :
 	# http://iamwjlee.appspot.com/
 	#
 	# Komodo-Edit
-	# Developing and deploying an application on Google App Engine
 	#
+	# Developing and deploying an application on Google App Engine
 	# shout example
 	# http://www.youtube.com/watch?v=bfgO-LXGpTM
 
@@ -343,4 +343,7 @@ gae_guestbook:
 
 gae_shout:
 	 /home/google_appengine/dev_appserver.py shout/	 
+	 
+gae_django:
+	 /home/google_appengine/dev_appserver.py django/	 
 	 
