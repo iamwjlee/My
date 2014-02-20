@@ -9,7 +9,9 @@ help:
 	@echo sudo apt-cache search libjpeg
 	@echo sudo apt-cache search libfreetype
 	@echo sudo apt-get install libjpeg62-dev
-
+	#
+	#
+	# GAE 	
 
 
 ubuntu:
@@ -330,8 +332,15 @@ gae :
 	#
 	# Komodo-Edit
 	# Developing and deploying an application on Google App Engine
+	#
+	# shout example
 	# http://www.youtube.com/watch?v=bfgO-LXGpTM
+
 gae_hello:
 	 /home/google_appengine/dev_appserver.py hello/
 gae_guestbook:
 	 /home/google_appengine/dev_appserver.py guestbook/	 
+
+gae_shout:
+	 /home/google_appengine/dev_appserver.py shout/	 
+	 
