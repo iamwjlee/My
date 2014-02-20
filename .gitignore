@@ -4,3 +4,4 @@ prj
 *.bak
 *.o
 core
+*.pyc
