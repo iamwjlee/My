@@ -304,3 +304,32 @@ django :
 	#
 	# https://docs.djangoproject.com/en/1.6/intro/tutorial01/
 	# http://django-document-korean.readthedocs.org/en/old_master/index.html
+
+gae :
+	# starting Google App Engine
+	# 
+	# 
+	# https://developers.google.com/appengine/
+	# enter Admin Console and register and 
+	# enter Download and download google sdk engine for python
+	#
+	# Application Identifier : iamwjlee
+	# Application title :hello
+	#
+	# You can see Application Registered Successfully
+	# 
+	# You can see and create My application at:   https://appengine.google.com
+	# 
+	#
+	# how to show
+	# cd /home/My
+	# /home/google_appengine/dev_appserver.py hello/
+	# http://localhost:8080/
+	# /home/google_appengine/appcfg.py update hello/
+	# http://iamwjlee.appspot.com/
+	#
+	# Komodo-Edit
+gae_hello:
+	 /home/google_appengine/dev_appserver.py hello/
+gae_guestbook:
+	 /home/google_appengine/dev_appserver.py guestbook/	 
