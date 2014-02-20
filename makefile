@@ -329,6 +329,8 @@ gae :
 	# http://iamwjlee.appspot.com/
 	#
 	# Komodo-Edit
+	# Developing and deploying an application on Google App Engine
+	# http://www.youtube.com/watch?v=bfgO-LXGpTM
 gae_hello:
 	 /home/google_appengine/dev_appserver.py hello/
 gae_guestbook:
