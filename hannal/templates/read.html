@@ -1,0 +1,28 @@
+	<div>
+		<h3><a href="/blog/entry/{{current_entry.id}}">{{current_entry.Title}}</a></h3>
+		
+		<ul>
+			<li>{{current_entry.Category.Title}}</li>
+			<li>{% for tag in current_entry.Tags.all %}
+			<span>{{tag.Title}}</span>
+			{% endfor %}</li>
+			<li>{{current_entry.created}}</li>
+			<li>{{current_entry.Comments}}</li>
+		</ul>
+					
+		<div>{{current_entry.Content}}</div>
+		
+	</div>
+	<ul>
+		{% if prev_entry %}
+		<li><a href="/blog/entry/{{prev_entry.id}}"> prev_content ({{prev_entry.Title}})</a></li>
+		{% endif %}
+		
+		{% if next_entry %}
+		<li><a href="/blog/entry/{{next_entry.id}}">next_content ({{next_entry.Title}})</a></li>
+		{% endif %}
+	</ul>
+
+
+
+

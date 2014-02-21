@@ -1,0 +1,26 @@
+	<h1>{{page_title}}</h1>
+	
+	<p> Hello All.</p>
+	
+	<p>This content is in the  list.html </p>
+	
+	<hr />
+	
+	{% for entry in entries %}
+	
+	<div>
+		<h3><a href="/blog/entry/{{entry.id}}">{{entry.Title}}</a></h3>
+		
+		<ul>
+			<li>{{entry.Category.Title}}</li>
+			<li>{% for tag in entry.Tags.all %}
+			<span>{{tag.Title}}</span>
+			{% endfor %}</li>
+			<li>{{entry.created}}</li>
+			<li>{{entry.Comments}}</li>
+		</ul>
+					
+		<div>{{entry.Content}}</div>
+	</div>
+	
+	{% endfor %}

@@ -307,6 +307,25 @@ django_setup :
 	# https://docs.djangoproject.com/en/1.6/intro/tutorial01/
 	# http://django-document-korean.readthedocs.org/en/old_master/index.html
 
+	
+	# follow below example
+	# https://docs.djangoproject.com/en/1.6/intro/tutorial01/
+	
+
+	# follow below example
+	# http://blog.hannal.net/05_1-python_django_lecture/
+
+	# cd /home/My
+	# django-admin.py startproject hannal
+	# find hannal
+	# tree hannal
+	# cd hannal
+	# python manage.py startapp blog
+	# python manage.py runserver
+
+
+
+
 gae :
 	# starting Google App Engine
 	# 
