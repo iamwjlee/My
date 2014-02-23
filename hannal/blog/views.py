@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+#from django.core.context_processors import csrf
 from django.http import HttpResponse
 from blog.models import Entries, Categories, TagModel
 from django.template import Context, loader
