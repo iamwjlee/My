@@ -286,6 +286,8 @@ clean :
 
 
 django_setup :
+	python -c "import django; print(django.get_version())"
+
   # python --version
 	# apt-get install python
 	# apt-get install python-pip for Software deployment
@@ -320,10 +322,18 @@ django_setup :
 	# find hannal
 	# tree hannal
 	# cd hannal
+	# python manage.py syncdb for admin
 	# python manage.py startapp blog
 	# python manage.py runserver
+	# 
 
+dj_hello:
+	 @echo -- just show  page view in template --	
+	 python /home/My/dj/manage.py runserver
 
+dj_hello2:
+	 @echo -- just show  page view w/o template --	
+	 python /home/My/dj02/manage.py runserver
 
 
 gae :
