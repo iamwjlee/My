@@ -1,0 +1,24 @@
+<html> <head><title>Soccer time survey</title></head> 
+<body> 
+Hey, when would you like to play soccer? 
+<form action=”process” method=”post”> 
+{% csrf_token %} 
+Time: 
+ <input type=”radio” name=”time” id=”choice1″ value=”1″>08:00</input> 
+ <input type=”radio” name=”time” id=”choice2″ value=”2″>20:00</input> </br> 
+
+ Day: 
+ <select name=”day” > 
+ <option value=”Sun”>Sun</option> 
+ <option value=”Mon”>Mon</option> 
+ <option value=”Tue”>Tue</option> 
+ <option value=”Wed”>Wed</option> 
+ <option value=”Thu”>Thu</option> 
+ <option value=”Fri”>Fri</option> 
+ <option value=”Sat”>Sat</option> 
+ </select> <br /> 
+  Name: 
+	<input type=”text” name=”name” /> <br /> 
+	 <input type=”submit” value=”Vote” /> 
+	 </form> 
+	 </body> </html>
