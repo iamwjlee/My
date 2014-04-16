@@ -6,3 +6,4 @@ prj
 core
 *.pyc
 *.html~
+*.makefile.swp
