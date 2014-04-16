@@ -46,12 +46,13 @@ git:
 
 	# git config --global user.name "wj"
 	# git config --global user.email "iamwjlee@gmail.com"
-	# sudo git clone https://github.com/iamwjlee/My.git
+	# git clone https://github.com/iamwjlee/My.git
 	# chown -R wj My 
 	# 	 
 	
 	@echo  git status
 	@echo  git add filename
+	@echo  git add .  for all files
 	@echo  git  commit -m "fix something"
 	@echo  git push
 
