@@ -224,6 +224,12 @@ debug :
 gt:
 	make -C  ./sdl3
 
+test01:
+	make  $@ -C ./test
+
+run_test01:
+	./test/test01	
+	
 debug0 :
 	# http://beej.us/guide/bggdb/
 	# (gdb) run arg1 arg2
@@ -270,6 +276,7 @@ sfml:
 clean :
 ##	make $@ -C ./m
 	make $@ -C ./sdl3
+	make $@ -C ./test
 	rm -f *.o
 	rm -f hello-xlib
 	rm -f hello-cairo

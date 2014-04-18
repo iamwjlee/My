@@ -139,11 +139,11 @@ int gfx_blit_image(gfx_rectangle_t *dest_rect, unsigned int *image, gfx_rectangl
 	source_images	= load_image( (const char *)*image);  // 
 	if(source_images == NULL)
 	{
-		err("source_images is null :0x%x\n",(unsigned int)source_images);
+		err("source_images is null :0x%x   [%s]\n",(unsigned int)source_images,image);
 	}
-	//else
+	else
 		
-	//	print("source_images okay :0x%x\n",(unsigned int)source_images);
+		print("source_images okay :0x%x  [%s]\n",(unsigned int)source_images,image);
 	
 	
 	if(dest_rect==NULL)
@@ -170,7 +170,7 @@ int gfx_blit_image(gfx_rectangle_t *dest_rect, unsigned int *image, gfx_rectangl
 
 int gfx_blit_fill(int mode,gfx_rectangle_t *target_rect, unsigned int *source, gfx_rectangle_t *source_rect)
 {
-
+        
 	if(*source==0) 
 	{
 		/* when widget_create(ex, button_create),  widget->background==0   */
