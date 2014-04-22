@@ -101,6 +101,9 @@ git:
 	@echo  git add .  for all files
 	@echo  git  commit -m "fix something"
 	@echo  git push
+	#How to 'git rm' all deleted files shown by 'git status'
+	@echo git rm `git status | grep deleted | awk '{print $3}'`
+
 
 
 gdb :
