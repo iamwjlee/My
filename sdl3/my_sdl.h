@@ -44,7 +44,7 @@ typedef unsigned char  U8;
 
 #define s_width  800
 #define s_height  600
-#define DATADIR			"/home/My/data/"
+#define DATADIR			"./data/"
 #define DEBUG_ASSERT(exp)
 
 

@@ -25,14 +25,13 @@ sdl03 :
 ##	
 	gcc -Wall -g -c ui.view.c
 	gcc -Wall -g -c my_view2.c
-
 ##
 	gcc  -Wall -g -c zlist.c
 	gcc -Wall -g -c xlist.c
 ##
 	gcc -Wall -g -c event.c
-
 	gcc -Wall -g -c etc.c
+##	
 	gcc -g -o sdl03 sdl03.o time.o xlist.o zlist.o slink.o th.o q.o  get_key.o ui.control.o live.control.o live1.control.o live2.control.o live11.control.o gt.o dlink.o widget.o ui_data.o listbox.o scroll.o button.o my_view.o ui.view.o my_view2.o event.o  etc.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
 
 debug :
@@ -51,13 +50,12 @@ debug :
 	#(gdb) info win
 	#(gdb) wh  CMD [val] //Alias winheight 
 	#(gdb) wh  SRC [val] //Alias winheight 
-
+	#
 	## core dump
 	# ulimit -a
 	# ulimit -c unlimited
 	# gdb -tui -c core sdl03
-
-	gdb -tui ./sdl3
+	gdb -tui ./sdl03
 
 clean :
 	rm -f *.o

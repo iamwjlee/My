@@ -1,12 +1,22 @@
 TARGET=test01
 
+info :
+
+	@echo " make all"
+	@echo " make debug"
+	@echo " make clean"
+
+all : $(TARGET)
+
 $(TARGET) :
 	gcc -Wall -g -c  main.c  
-	gcc -g -o $(TARGET) main.o 
+	gcc -Wall -g -c task.c
+	gcc -g -pthread -lpthread -o $(TARGET) main.o  task.o
 
 debug :
 	# http://beej.us/guide/bggdb/
-	# (gdb) run arg1 arg2
+	# (gdb) b main
+	# (gdb) r or run arg1 arg2
 	# (gdb) display i
 	# (gdb) info display
 	# (gdb) undisplay 1
@@ -26,7 +36,7 @@ debug :
 	# ulimit -c unlimited
 	# gdb -tui -c core sdl03
 
-	gdb -tui ./hi
+	gdb -tui ./$(TARGET)
 
 clean :
 	rm -f *.o

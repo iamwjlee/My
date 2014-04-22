@@ -1,30 +1,57 @@
 CC = gcc
 
 help:
-	@echo -- I am used to Linux  --
+	@echo -----------------
+	@echo vim
+	@echo samba
+	@echo ubuntu
+	@echo git
+	@echo gdb
+	@echo cannot_open_shared_object_file
+	@echo ------------------
+	@echo sdl sdl01 sdl03
+	@echo test01 for list
+	@echo 
+	@echo
+	@echo ------------------
+vim:
+	# sudo apt-get remove vim-tiny
+	# sudo apt-get install vim
+	# sudo vi /etc/vim/vimrc 
+	#
+	#"--------------- setting config
+	#"syntax on
+	#"filetype on
+	#filetype indent on 
+	#colorscheme evening
+	#set fencs=ucs-bom,utf-8,euc-kr,latin1
 
-	@echo  tar -xvjf filename.tar.bz2
-	@echo  :set nocompatible before vi editer
-	@echo sudo apt-cache search libpng
-	@echo sudo apt-cache search libjpeg
-	@echo sudo apt-cache search libfreetype
-	@echo sudo apt-get install libjpeg62-dev
+	#"---------------basic configa
+	#set shiftwidth=4
+	#set tabstop=4
+	#set sts=4
+	#set showmatch
+	#set mouse=a
+
+	#set autoindent
+	#set cindent
+	#set smartindent
+	#set ruler
+	#set number
+	#set sm
+	#set hlsearch
+	#set incsearch
+	#set nocompatible
+	#set nobackup
+	#"------------------end of vimrc---
+	#	
 	#
 	#
-	# GAE 	
-
-
-ubuntu:
-	# version 12.04 
-
-	# chown -R wj My : owner of My directory is wj
-	# chown -R 755 My : change My direcory's mode
-
-	# -------gvim install ----------
 	# sudo apt-get install vim-gnome
 	# add in ~/.bashrc the line
 	# function gvim () { /usr/bin/gvim -f $* & }
 
+samba:
 	# ------- Samba install ----------
 	# apt-get install samba smbfs(cifs-utils)
 	# sudo smbpasswd -a wj
@@ -41,15 +68,34 @@ ubuntu:
 	# \\192.168.0.42\wj   at the win7
 
 
+
+ubuntu:
+	# version 12.04 
+	#
+	# chown -R wj My : owner of My directory is wj
+	# chown -R 755 My : change My direcory's mode
+	# to open terminal : CTRL+ALT+t
+	#
+	@echo -- I am used to Linux  --
+	@echo  tar -xvjf filename.tar.bz2
+	@echo  :set nocompatible before vi editer
+	@echo sudo apt-cache search libpng
+	@echo sudo apt-cache search libjpeg
+	@echo sudo apt-cache search libfreetype
+	@echo sudo apt-get install libjpeg62-dev
+	#
+	#
+	# GAE 	
+
+
+
 git:
 	@echo --- git usage ---
-
 	# git config --global user.name "wj"
 	# git config --global user.email "iamwjlee@gmail.com"
 	# git clone https://github.com/iamwjlee/My.git
 	# chown -R wj My 
 	# 	 
-	
 	@echo  git status
 	@echo  git add filename
 	@echo  git add .  for all files
@@ -57,6 +103,44 @@ git:
 	@echo  git push
 
 
+gdb :
+	# http://beej.us/guide/bggdb/
+	# (gdb) run arg1 arg2
+	# (gdb) display i
+	# (gdb) info display
+	# (gdb) undisplay 1
+	# (gdb) watch i  [Hardware watchpoints are special breakpoints that will trigger whenever an expression changes]
+	# (gdb) set (i = 20)
+	## window function
+	#(gdb) fs next
+	#(gdb) fs src  //focus set to source window  //fs is Alias for focus
+	#(gdb) fs cmd 
+	#(gdb) layout [type] //src,asm,split.reg
+	#(gdb) info win
+	#(gdb) wh  CMD [val] //Alias winheight 
+	#(gdb) wh  SRC [val] //Alias winheight 
+
+	## core dump
+	# ulimit -a
+	# ulimit -c unlimited
+	# gdb -tui -c core sdl02
+	#gdb -tui ./sdl02
+
+cannot_open_shared_object_file:
+	# cannot open shared object file: No such file or directory
+	# /usr/local/lib is normally not searched by the dynamic linker. Add it to LD_LIBRARY_PATH.
+	# Alternatively, configure the dynamic linker to always search /usr/local/lib and perhaps /usr/local/lib64. 
+	# This is usually done by adding the paths to the /etc/ld.so.conf file, and running ldconfig.
+	# There is sometimes also a 32/64 bit issue, that is, one tries to run a 32-bit executable and only 64-bit libraries are present, 
+	# or vice versa. Run file <somtething>.so and file <your-executable> to determine their architecture. 
+	# In general, 32-bit libraries go to <whatever>/lib and 64-bit ones to <whatever>/lib64, but sometimes they end up in a wrong place.
+
+	# export LD_LIBRARY_PATH=$PATH:/usr/local/lib	
+	#  g++  main.o -o main -L/usr/local/lib -lxxx
+	# sudo sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/usrlocal'  
+        # sudo ldconfig
+	# after make install, don't forget   sudo ldconfig
+	# vi /etc/ld.so.conf
 
 
 a: 
@@ -103,7 +187,7 @@ gtk1:
 directfb:
 	@echo -- change booting option and add module vesafb and make initramfs image again
 	# //$ sudo vi /etc/default/grub
-        #  //add 'vga=789' 
+    #  //add 'vga=789' 
    	#  //$ sudo update-grub
 	# $ sudo vi /etc/initramfs-tools/module
         # add 'fbcon' and 'vesafb'
@@ -180,36 +264,13 @@ sdl:
 	# libsdl-mixer1.2-dev
 	#gcc  -c sdl.c 
 	#gcc  -o sdl sdl.o -I/usr/include/SDL -lSDL -lSDL_image  
-
+	#
 	gcc  -c sdl.c 
 	gcc -o sdl sdl.o `pkg-config  --cflags  --libs sdl` -lSDL_image
 
 sdl01:
-	
 	gcc  -c sdl01.c 
 	gcc -o sdl01 sdl01.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
-sdl02:
-	#gcc  -c sdl02.c  -I/usr/src/linux-headers-3.8.0-29/include/linux -I/usr/src/linux-headers-3.8.0-29/include/uapi/linux 
-	gcc -g -c sdl02.c  
-	gcc -g -c time.c
-	gcc -g -c slink.c
-	gcc -g -c th.c
-	gcc -g  -c q.c
-	gcc -g -c ui.control.c
-	gcc -g -c live.control.c
-	gcc -g -c live1.control.c
-	gcc -g -c live2.control.c
-	gcc -g -c live11.control.c
-	gcc -g -c dlink.c
-	gcc -g -c gt.c
-	gcc -g -c widget.c
-##	not yet tested
-	gcc -g -c ui_data.c
-	gcc -g -c listbox.c
-	gcc -g -c scroll.c
-##
-	gcc -g -c button.c
-	gcc -g -o sdl02 sdl02.o time.o slink.o th.o q.o  ui.control.o live.control.o live1.control.o live2.control.o live11.control.o gt.o dlink.o widget.o ui_data.o listbox.o scroll.o button.o `pkg-config  --cflags  --libs sdl` -lSDL_image  -lSDL_ttf
 
 sdl03 :
 	make  $@ -C  ./sdl3
@@ -230,51 +291,13 @@ test01:
 run_test01:
 	./test/test01	
 	
-debug0 :
-	# http://beej.us/guide/bggdb/
-	# (gdb) run arg1 arg2
-	# (gdb) display i
-	# (gdb) info display
-	# (gdb) undisplay 1
-	# (gdb) watch i  [Hardware watchpoints are special breakpoints that will trigger whenever an expression changes]
-	# (gdb) set (i = 20)
-	## window function
-	#(gdb) fs next
-	#(gdb) fs src  //focus set to source window  //fs is Alias for focus
-	#(gdb) fs cmd 
-	#(gdb) layout [type] //src,asm,split.reg
-	#(gdb) info win
-	#(gdb) wh  CMD [val] //Alias winheight 
-	#(gdb) wh  SRC [val] //Alias winheight 
-
-	## core dump
-	# ulimit -a
-	# ulimit -c unlimited
-	# gdb -tui -c core sdl02
-
-	gdb -tui ./sdl02
-cannot open shared object file:
-	# cannot open shared object file: No such file or directory
-	# /usr/local/lib is normally not searched by the dynamic linker. Add it to LD_LIBRARY_PATH.
-	# Alternatively, configure the dynamic linker to always search /usr/local/lib and perhaps /usr/local/lib64. 
-	# This is usually done by adding the paths to the /etc/ld.so.conf file, and running ldconfig.
-	# There is sometimes also a 32/64 bit issue, that is, one tries to run a 32-bit executable and only 64-bit libraries are present, 
-	# or vice versa. Run file <somtething>.so and file <your-executable> to determine their architecture. 
-	# In general, 32-bit libraries go to <whatever>/lib and 64-bit ones to <whatever>/lib64, but sometimes they end up in a wrong place.
-
-	# export LD_LIBRARY_PATH=$PATH:/usr/local/lib	
-	#  g++  main.o -o main -L/usr/local/lib -lxxx
-	# sudo sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/usrlocal'  
-        # sudo ldconfig
-	# after make install, don't forget   sudo ldconfig
-	# vi /etc/ld.so.conf
 sfml: 
 	g++ -c sfml.cpp
 	g++ -o sfml sfml.o -lsfml-graphics -lsfml-window -lsfml-system
 	#g++ -o sfml sfml.o -L/usr/local/lib -lsfml-graphics -lsfml-window -lsfml-system
 
 clean :
-##	make $@ -C ./m
+	##make $@ -C ./m
 	make $@ -C ./sdl3
 	make $@ -C ./test
 	rm -f *.o

@@ -57,6 +57,8 @@ int main(int argc,char *argv[])
 		tt_xlist();
 		event_test();
 		test_sys_command();
+		
+		gt_test();
 		return 0;
 
 	}

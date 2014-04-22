@@ -357,6 +357,13 @@ int gt_init(void)
 	screenLock = SDL_CreateSemaphore( 1 );
 
 	SDL_FillRect(screen,&rect, 0x80ffffff); //white bg
+
+
+	//SDL_FillRect(screen,&rect, 0x80ff0000); //white bg
+	FillRect(screen,100,100,100,100,0x0000ff);
+
+	
+	SDL_Flip(screen);
 	return 0;
 	
 }
