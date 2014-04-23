@@ -1,5 +1,6 @@
 TARGET=test01
-
+CFLAGS=-Wall -g -I.
+LFLAGS=
 info :
 
 	@echo " make all"
@@ -8,7 +9,15 @@ info :
 
 all : $(TARGET)
 
-$(TARGET) :
+main.o : main.c task.h
+	gcc -c $< -o $@ $(CFLAGS)
+task.o : task.c task.h
+	gcc -c $< -o $@ $(CFLAGS)
+
+$(TARGET): main.o task.o
+	gcc -o $@ $^ -pthread -lpthread
+
+$(TARGET)-old :
 	gcc -Wall -g -c  main.c  
 	gcc -Wall -g -c task.c
 	gcc -g -pthread -lpthread -o $(TARGET) main.o  task.o

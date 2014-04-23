@@ -10,6 +10,13 @@
 
 #include "task.h"
 #define print(f,...) printf(f"%s",##__VA_ARGS__,"\r\n")
+typedef struct
+{
+	char *name;
+	void (*func)(char *arg);
+
+}command_t;
+
 
 typedef struct my_mem_s
 {
@@ -24,6 +31,10 @@ static my_mem_t *mem_list=NULL;
 
 
 //
+
+	/* for task */
+	int id;
+	int para;
 void *function00(void *p)
 {
 	int *arg=(int *)p; 
@@ -59,11 +70,12 @@ int get_mem2(int **pp,int size)
 
 int point_test(void)
 {
-	int m=3;
+	int m=1;
 	int *p=&m;
 	int **pp= &p;
 	int *p2;
 	
+	print(" ---m=1---- ");
 	print(" %d",m);
 	print(" %x",*p);
 	print(" %x",**pp);
@@ -73,8 +85,17 @@ int point_test(void)
 	print(" %x",(int)*pp);
 	p2=*pp;
 	*p2=4;
-	
+	print(" ---*p2=4---- ");
+	print(" %d",m);
+	print(" %x",*p);
 	print(" %x",**pp);
+	print(" --- **pp=5---- ");
+	**pp=5;
+	print(" %d",m);
+	print(" %x",*p);
+	print(" %x",**pp);
+
+
 	p2=get_mem(10);
 	print("get_mem: 0x%08x:%d",(int)p2 ,*p2);
 	get_mem2(&p2,10);
@@ -96,11 +117,67 @@ void swap(int *a, int *b)
 
 }
 //
+int get_key(char *data)
+{
+	int i=0;
+	char key;
+	//char data[30];
+	memset(data,0,sizeof(data));
+	while(1)
+	{
+		/*
+		   current key buffer is 30. 
+		   but suppose  buffer is 4 bytes and command is 10bytes
+		 */  
+		read(0,&key,1);   
+		if(key=='\n') 
+		{
+			data[i++]='\0';
+			print("data[%s]",data);
+			//data1=data;		
+			return 0;
+		}
+		else
+		{
+			data[i++]=key;
+		}
+		if(i>16) return 1;
+
+	}
+
+}
+
+void quit(char *arg)
+{
+
+	print("quit command");
+	para=0;
+	m_task_delete(id);
+	print("exit");
+	return ;
+}
+
+void test(char *arg)
+{
+
+	print("test command");
+}
+
+
+command_t cmds[]=
+{
+	{"quit",quit},
+	{"test",test},
+	{NULL,NULL}
+
+};
+
 int main(void)
 {
-	int para;
 	char data[80];
-	int id;
+	char arg[2];
+		char key[30];
+//	char key;
 	int i;
 	int a=1;
 	int b=2;
@@ -183,16 +260,55 @@ int main(void)
 
 	}
 
+	while(1)
+	{
+		i=0;
+		get_key(key);
+		print("key=%s",key);
+		while(cmds[i].name != NULL)
+		{
+			//print("key [%s] cmds.name [%s] i[%d]",key,cmds[i].name,i);
+			if(!strcmp(key,cmds[i].name))
+				cmds[i].func(arg);
+			i++;
+
+		}
+
+		//if(!strcmp(key,"quit")) break;
+	}
+#if 0	
+	i=0;
+	memset(data,0,sizeof(data));
+	while(1)`
+	{
+
+		read(0,&key,1);
+		if(key=='\n') 
+		{
+			data[i++]=0;
+			print("data[%s]",data);
+			i=0;
+		}
+		else
+		{
+			data[i++]=key;
+		}
+		//print("data[%s]",data);
+
+	}
+#endif	
+#if 0
 	memset(data,0,sizeof(data));
 	while(read(0, data,sizeof(data)))
 	{
-		 write(1, data,strlen(data));
-		 if(!strncmp(data,"quit",4)) break;
-		 else 	print(">");
-		 memset(data,0,sizeof(data));
+		write(1, data,strlen(data));
+		
+		if(!strncmp(data,"quit",4)) break;
+		else 	print(">");
+		memset(data,0,sizeof(data));
 	
 	}
-
+#endif
 	print("sizeof data=%d",sizeof(data));
 	para=0;
 	m_task_delete(id);

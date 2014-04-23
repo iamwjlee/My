@@ -9,7 +9,7 @@
 
 #define print(f,...) printf(f"%s",##__VA_ARGS__,"\r\n")
 
-
+int momo=0;
 
 int m_task_create(void *(*function)(void *),void *param,int *task_id)
 {
