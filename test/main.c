@@ -10,6 +10,7 @@
 
 #include "task.h"
 #define print(f,...) printf(f"%s",##__VA_ARGS__,"\r\n")
+#define log(...) printf(__VA_ARGS__)
 typedef struct
 {
 	char *name;
@@ -32,19 +33,7 @@ static my_mem_t *mem_list=NULL;
 
 //
 
-	/* for task */
-	int id;
-	int para;
-void *function00(void *p)
-{
-	int *arg=(int *)p; 
-	while(*arg==1)
-	{
-	print(" child ");
-	sleep(2);
-	}
-	return 0;
-}
+
 //
 int *get_mem(int size )
 {
@@ -147,6 +136,11 @@ int get_key(char *data)
 
 }
 
+
+	/* for task */
+	int id;
+	int para;
+
 void quit(char *arg)
 {
 
@@ -172,6 +166,18 @@ command_t cmds[]=
 
 };
 
+
+void *function00(void *p)
+{
+	int *arg=(int *)p; 
+	while(*arg==1)
+	{
+	print(" child ");
+	sleep(2);
+	}
+	return 0;
+}
+
 int main(void)
 {
 	char data[80];
@@ -183,9 +189,19 @@ int main(void)
 	int b=2;
 	my_mem_t *list,*list_previous;
 	unsigned char *p;
+
+
+	log("wj\r\n");
 	point_test();
 	swap(&a,&b);
 	//thread_test();
+	m_task_test();
+	while(1)
+	{
+		sleep(2);
+	}
+	return 0;
+
 	para=1;
 	m_task_create(function00,(void *)&para,&id);
 	print("task id = 0x%x",id);
