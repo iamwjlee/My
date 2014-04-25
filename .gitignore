@@ -7,3 +7,4 @@ core
 *.pyc
 *.html~
 *.makefile.swp
+tags
