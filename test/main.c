@@ -1,16 +1,16 @@
+#include "common.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <pthread.h>
+//#include <pthread.h>
 //#include <signal.h>
 //#include <sys/types.h>
 #include <unistd.h> //sleep
 
 
 #include "task.h"
-#define print(f,...) printf(f"%s",##__VA_ARGS__,"\r\n")
-#define log(...) printf(__VA_ARGS__)
+#include "sys.h"
+
+
+
 typedef struct
 {
 	char *name;
@@ -183,13 +183,17 @@ int main(void)
 	char data[80];
 	char arg[2];
 		char key[30];
+
+	my_mem_t *list,*list_previous;
 //	char key;
 	int i;
 	int a=1;
 	int b=2;
-	my_mem_t *list,*list_previous;
 	unsigned char *p;
 
+	test_sys();
+	return 0;
+	
 
 	log("wj\r\n");
 	point_test();

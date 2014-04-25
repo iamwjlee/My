@@ -9,13 +9,22 @@ info :
 
 all : $(TARGET)
 
-main.o : main.c task.h
+main.o : main.c task.h sys.h
 	gcc -c $< -o $@ $(CFLAGS)
-task.o : task.c task.h
+task.o : task.c task.h sys.h
+	gcc -c $< -o $@ $(CFLAGS)
+sys.o: sys.c sys.h
 	gcc -c $< -o $@ $(CFLAGS)
 
-$(TARGET): main.o task.o
+$(TARGET): main.o task.o sys.o
 	gcc -o $@ $^ -pthread -lpthread
+
+
+
+
+
+
+
 
 $(TARGET)-old :
 	gcc -Wall -g -c  main.c  

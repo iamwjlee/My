@@ -1,14 +1,10 @@
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "common.h"
 #include <pthread.h>
 //#include <signal.h>
 //#include <sys/types.h>
 #include <unistd.h> //sleep
 
-#define print(f,...) printf(f"%s",##__VA_ARGS__,"\r\n")
-
+#include "sys.h"
 int momo=0;
 
 int m_task_create(void *(*function)(void *),void *param,int *task_id)
@@ -33,7 +29,7 @@ int m_task_delete(int task_id)
 //
 
 /*
-	let's make simple task 
+	let's make simple task as disp_t
 
 */
 
@@ -45,7 +41,7 @@ typedef struct disp_s
 	struct disp_s *next;
 }disp_t;
 
-disp_t *list=NULL;
+static disp_t *list=NULL;
 
 int show_disp_task(void)
 {

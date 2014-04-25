@@ -15,7 +15,7 @@
 */
 int m_task_create(void *(*function)(void *),void *param,int *task_id);
 int m_task_delete(int task_id);
-
+int m_task_test(void);
 enum
 {
 
