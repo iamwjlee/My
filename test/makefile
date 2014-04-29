@@ -16,7 +16,14 @@ task.o : task.c task.h sys.h
 sys.o: sys.c sys.h
 	gcc -c $< -o $@ $(CFLAGS)
 
-$(TARGET): main.o task.o sys.o
+counter_task.o : counter_task.c counter_task.h
+	gcc -c $< -o $@ $(CFLAGS)
+get_key.o : get_key.c get_key.h
+	gcc -c $< -o $@ $(CFLAGS)
+q.o : q.c q.h
+	gcc -c $< -o $@ $(CFLAGS)
+
+$(TARGET): main.o task.o sys.o counter_task.o get_key.o q.o
 	gcc -o $@ $^ -pthread -lpthread
 
 

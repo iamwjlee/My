@@ -1,5 +1,12 @@
 #include "common.h"
 
+/*
+	1st job
+	memory alloc function
+	which is listed
+
+*/   
+
 
 typedef struct mem_s
 {
@@ -13,27 +20,32 @@ typedef struct mem_s
 static mem_t *mem_list=NULL;
 
 
+
 u32 mem_alloc(int type,int size)
 {	
-	mem_t *p1;
-	
-	p1 =(mem_t *)malloc(sizeof(mem_t));
-	p1->type = type;
-	p1->size = size;
-	p1->next = NULL;
-	p1->addr = (u32)malloc(size);
-//	memset((char *)p1->addr,0,size);
+	mem_t *p;
+	/* allocate a descriptor */	
+	p =(mem_t *)malloc(sizeof(mem_t));
+	p->type = type;
+	p->size = size;
+	p->next = NULL;
+	p->addr = (u32)malloc(size);
+//	memset((char *)p->addr,0,size);
 
-
+	/* Attached the memory descriptor to the list */
 	if(mem_list == NULL) 
-		mem_list = p1;
+	{
+		/* The list is now started wiht this element */
+		mem_list = p;
+	}	
 	else
 	{
-		p1->next = mem_list;
-		mem_list = p1;		
+		/* Add the new element on the top of the list */
+		p->next = mem_list;
+		mem_list = p;		
 	}
 
-	return (p1->addr);
+	return (p->addr);
 }
 
 int mem_dealloc(u32 addr)
@@ -54,6 +66,7 @@ int mem_dealloc(u32 addr)
 		else p0->next=p->next;
 		
 		free((void *)p->addr);
+		/* Deallocate the internal descriptor */
 		free(p);
 	}
 	else
@@ -81,7 +94,8 @@ int mem_show(void)
 
 int test_sys(void)
 {
-	int i,j;
+	int i;
+	//int j;
 	u32 addr[10];
 	for(i=1;i<10;i++)
 	{	
@@ -101,4 +115,41 @@ int test_sys(void)
 
 }
 
+/* ------------------------------- */
 
+
+int *get_mem(int size )
+{
+	int *p;
+	p=malloc(size);
+	*p=1;
+	return p;
+	
+}
+int get_mem2(int **pp,int size)
+{
+	
+	int *p;
+	p=malloc(size);
+	*p = 5;
+	print("	get_mem2: 0x%08x:%d",(int)p,*p);
+
+	*pp=p;
+	return 0;
+	
+
+}
+
+int test_get_mem(void)
+{
+
+	int *p;
+
+	p=get_mem(10);
+	print("get_mem: 0x%08x:%d",(int)p ,*p);
+	get_mem2(&p,10);
+	print("get_mem2 addr: 0x%08x",(int)p);
+	print("get_mem2 content: %d",*p);
+
+	return 0;
+}
