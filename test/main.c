@@ -11,7 +11,7 @@
 #include "counter_task.h"
 #include "get_key.h"
 #include "q.h"
-
+#include "time.h"
 
 
 
@@ -59,6 +59,33 @@ void swap(int *a, int *b)
 
 }
 
+void xx(u8 *buf)
+{
+	int i;
+	u8 j=0;
+	for(i=0;i<1024;i++)
+		*(buf+i)=j++;
+
+}
+void file_test(void)
+{
+	
+	FILE *f;
+	int i;
+	u8 buffer[1024];
+	print("file test size[%d]",sizeof(buffer));
+	f=fopen("wj.bin","wb");
+
+	xx(buffer);
+	for(i=0;i<1024;i++)
+	{
+	fwrite(buffer,sizeof(char)*1024,1,f);
+	}
+	print(" end of write");
+	fclose(f);
+	print("file close");
+
+}
 
 
 int main(void)
@@ -67,7 +94,7 @@ int main(void)
 	int a=1;
 	int b=2;
 
-	log("wj concep! \r\n");
+	log("wj concep! [%d] [%d]\r\n",sizeof(unsigned long),sizeof(unsigned int));
 	print("swap test");
 	print("a=%d b=%d",a,b);
 	swap(&a,&b);
@@ -77,7 +104,10 @@ int main(void)
 	//test_sys();
 	//my_counter_task_test();
 	//test_get_string();
-	q_test();
+	//q_test();
+	fifo_test();
+	//file_test();
+	time_test();
 	get_key();
 	return 0;
 	

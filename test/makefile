@@ -6,6 +6,11 @@ info :
 	@echo " make all"
 	@echo " make debug"
 	@echo " make clean"
+	# sys.c for malloc and linklist
+	# task.c for pthread
+	# simple task - counter_task,get_key
+	# fifo queue
+	# message queue
 
 all : $(TARGET)
 
@@ -22,8 +27,10 @@ get_key.o : get_key.c get_key.h
 	gcc -c $< -o $@ $(CFLAGS)
 q.o : q.c q.h
 	gcc -c $< -o $@ $(CFLAGS)
+time.o : time.c time.h
+	gcc -c $< -o $@ $(CFLAGS)
 
-$(TARGET): main.o task.o sys.o counter_task.o get_key.o q.o
+$(TARGET): main.o task.o sys.o counter_task.o get_key.o q.o time.o
 	gcc -o $@ $^ -pthread -lpthread
 
 

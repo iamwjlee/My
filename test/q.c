@@ -22,61 +22,16 @@
 #include "common.h"
 #include "q.h"
 
-int q_test(void)
+typedef struct msg
 {
-	u8 buf;
-	u8 read;
-	qBuffer *p=malloc(sizeof(qBuffer));
-	q_init(p,10);
-	print("q_size = %d",q_size(p));
-	buf=1;
-	q_write(p,&buf,1);
-	buf=2;
-	q_write(p,&buf,1);
+	char key;
+	int type;
 
-	print("q_size = %d",q_size(p));
-	q_read(p,&read,1);
+}msg_t;
 
-	print("read = %d",read);
-	print("q_size = %d",q_size(p));
 
-	q_read(p,&read,1);
-	print("read = %d",read);
-	print("q_size = %d",q_size(p));
 
-	if(q_read(p,&read,1)>0)
-	{
-	print("read = %d",read);
-	print("q_size = %d",q_size(p));
-	}
-
-	if(q_read(p,&read,1)>0)
-	{
-	print("read = %d",read);
-	print("q_size = %d",q_size(p));
-	}
-	
-	q_free(p);
-	free(p);
-
-	return 0;
-}
-int q_init(qBuffer *f, int size)
-{
-    f->wptr = f->rptr =
-    f->buffer = malloc(size);
-    f->end = f->buffer + size;
-    if (!f->buffer)
-        return -1;
-    return 0;
-}
-
-void q_free(qBuffer *f)
-{
-    free(f->buffer);
-}
-
-int q_size(qBuffer *f)
+int q_size(qb_t *f)
 {
     int size = f->wptr - f->rptr;
     if (size < 0)
@@ -84,33 +39,32 @@ int q_size(qBuffer *f)
     return size;
 }
 
-/**
- * Get data from the fifo (returns -1 if not enough data).
- */
-int q_read(qBuffer *f, u8 *buf, int buf_size)
+
+int q_read(qb_t *f, void *buf, int buf_size)
 {
-    return q_generic_read(f, buf_size, NULL, buf);
+ //   return q_generic_read(f, buf_size, NULL, buf);
+   int size = q_size(f);
+
+    if (size < buf_size)
+        return 1;
+    do {
+        int len = FFMIN(f->end - f->rptr, buf_size);
+        memcpy(buf, f->rptr, len);
+        buf = (u8*)buf + len;
+        //q_drain(f, len);
+	    f->rptr += len;
+		if (f->rptr >= f->end)
+			f->rptr -= f->end - f->buffer;
+
+
+
+        buf_size -= len;
+    } while (buf_size > 0);
+    return 0;
+
+
 }
-
-/**
- * Resizes a FIFO.
- */
-void q_realloc(qBuffer *f, unsigned int new_size) {
-    unsigned int old_size= f->end - f->buffer;
-
-    if(old_size < new_size){
-        int len= q_size(f);
-        qBuffer f2;
-
-        q_init(&f2, new_size);
-        q_read(f, f2.buffer, len);
-        f2.wptr += len;
-        free(f->buffer);
-        *f= f2;
-    }
-}
-
-void q_write(qBuffer *f, const u8 *buf, int size)
+void q_write(qb_t *f, const void *buf, int size)
 {
     do {
         int len = FFMIN(f->end - f->wptr, size);
@@ -118,36 +72,92 @@ void q_write(qBuffer *f, const u8 *buf, int size)
         f->wptr += len;
         if (f->wptr >= f->end)
             f->wptr = f->buffer;
-        buf += len;
+        buf = (u8*)buf + len;
         size -= len;
     } while (size > 0);
 }
 
-
-/** get data from the fifo (return -1 if not enough data) */
-int q_generic_read(qBuffer *f, int buf_size, void (*func)(void*, void*, int), void* dest)
+int q_free(qb_t *p)
 {
-    int size = q_size(f);
 
-    if (size < buf_size)
-        return -1;
-    do {
-        int len = FFMIN(f->end - f->rptr, buf_size);
-        if(func) func(dest, f->rptr, len);
-        else{
-            memcpy(dest, f->rptr, len);
-            dest = (u8*)dest + len;
-        }
-        q_drain(f, len);
-        buf_size -= len;
-    } while (buf_size > 0);
-    return 0;
+	free(p->buffer);
+	free(p);
+	return 0;
 }
 
-/** discard data from the fifo */
-void q_drain(qBuffer *f, int size)
+int msg_q_init(int size)
 {
-    f->rptr += size;
-    if (f->rptr >= f->end)
-        f->rptr -= f->end - f->buffer;
+	qb_t *p = malloc(sizeof(qb_t));
+	p->buffer = (msg_t *)malloc(sizeof(msg_t)*size);
+	p->wptr=p->rptr=p->buffer;	
+	p->end = (msg_t *)p->buffer + size;
+
+
+	return 0;
 }
+
+int fifo_test(void)
+{
+	int size= 10;
+	u8 buf;
+	qb_t *p = malloc(sizeof(qb_t));
+	p->buffer = (u8 *)malloc(size);
+	
+	p->wptr=p->rptr=p->buffer;	
+	p->end = (msg_t *)p->buffer + size;
+
+	print("fifo test");
+	buf=1;
+	q_write(p,&buf,1);
+	buf=2;
+	q_write(p,&buf,1);
+
+	if(!q_read(p,&buf,1))
+		print("read[%d] qsize[%d]",buf,q_size(p));
+	if(!q_read(p,&buf,1))
+		print("read[%d] qsize[%d]",buf,q_size(p));
+	if(!q_read(p,&buf,1))
+		print("read[%d] qsize[%d]",buf,q_size(p));
+
+	//q_free(p->buffer);
+	q_free(p);
+
+	return 0;
+}
+int q_test(void)
+{
+	msg_t my_msg;
+	int i=0;
+	int size = 5;
+	print("size of msg_t [%d] sizeof qb_t[%d]",sizeof(msg_t),sizeof(qb_t));
+	qb_t *p = malloc(sizeof(qb_t));
+	p->buffer = (msg_t *)malloc(sizeof(msg_t)*size);
+	p->wptr=p->rptr=p->buffer;	
+	p->end = (msg_t *)p->buffer + size;
+
+	my_msg.key=31;
+	my_msg.type=1;
+	q_write(p,&my_msg,sizeof(msg_t));
+	my_msg.key=32;
+	my_msg.type=2;
+	q_write(p,&my_msg,sizeof(msg_t));
+	my_msg.key=33;
+	my_msg.type=3;
+	q_write(p,&my_msg,sizeof(msg_t));
+
+	if(!q_read(p,&my_msg,sizeof(msg_t)))
+		print("q_read %d %d",my_msg.key,my_msg.type);
+
+	if(!q_read(p,&my_msg,sizeof(msg_t)))
+		print("q_read %d %d",my_msg.key,my_msg.type);
+	if(!q_read(p,&my_msg,sizeof(msg_t)))
+		print("q_read %d %d",my_msg.key,my_msg.type);
+	if(!q_read(p,&my_msg,sizeof(msg_t)))
+		print("q_read %d %d",my_msg.key,my_msg.type);
+
+	i++;
+	q_free(p);
+	return 0;
+}
+
+
