@@ -14,6 +14,13 @@ help:
 	@echo 
 	@echo
 	@echo ------------------
+
+pkg-config:
+	@echo ------
+	#for  ffmpeg
+	#pkg-config --list-all | grep libav
+	#pkg-config --cflags --libs sdl
+
 vim:
 	# sudo apt-get remove vim-tiny
 	# sudo apt-get install vim

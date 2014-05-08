@@ -1,5 +1,6 @@
 TARGET=test01
-CFLAGS=-Wall -g -I.
+CFLAGS=-Wall -g 
+INCLUDES = -I.
 LFLAGS=
 info :
 
@@ -12,23 +13,26 @@ info :
 	# fifo queue
 	# message queue
 
-all : $(TARGET)
+all : dirs $(TARGET)
 
+dirs:
+		mkdir -p obj
+	
 main.o : main.c task.h sys.h
-	gcc -c $< -o $@ $(CFLAGS)
+	gcc -c $< -o $@ $(CFLAGS) $(INCLUESE)
 task.o : task.c task.h sys.h
-	gcc -c $< -o $@ $(CFLAGS)
+	gcc -c $< -o $@ $(CFLAGS) $(INCLUDES)
 sys.o: sys.c sys.h
-	gcc -c $< -o $@ $(CFLAGS)
+	gcc -c $< -o $@ $(CFLAGS) $(INCLUDES)
 
 counter_task.o : counter_task.c counter_task.h
-	gcc -c $< -o $@ $(CFLAGS)
+	gcc -c $< -o $@ $(CFLAGS) $(INCLUDES)
 get_key.o : get_key.c get_key.h
-	gcc -c $< -o $@ $(CFLAGS)
+	gcc -c $< -o $@ $(CFLAGS) $(INCLUDES)
 q.o : q.c q.h
-	gcc -c $< -o $@ $(CFLAGS)
+	gcc -c $< -o $@ $(CFLAGS) $(INCLUDES)
 time.o : time.c time.h
-	gcc -c $< -o $@ $(CFLAGS)
+	gcc -c $< -o $@ $(CFLAGS) $(INCLUDES)
 
 $(TARGET): main.o task.o sys.o counter_task.o get_key.o q.o time.o
 	gcc -o $@ $^ -pthread -lpthread
