@@ -5,7 +5,7 @@
 
 CC:=gcc
 INCLUDES:=$(shell pkg-config --cflags libavformat libavcodec libswscale libavutil sdl)
-CFLAGS:=-Wall -ggdb
+CFLAGS:=-Wall -ggdb -g
 LDFLAGS:=$(shell pkg-config --libs libavformat libavcodec libswscale libavutil sdl) 
 EXE:=tutorial01.out tutorial02.out tutorial03.out tutorial04.out\
 	tutorial05.out tutorial06.out tutorial07.out
