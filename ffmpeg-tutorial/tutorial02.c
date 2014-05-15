@@ -140,17 +140,24 @@ int main(int argc, char *argv[]) {
   // Read frames and save first five frames to disk
   i=0;
   while(av_read_frame(pFormatCtx, &packet)>=0) {
-  	wj++;
   	
+	av_log(NULL, AV_LOG_INFO, "All packet[%d] [%d] stream_index[%d]\n",wj,packet.size,packet.stream_index);
+
+  	wj++;
     // Is this a packet from the video stream?
     if(packet.stream_index==videoStream) {
+
+	av_log(NULL, AV_LOG_INFO, "  video packet[%d] [%d]\n",wj1,packet.size);
     wj1++;
+	
       // Decode video frame
       avcodec_decode_video2(pCodecCtx, pFrame, &frameFinished, 
 			   &packet);
       
       // Did we get a video frame?
       if(frameFinished) {
+
+		av_log(NULL, AV_LOG_INFO, "    frame packet[%d] [%d]\n",wj2,packet.size);
       wj2++;
 	SDL_LockYUVOverlay(bmp);
 
@@ -199,7 +206,7 @@ int main(int argc, char *argv[]) {
     }
 
   }
-  printf("end wj  [%ld][%ld][%ld]\n",wj,wj1,wj2);
+  printf("end:  all packet[%ld]video packet[%ld] frame packet[%ld]\n",wj,wj1,wj2);
   // Free the YUV frame
   av_free(pFrame);
   

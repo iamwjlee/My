@@ -23,8 +23,9 @@ EXE:=tutorial01.out tutorial02.out tutorial03.out tutorial04.out\
 info:
 	@echo HOME=$(HOME)
 	@echo PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)
-
-all: dirs $(addprefix bin/, $(EXE)) tags
+		
+#all: dirs $(addprefix bin/, $(EXE)) tags
+all: dirs $(addprefix bin/, $(EXE)) 
 
 dirs:
 	mkdir -p obj
@@ -38,6 +39,16 @@ bin/%.out: obj/%.o
 
 obj/%.o : %.c
 	$(CC) $(CFLAGS) $< $(INCLUDES) -c -o $@
+
+
+run:
+	@echo run	
+	./bin/tutorial02.out 2.avi
+	
+debug:	
+	@echo debug
+	gdb -tui ./bin/tutorial02.out 1.avi
+	
 
 clean:
 	rm -f obj/*
