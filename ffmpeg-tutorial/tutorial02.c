@@ -56,8 +56,8 @@ int main(int argc, char *argv[]) {
   // Register all formats and codecs
   av_register_all();
 	avformat_network_init();  
-   av_log(NULL, AV_LOG_ERROR, "wj av_log error  test\n");
-   av_log(NULL, AV_LOG_INFO, "wj av_log info   test\n");
+   av_log(NULL, AV_LOG_ERROR, "wj test\n");
+   av_log(NULL, AV_LOG_INFO, "wj test\n");
  
   if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER)) {
     fprintf(stderr, "Could not initialize SDL - %s\n", SDL_GetError());
@@ -69,11 +69,17 @@ int main(int argc, char *argv[]) {
   if(avformat_open_input(&pFormatCtx, argv[1], NULL, NULL)!=0)
     return -1; // Couldn't open file
   
+   av_log(NULL, AV_LOG_ERROR, "====================================\n");
+   av_log(NULL, AV_LOG_ERROR, "pFormatCtx->nb_streams=%d \n",pFormatCtx->nb_streams);
+
+
+   av_log(NULL, AV_LOG_ERROR, "====================================\n");
   // Retrieve stream information
   //av_find_stream_info()
+#if 0
   if(avformat_find_stream_info(pFormatCtx, NULL)<0)
     return -1; // Couldn't find stream information
-  
+#endif  
   // Dump information about file onto standard error
   //dump_format()
   av_dump_format(pFormatCtx, 0, argv[1], 0);
@@ -139,15 +145,16 @@ int main(int argc, char *argv[]) {
 
   // Read frames and save first five frames to disk
   i=0;
+  pFormatCtx->debug=1;
   while(av_read_frame(pFormatCtx, &packet)>=0) {
   	
-	av_log(NULL, AV_LOG_INFO, "All packet[%d] [%d] stream_index[%d]\n",wj,packet.size,packet.stream_index);
+	av_log(NULL, AV_LOG_INFO, "All packet[%d] [%d] stream_index[%d]\r\n",wj,packet.size,packet.stream_index);
 
   	wj++;
     // Is this a packet from the video stream?
     if(packet.stream_index==videoStream) {
 
-	av_log(NULL, AV_LOG_INFO, "  video packet[%d] [%d]\n",wj1,packet.size);
+	av_log(NULL, AV_LOG_INFO, "  video packet[%d] [%d]\r\n",wj1,packet.size);
     wj1++;
 	
       // Decode video frame
@@ -157,7 +164,7 @@ int main(int argc, char *argv[]) {
       // Did we get a video frame?
       if(frameFinished) {
 
-		av_log(NULL, AV_LOG_INFO, "    frame packet[%d] [%d]\n",wj2,packet.size);
+		av_log(NULL, AV_LOG_INFO, "    frame packet[%d] [%d]\r\n",wj2,packet.size);
       wj2++;
 	SDL_LockYUVOverlay(bmp);
 

@@ -24,8 +24,8 @@ info:
 	@echo HOME=$(HOME)
 	@echo PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)
 		
-#all: dirs $(addprefix bin/, $(EXE)) tags
-all: dirs $(addprefix bin/, $(EXE)) 
+all: dirs $(addprefix bin/, $(EXE)) tags
+#all: dirs $(addprefix bin/, $(EXE)) 
 
 dirs:
 	mkdir -p obj
@@ -47,8 +47,11 @@ run:
 	
 debug:	
 	@echo debug
-	gdb -tui ./bin/tutorial02.out 1.avi
+	gdb  ./bin/tutorial02.out 
 	
+debug2:	
+	@echo debug
+	gdb -tui ./bin/tutorial02.out 
 
 clean:
 	rm -f obj/*
