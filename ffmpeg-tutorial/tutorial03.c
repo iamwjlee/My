@@ -277,6 +277,13 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "SDL_OpenAudio: %s\n", SDL_GetError());
     return -1;
   }
+
+// fix audio break	
+  if (aCodecCtx->sample_fmt == AV_SAMPLE_FMT_S16P) {
+  aCodecCtx->request_sample_fmt = AV_SAMPLE_FMT_S16;
+  }
+
+  
   aCodec = avcodec_find_decoder(aCodecCtx->codec_id);
   if(!aCodec) {
     fprintf(stderr, "Unsupported codec!\n");

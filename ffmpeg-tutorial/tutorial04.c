@@ -495,6 +495,11 @@ int stream_component_open(VideoState *is, int stream_index) {
       return -1;
     }
   }
+  if (codecCtx->sample_fmt == AV_SAMPLE_FMT_S16P) {
+  codecCtx->request_sample_fmt = AV_SAMPLE_FMT_S16;
+  }
+
+  
   codec = avcodec_find_decoder(codecCtx->codec_id);
   if(!codec || (avcodec_open2(codecCtx, codec, &optionsDict) < 0)) {
     fprintf(stderr, "Unsupported codec!\n");
@@ -535,6 +540,7 @@ int stream_component_open(VideoState *is, int stream_index) {
   default:
     break;
   }
+  
   return 0;
 }
 

@@ -13,11 +13,13 @@ info :
 	# fifo queue
 	# message queue
 
-all : dirs $(TARGET)
+all : dirs $(TARGET) tags
 
 dirs:
-		mkdir -p obj
-	
+	mkdir -p obj
+
+tags: *.c *.h
+	ctags *.c *.h
 main.o : main.c task.h sys.h
 	gcc -c $< -o $@ $(CFLAGS) $(INCLUESE)
 task.o : task.c task.h sys.h
