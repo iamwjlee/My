@@ -9,3 +9,5 @@ core
 *.makefile.swp
 tags
 *.out
+*.avi
+*.ts
