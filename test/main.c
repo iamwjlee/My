@@ -67,7 +67,7 @@ void xx(u8 *buf)
 		*(buf+i)=j++;
 
 }
-void file_test(void)
+void file_test0(void)
 {
 	
 	FILE *f;
@@ -106,9 +106,10 @@ int main(void)
 	//test_get_string();
 	//q_test();
 	fifo_test();
-	//file_test();
-	time_test();
-	get_key();
+	//time_test();
+	file_test();
+
+	get_key(); // loop
 	return 0;
 	
 

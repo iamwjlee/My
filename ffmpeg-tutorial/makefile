@@ -18,7 +18,7 @@ INCLUDES:=$(shell pkg-config --cflags libavformat libavcodec libswscale libavuti
 CFLAGS:=-Wall -ggdb -g
 LDFLAGS:=$(shell pkg-config --libs libavformat libavcodec libswscale libavutil sdl) 
 EXE:=tutorial01.out tutorial02.out tutorial03.out tutorial04.out\
-	tutorial05.out tutorial06.out tutorial07.out audio_tone.out
+	tutorial05.out tutorial06.out tutorial07.out audio_tone.out aviocat.out pktdumper.out gray.out
 
 #
 # This is here to prevent Make from deleting secondary files.
@@ -55,7 +55,7 @@ obj/%.o : %.c
 
 run0:
 	@echo run0	
-	./bin/tutorial03.out 1.avi
+	./bin/pktdumper.out 6.avi
 run3:
 	@echo run3	
 	./bin/tutorial03.out 1.avi
@@ -65,32 +65,42 @@ run4:
 	./bin/tutorial04.out 1.avi
 run7:
 	@echo run7	
-	./bin/tutorial07.out 1.avi
+	./bin/tutorial07.out cd1.ts
 
 run:
 	@echo run	
 	./bin/tutorial03.out 2.avi
 
+run2n:
+	@echo run2n
+	./bin/tutorial02.out http://192.168.0.37:8080/genitek/2.avi
+
 run2:
 	@echo run2	
-	./bin/tutorial02.out http://192.168.0.37:8080/genitek/2.avi
-debug0:
-	@echo debug0	
+	./bin/tutorial02.out 6.avi
+
+debug2:	
+	@echo debug2
+	@echo using (gdb)r args
+	gdb  ./bin/tutorial02.out 
+
+debug2na:
+	@echo debug2na	
 	gdb --args ./bin/tutorial02.out http://192.168.0.37:8080/genitek/2.avi
 
 
-debug:	
-	@echo debug
-	gdb  ./bin/tutorial02.out 
-	
-debug2:	
-	@echo debug
+tui2:	
+	@echo tui2
 	gdb -tui ./bin/tutorial02.out 
-debug3:
-	@echo debug3
+tui2n:
+	@echo tui2 network
 	gdb -tui --args ./bin/tutorial02.out   http://192.168.0.37:8080/genitek/2.avi
-debug4:
+
+tui2nx:
+	@echo using -x gdb.cmd
 	gdb -tui --directory . -x gdb.cmd
+
+
 
 clean:
 	rm -f obj/*

@@ -56,8 +56,6 @@ int main(int argc, char *argv[]) {
   // Register all formats and codecs
   av_register_all();
 	avformat_network_init();  
-   av_log(NULL, AV_LOG_ERROR, "wj test\n");
-   av_log(NULL, AV_LOG_INFO, "wj test\n");
  
   if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER)) {
     fprintf(stderr, "Could not initialize SDL - %s\n", SDL_GetError());
@@ -69,14 +67,16 @@ int main(int argc, char *argv[]) {
   if(avformat_open_input(&pFormatCtx, argv[1], NULL, NULL)!=0)
     return -1; // Couldn't open file
   
-   av_log(NULL, AV_LOG_ERROR, "====================================\n");
-   av_log(NULL, AV_LOG_ERROR, "pFormatCtx->nb_streams=%d \n",pFormatCtx->nb_streams);
+   av_log(NULL, AV_LOG_INFO, "====================================\n");
+   
+   av_log(NULL, AV_LOG_INFO, "pFormatCtx->filename=%s \n",pFormatCtx->filename);
+   av_log(NULL, AV_LOG_INFO, "pFormatCtx->nb_streams=%d \n",pFormatCtx->nb_streams);
+   av_log(NULL, AV_LOG_INFO, "pFormatCtx->iformat->name=%s \n",pFormatCtx->iformat->name);
 
-
-   av_log(NULL, AV_LOG_ERROR, "====================================\n");
+   av_log(NULL, AV_LOG_INFO, "====================================\n");
   // Retrieve stream information
   //av_find_stream_info()
-#if 0
+#if 1
   if(avformat_find_stream_info(pFormatCtx, NULL)<0)
     return -1; // Couldn't find stream information
 #endif  
@@ -213,7 +213,7 @@ int main(int argc, char *argv[]) {
     }
 
   }
-  printf("end:  all packet[%ld]video packet[%ld] frame packet[%ld]\n",wj,wj1,wj2);
+  printf("end:  all packet[%d]video packet[%d] frame packet[%d]\n",wj,wj1,wj2);
   // Free the YUV frame
   av_free(pFrame);
   
@@ -222,6 +222,7 @@ int main(int argc, char *argv[]) {
   
   // Close the video file
   avformat_close_input(&pFormatCtx);
+  avformat_network_deinit();
   
   return 0;
 }

@@ -35,8 +35,10 @@ q.o : q.c q.h
 	gcc -c $< -o $@ $(CFLAGS) $(INCLUDES)
 time.o : time.c time.h
 	gcc -c $< -o $@ $(CFLAGS) $(INCLUDES)
+file.o : file.c 
+	gcc -c $< -o $@ $(CFLAGS) $(INCLUDES)
 
-$(TARGET): main.o task.o sys.o counter_task.o get_key.o q.o time.o
+$(TARGET): main.o task.o sys.o counter_task.o get_key.o q.o time.o file.o
 	gcc -o $@ $^ -pthread -lpthread
 
 
