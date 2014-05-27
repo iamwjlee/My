@@ -75,6 +75,18 @@ run2n:
 	@echo run2n
 	./bin/tutorial02.out http://192.168.0.37:8080/genitek/2.avi
 
+run3n:
+	@echo run3n
+	./bin/tutorial03.out http://192.168.0.37:8080/genitek/2.avi
+
+run4n:
+	@echo run4n
+	./bin/tutorial04.out http://192.168.0.37:8080/genitek/2.avi
+
+run7n:
+	@echo run7n
+	./bin/tutorial07.out http://192.168.0.37:8080/genitek/2.avi
+
 run2:
 	@echo run2	
 	./bin/tutorial02.out 6.avi
@@ -84,9 +96,13 @@ debug2:
 	@echo using (gdb)r args
 	gdb  ./bin/tutorial02.out 
 
-debug2na:
-	@echo debug2na	
+debug2n:
+	@echo debug2n	
 	gdb --args ./bin/tutorial02.out http://192.168.0.37:8080/genitek/2.avi
+
+debug4n:
+	@echo debugn
+	gdb --args ./bin/tutorial04.out http://192.168.0.37:8080/genitek/2.avi
 
 
 tui2:	
@@ -95,6 +111,19 @@ tui2:
 tui2n:
 	@echo tui2 network
 	gdb -tui --args ./bin/tutorial02.out   http://192.168.0.37:8080/genitek/2.avi
+
+tui3n:
+	@echo tui3 network
+	gdb -tui --args ./bin/tutorial03.out   http://192.168.0.37:8080/genitek/2.avi
+
+tui4n:
+	@echo tui4 network
+	gdb -tui --args ./bin/tutorial04.out   http://192.168.0.37:8080/genitek/2.avi
+
+tui7n:
+	@echo tui7 network
+	gdb -tui --args ./bin/tutorial07.out   http://192.168.0.37:8080/genitek/2.avi
+
 
 tui2nx:
 	@echo using -x gdb.cmd

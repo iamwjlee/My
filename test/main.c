@@ -107,8 +107,9 @@ int main(void)
 	//q_test();
 	fifo_test();
 	//time_test();
+	//file_test();
+	make_bin_file();
 	file_test();
-
 	get_key(); // loop
 	return 0;
 	

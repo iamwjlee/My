@@ -81,4 +81,5 @@ debug :
 clean :
 	rm -f *.o
 	rm -f $(TARGET)
+	rm *.bin
 
